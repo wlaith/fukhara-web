@@ -1,0 +1,148 @@
+{
+  "appHeader": {
+    "about": "حول",
+    "documentation": "التوثيق",
+    "analyze": "تحليل",
+    "toggleMenu": "فتح القائمة"
+  },
+  "containedList": {
+    "noFindings": "لا نتائج"
+  },
+  "fileUpload": {
+    "dropPrompt": "اسحب الملفات وأفلتها هنا أو انقر للرفع",
+    "invalidType": "يُسمح فقط بملفات .apk."
+  },
+  "homeView": {
+    "heroTitle": "تحقق من التطبيق قبل أن تثق به.",
+    "heroBody": "ارفع ملف تطبيق أندرويد (.apk)، وسنخبرك ما إذا كان يبدو خطيرًا أم لا ولماذا.",
+    "uploadFailed": "حدث خطأ أثناء تحليل هذا الملف. يرجى المحاولة مرة أخرى.",
+    "transparent": {
+      "title": "شفافية. انفتاح. مسؤولية.",
+      "body": "هذه الأداة طوّرتها الجمعية الأردنية للمصادر المفتوحة (JOSA)، وهي مفتوحة المصدر وخاضعة للتدقيق. اطّلع بدقة على آلية عملها، وعلى الأسباب وراء كل نتيجة."
+    },
+    "deepAnalysis": {
+      "title": "تحليل تقني معمّق",
+      "body": "نحلّل أذونات ملف APK وشيفرته وسلوكه الشبكي، ونقارنها بقواعد بيانات التهديدات، ونرصد التمويه والمكتبات المشبوهة وتوقيعات البرمجيات الخبيثة المعروفة. احصل على التفاصيل التقنية إن أردت، أو على الحكم النهائي بلغة مبسّطة فقط."
+    },
+    "report": {
+      "title": "تقرير قابل للتحميل والمشاركة",
+      "body": "صدّر النتائج بصيغة يمكنك مشاركتها بأمان مع زملائك. يعمل دون اتصال بالإنترنت، ولا يُخزَّن شيء في السحابة بعد مغادرتك."
+    }
+  },
+  "verdictBanner": {
+    "reason": "السبب",
+    "recommendedResponse": "الإجراء الموصى به",
+    "severitySuffixFallback": "خطورة",
+    "severityTag": {
+      "high": "خطورة عالية",
+      "medium": "خطورة متوسطة",
+      "low": "خطورة منخفضة"
+    }
+  },
+  "reportView": {
+    "tabs": {
+      "codeAnalysis": "تحليل الشيفرة",
+      "behaviorAnalysis": "تحليل السلوك",
+      "appInformation": "معلومات التطبيق",
+      "threatIntelligence": "استخبارات التهديدات",
+      "network": "الشبكة",
+      "fingerprints": "البصمات",
+      "controlFlow": "تدفق التحكم"
+    }
+  },
+  "analyzingView": {
+    "title": "نقوم بتحليل ملفك",
+    "subtitle": "يستغرق تحليل الملف 3 دقائق في المتوسط",
+    "helperText": "تجمع فخّارة بين أدوات متعددة لاستخبارات التهديدات لإنتاج تحليل شامل لتطبيقات الجوال",
+    "steps": {
+      "uploading": "جارٍ رفع الملف",
+      "staticAnalysis": "جارٍ إجراء التحليل الساكن",
+      "threatIntelligence": "جارٍ فحص استخبارات التهديدات",
+      "generatingReport": "جارٍ إنشاء التقرير"
+    }
+  },
+  "severity": {
+    "high": "عالية",
+    "warning": "تحذير",
+    "info": "معلومة",
+    "good": "جيد",
+    "dangerous": "خطير",
+    "normal": "عادي",
+    "unknown": "غير معروف"
+  },
+  "subVerdicts": {
+    "codeAnalysis": {
+      "headline": "{count} ثغرات",
+      "highTag": "{count} عالية",
+      "warningTag": "{count} تحذير",
+      "noIssues": "لا توجد مشكلات"
+    },
+    "behaviorAnalysis": {
+      "headline": "{count} خطير",
+      "moderateTag": "{count} متوسط",
+      "unclassifiedTag": "{count} غير مصنّف"
+    },
+    "appInformation": {
+      "headline": "{count} حرج",
+      "moderateTag": "{count} متوسط",
+      "lowTag": "{count} منخفض"
+    },
+    "threatIntelligence": {
+      "flaggedHeadline": "أُبلغ عنه {count} مرة",
+      "noDetections": "لا اكتشافات",
+      "yaraTag": "{count} تطابقات YARA",
+      "noYaraTag": "لا تطابقات YARA",
+      "avTag": "{count} اكتشافات مكافح الفيروسات",
+      "notDetectedTag": "لم يُكتشف بواسطة مكافح الفيروسات"
+    },
+    "network": {
+      "noBadDomains": "لا نطاقات ضارة",
+      "badDomainsHeadline": "{count} نطاقات ضارة",
+      "ofacTag": "{count} مُدرج ضمن OFAC"
+    },
+    "fingerprints": {
+      "headline": "{count} معرّفات مُبلَّغ عنها"
+    },
+    "categories": {
+      "manipulator": "أداة التلاعب",
+      "antiDebug": "مضاد التصحيح",
+      "antiVm": "مضاد الأجهزة الافتراضية",
+      "obfuscator": "أداة التمويه",
+      "protector": "أداة الحماية"
+    }
+  },
+  "codeAnalysis": {
+    "listTitle": "ثغرات الشيفرة · {count} من {total}"
+  },
+  "behaviorAnalysis": {
+    "permissionsTitle": "الأذونات"
+  },
+  "appInformation": {
+    "appDetailsTitle": "تفاصيل التطبيق",
+    "certificateTitle": "الشهادة",
+    "componentsTitle": "المكوّنات",
+    "manifestFindingsTitle": "نتائج البيان (Manifest)",
+    "certificateSummary": "الجهة المُصدرة: {issuer} · SHA-256: {sha256} · صالحة {notBefore} → {notAfter}",
+    "componentsSummary": "{activities} أنشطة · {receivers} مستقبِلات · {services} خدمات",
+    "severityPrefix": "الخطورة: {severity}"
+  },
+  "threatIntelligence": {
+    "yaraMatchesTitle": "تطابقات YARA"
+  },
+  "network": {
+    "domainsTitle": "النطاقات",
+    "badLabel": "ضار: {value}"
+  },
+  "fingerprints": {
+    "fingerprintsTitle": "البصمات",
+    "identifiersTitle": "المعرّفات",
+    "checksumsTitle": "قيم التحقق (Checksums)",
+    "checksumsSummary": "MD5 {md5} · SHA1 {sha1} · SHA256 {sha256} · الحجم {size}",
+    "unknownFilename": "غير معروف",
+    "noFuzzyHash": "لا تجزئة تقريبية"
+  },
+  "controlFlow": {
+    "title": "غير متاح بعد",
+    "description": "لم يُحدَّد بعد تصور الرسم البياني لتدفق التحكم من الخلفية (backend). تحقق مرة أخرى بعد الانتهاء من تحديد عقد بيانات هذا القسم."
+  }
+}

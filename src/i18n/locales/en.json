@@ -1,0 +1,148 @@
+{
+  "appHeader": {
+    "about": "About",
+    "documentation": "Documentation",
+    "analyze": "Analyze",
+    "toggleMenu": "Toggle menu"
+  },
+  "containedList": {
+    "noFindings": "No findings"
+  },
+  "fileUpload": {
+    "dropPrompt": "Drag and drop files here or click to upload",
+    "invalidType": "Only .apk files are supported."
+  },
+  "homeView": {
+    "heroTitle": "Check an app before you trust it.",
+    "heroBody": "Upload an Android app file (.apk). We tell you whether it looks dangerous or not and why.",
+    "uploadFailed": "Something went wrong analyzing this file. Please try again.",
+    "transparent": {
+      "title": "Transparent. Open. Accountable.",
+      "body": "This tool is built by Jordan Open Source Association (JOSA), open-source, and audited. See exactly how it works. See the reasoning behind every finding."
+    },
+    "deepAnalysis": {
+      "title": "Deep Technical Analysis",
+      "body": "We analyze the APK's permissions, code, and network behavior. Cross-check against threat databases. Flag obfuscation, suspicious libraries, and known malware signatures. You get the technical details if you want them, or just the plain-language verdict."
+    },
+    "report": {
+      "title": "Downloadable Sharable Report",
+      "body": "Export results in a format you can safely share with colleagues. Works offline. Nothing stored in the cloud after you leave."
+    }
+  },
+  "verdictBanner": {
+    "reason": "Reason",
+    "recommendedResponse": "Recommended Response",
+    "severitySuffixFallback": "Severity",
+    "severityTag": {
+      "high": "High Severity",
+      "medium": "Medium Severity",
+      "low": "Low Severity"
+    }
+  },
+  "reportView": {
+    "tabs": {
+      "codeAnalysis": "Code Analysis",
+      "behaviorAnalysis": "Behavior Analysis",
+      "appInformation": "App Information",
+      "threatIntelligence": "Threat Intelligence",
+      "network": "Network",
+      "fingerprints": "Fingerprints",
+      "controlFlow": "Control Flow"
+    }
+  },
+  "analyzingView": {
+    "title": "We are analyzing your file",
+    "subtitle": "On average, it takes 3 minutes to analyze a file",
+    "helperText": "Fukhara combines multiple threat intelligence tools to produce thorough analysis of mobile apps",
+    "steps": {
+      "uploading": "Uploading file",
+      "staticAnalysis": "Running static analysis",
+      "threatIntelligence": "Checking threat intelligence",
+      "generatingReport": "Generating report"
+    }
+  },
+  "severity": {
+    "high": "High",
+    "warning": "Warning",
+    "info": "Info",
+    "good": "Good",
+    "dangerous": "Dangerous",
+    "normal": "Normal",
+    "unknown": "Unknown"
+  },
+  "subVerdicts": {
+    "codeAnalysis": {
+      "headline": "{count} Vulnerabilities",
+      "highTag": "{count} High",
+      "warningTag": "{count} Warning",
+      "noIssues": "No Issues Found"
+    },
+    "behaviorAnalysis": {
+      "headline": "{count} Dangerous",
+      "moderateTag": "{count} Moderate",
+      "unclassifiedTag": "{count} Unclassified"
+    },
+    "appInformation": {
+      "headline": "{count} Critical",
+      "moderateTag": "{count} Moderate",
+      "lowTag": "{count} Low"
+    },
+    "threatIntelligence": {
+      "flaggedHeadline": "Flagged {count}×",
+      "noDetections": "No Detections",
+      "yaraTag": "{count} YARA Matches",
+      "noYaraTag": "No YARA Matches",
+      "avTag": "{count} AV Detections",
+      "notDetectedTag": "Not Detected by AV"
+    },
+    "network": {
+      "noBadDomains": "No Bad Domains",
+      "badDomainsHeadline": "{count} Bad Domains",
+      "ofacTag": "{count} OFAC-Listed"
+    },
+    "fingerprints": {
+      "headline": "{count} Identifiers Flagged"
+    },
+    "categories": {
+      "manipulator": "Manipulator",
+      "antiDebug": "Anti-Debug",
+      "antiVm": "Anti-VM",
+      "obfuscator": "Obfuscator",
+      "protector": "Protector"
+    }
+  },
+  "codeAnalysis": {
+    "listTitle": "Code Vulnerability · {count} of {total}"
+  },
+  "behaviorAnalysis": {
+    "permissionsTitle": "Permissions"
+  },
+  "appInformation": {
+    "appDetailsTitle": "App Details",
+    "certificateTitle": "Certificate",
+    "componentsTitle": "Components",
+    "manifestFindingsTitle": "Manifest Findings",
+    "certificateSummary": "Issuer: {issuer} · SHA-256: {sha256} · Valid {notBefore} → {notAfter}",
+    "componentsSummary": "{activities} Activities · {receivers} Receivers · {services} Services",
+    "severityPrefix": "Severity: {severity}"
+  },
+  "threatIntelligence": {
+    "yaraMatchesTitle": "YARA Matches"
+  },
+  "network": {
+    "domainsTitle": "Domains",
+    "badLabel": "Bad: {value}"
+  },
+  "fingerprints": {
+    "fingerprintsTitle": "Fingerprints",
+    "identifiersTitle": "Identifiers",
+    "checksumsTitle": "Checksums",
+    "checksumsSummary": "MD5 {md5} · SHA1 {sha1} · SHA256 {sha256} · Size {size}",
+    "unknownFilename": "Unknown",
+    "noFuzzyHash": "No fuzzy hash"
+  },
+  "controlFlow": {
+    "title": "Not yet available",
+    "description": "Control-flow graph visualization is not yet defined by the backend. Check back once this section's data contract is finalized."
+  }
+}
