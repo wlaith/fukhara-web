@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import DetailRow from '../../ui/DetailRow.vue'
 import { REPORT_INJECTION_KEY } from '../../../composables/useReport'
-import deviceUnknownIcon from '../../../assets/icons/device-unknown.svg'
-import sourceIcon from '../../../assets/icons/source.svg'
-import warningIcon from '../../../assets/icons/warning.svg'
-import shieldIcon from '../../../assets/icons/shield.svg'
 import ContainedList from '../../ui/ContainedList.vue'
 
 const { t } = useI18n()

@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { computed, inject, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import DetailRow from '../../ui/DetailRow.vue'
-import Tag from '../../ui/Tag.vue'
 import { REPORT_INJECTION_KEY } from '../../../composables/useReport'
 import { flaggedIdentifierPairs, categoryLabel, type ApkidFileMatches } from '../../../domain/subVerdicts'
-import deviceUnknownIcon from '../../../assets/icons/device-unknown.svg'
-import fingerprintIcon from '../../../assets/icons/fingerprint.svg'
-import sourceIcon from '../../../assets/icons/source.svg'
 import ContainedList from '../../ui/ContainedList.vue'
 
 const { t } = useI18n()
