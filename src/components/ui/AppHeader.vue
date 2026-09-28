@@ -18,6 +18,10 @@ const logo = computed(() => (isArabic.value ? fukharaLogoAr : fukharaLogoEn))
 const switchToLabel = computed(() => (isArabic.value ? 'English' : 'العربية'))
 const isMenuOpen = ref(false)
 
+function goHome() {
+  push({ name: 'home' })
+}
+
 function switchLocale() {
   if (isArabic.value) {
     push(route.fullPath.replace(/^\/ar(\/|$)/, '/'))
@@ -29,7 +33,9 @@ function switchLocale() {
 
 <template>
   <header class="page-shell relative flex h-fit items-center justify-between bg-panel">
-    <img :src="logo" alt="Fukhara" class="h-[27.5px] w-auto" />
+    <button type="button" class="border-none bg-transparent p-0 cursor-pointer" @click="goHome">
+      <img :src="logo" alt="Fukhara" class="h-[27.5px] w-auto" />
+    </button>
 
     <nav class="hidden items-center gap-2 lg:flex">
       <Button variant="secondary">{{ t('appHeader.about') }}</Button>
