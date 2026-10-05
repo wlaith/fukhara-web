@@ -3,42 +3,47 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-    "preview": "vite preview",
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
-    "format": "prettier --write \"src/**/*.{ts,vue,css}\"",
-    "generate:api-types": "openapi-typescript docs/openapi.json -o src/api/schema.ts"
+    "format": "prettier --write \"app/**/*.{ts,vue,css}\"",
+    "generate:api-types": "openapi-typescript docs/openapi.json -o app/api/schema.ts",
+    "generate": "nuxt generate",
+    "start": "node .output/server/index.mjs",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
   },
   "dependencies": {
+    "@nuxtjs/i18n": "^10.6.0",
+    "nuxt": "^4.5.2",
     "vue": "^3.5.40",
-    "vue-i18n": "^11.4.12",
-    "vue-router": "^4.6.4"
+    "vue-i18n": "^11.4.12"
   },
   "devDependencies": {
     "@eslint/css": "^2.0.0",
     "@eslint/js": "^10.0.1",
     "@eslint/json": "^2.1.0",
     "@eslint/markdown": "^8.0.3",
-    "@vitejs/plugin-vue": "^5.2.4",
+    "@nuxt/eslint": "^1.17.0",
+    "@nuxt/test-utils": "^4.3.3",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@vitejs/plugin-vue": "^6.0.9",
     "@vue/test-utils": "^2.4.11",
-    "autoprefixer": "^10.5.4",
     "eslint": "^10.0.0",
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-vue": "^10.11.1",
     "globals": "^17.12.0",
     "jiti": "^2.7.0",
-    "jsdom": "^24.1.3",
+    "jsdom": "^30.1.2",
     "openapi-typescript": "^6.7.6",
-    "postcss": "^8.5.25",
     "prettier": "^3.9.6",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.70.1",
-    "vite": "^5.4.21",
-    "vitest": "^1.6.1",
-    "vue-tsc": "^2.2.12"
+    "vitest": "^5.0.3",
+    "vue-tsc": "^3.3.12"
   }
 }
