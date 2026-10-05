@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import VerdictBanner from './VerdictBanner.vue'
 import Tag from '../ui/Tag.vue'
-import i18n from '../../i18n'
+import i18n from '~/test-utils/i18n'
 
 describe('VerdictBanner', () => {
   it('renders verdict, severity, reason, and response', () => {

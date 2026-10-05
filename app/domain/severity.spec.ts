@@ -1,14 +1,18 @@
-// src/domain/severity.spec.ts
 import { describe, it, expect } from 'vitest'
 import {
   severityKind,
   severityRank,
   permissionStatusKind,
   verdictSeverityKind,
-  severityLabel,
-  permissionStatusLabel,
+  severityLabel as severityLabelWithT,
+  permissionStatusLabel as permissionStatusLabelWithT,
 } from './severity'
-import i18n from '../i18n'
+import i18n from '~/test-utils/i18n'
+import { withTestT } from '~/test-utils/translate'
+import type { Translate } from '~/domain/translate'
+
+const severityLabel = withTestT(severityLabelWithT)
+const permissionStatusLabel = withTestT(permissionStatusLabelWithT)
 
 describe('severityKind', () => {
   it('maps each known severity to its tag color', () => {
@@ -97,5 +101,25 @@ describe('permissionStatusLabel', () => {
     i18n.global.locale.value = 'ar'
     expect(permissionStatusLabel('dangerous')).toBe('خطير')
     i18n.global.locale.value = 'en'
+  })
+})
+
+describe('label helpers translate through the t argument', () => {
+  const fakeT = ((key: string) => `fake:${key}`) as unknown as Translate
+
+  it('severityLabel ignores shared locale state', () => {
+    i18n.global.locale.value = 'ar'
+    expect(severityLabelWithT('high', fakeT)).toBe('fake:severity.high')
+    i18n.global.locale.value = 'en'
+  })
+
+  it('permissionStatusLabel ignores shared locale state', () => {
+    i18n.global.locale.value = 'ar'
+    expect(permissionStatusLabelWithT('dangerous', fakeT)).toBe('fake:severity.dangerous')
+    i18n.global.locale.value = 'en'
+  })
+
+  it('still falls back to the raw value for an unrecognized severity', () => {
+    expect(severityLabelWithT('critical', fakeT)).toBe('critical')
   })
 })

@@ -1,8 +1,6 @@
 import type { Severity, PermissionStatus, TagKind } from './severity'
 import { severityKind, permissionStatusKind } from './severity'
-import i18n from '../i18n'
-
-const t = i18n.global.t
+import type { Translate } from './translate'
 
 export interface SubVerdict {
   headline: string
@@ -13,26 +11,38 @@ export interface VulnerabilityCategory {
   severity: Severity | null
 }
 
-export function codeAnalysisSubVerdict(categories: VulnerabilityCategory[]): SubVerdict {
+export function codeAnalysisSubVerdict(
+  categories: VulnerabilityCategory[],
+  t: Translate,
+): SubVerdict {
   const highCount = categories.filter((c) => c.severity === 'high').length
   const warningCount = categories.filter((c) => c.severity === 'warning').length
   const tags: SubVerdict['tags'] = []
   if (highCount > 0)
-    tags.push({ label: t('subVerdicts.codeAnalysis.highTag', { count: highCount }), kind: severityKind('high') })
+    tags.push({
+      label: t('subVerdicts.codeAnalysis.highTag', { count: highCount }),
+      kind: severityKind('high'),
+    })
   if (warningCount > 0)
     tags.push({
       label: t('subVerdicts.codeAnalysis.warningTag', { count: warningCount }),
       kind: severityKind('warning'),
     })
   if (tags.length === 0) tags.push({ label: t('subVerdicts.codeAnalysis.noIssues'), kind: 'green' })
-  return { headline: t('subVerdicts.codeAnalysis.headline', { count: highCount + warningCount }), tags }
+  return {
+    headline: t('subVerdicts.codeAnalysis.headline', { count: highCount + warningCount }),
+    tags,
+  }
 }
 
 export interface PermissionEntry {
   status: PermissionStatus | null
 }
 
-export function behaviorAnalysisSubVerdict(permissions: PermissionEntry[]): SubVerdict {
+export function behaviorAnalysisSubVerdict(
+  permissions: PermissionEntry[],
+  t: Translate,
+): SubVerdict {
   const dangerous = permissions.filter((p) => p.status === 'dangerous').length
   const moderate = permissions.filter((p) => p.status === 'normal').length
   const unclassified = permissions.filter((p) => p.status === 'unknown').length
@@ -54,7 +64,7 @@ export interface ManifestFinding {
   severity: Severity | null
 }
 
-export function appInformationSubVerdict(findings: ManifestFinding[]): SubVerdict {
+export function appInformationSubVerdict(findings: ManifestFinding[], t: Translate): SubVerdict {
   const critical = findings.filter((f) => f.severity === 'high').length
   const moderate = findings.filter((f) => f.severity === 'warning').length
   const low = findings.filter((f) => f.severity === 'info').length
@@ -65,21 +75,31 @@ export function appInformationSubVerdict(findings: ManifestFinding[]): SubVerdic
       kind: severityKind('warning'),
     })
   if (low > 0)
-    tags.push({ label: t('subVerdicts.appInformation.lowTag', { count: low }), kind: severityKind('info') })
+    tags.push({
+      label: t('subVerdicts.appInformation.lowTag', { count: low }),
+      kind: severityKind('info'),
+    })
   return { headline: t('subVerdicts.appInformation.headline', { count: critical }), tags }
 }
 
 export function threatIntelligenceSubVerdict(
   yaraMatchCount: number,
   avDetectionCount: number,
+  t: Translate,
 ): SubVerdict {
   const total = yaraMatchCount + avDetectionCount
   const tags: SubVerdict['tags'] = [
     yaraMatchCount > 0
-      ? { label: t('subVerdicts.threatIntelligence.yaraTag', { count: yaraMatchCount }), kind: 'red' }
+      ? {
+          label: t('subVerdicts.threatIntelligence.yaraTag', { count: yaraMatchCount }),
+          kind: 'red',
+        }
       : { label: t('subVerdicts.threatIntelligence.noYaraTag'), kind: 'green' },
     avDetectionCount > 0
-      ? { label: t('subVerdicts.threatIntelligence.avTag', { count: avDetectionCount }), kind: 'red' }
+      ? {
+          label: t('subVerdicts.threatIntelligence.avTag', { count: avDetectionCount }),
+          kind: 'red',
+        }
       : { label: t('subVerdicts.threatIntelligence.notDetectedTag'), kind: 'green' },
   ]
   return {
@@ -96,11 +116,12 @@ export interface DomainEntry {
   ofac?: boolean | null
 }
 
-export function networkSubVerdict(domains: DomainEntry[]): SubVerdict {
+export function networkSubVerdict(domains: DomainEntry[], t: Translate): SubVerdict {
   const badCount = domains.filter((d) => d.bad != null && d.bad !== 'no').length
   const ofacCount = domains.filter((d) => d.ofac === true).length
   const tags: SubVerdict['tags'] = []
-  if (ofacCount > 0) tags.push({ label: t('subVerdicts.network.ofacTag', { count: ofacCount }), kind: 'red' })
+  if (ofacCount > 0)
+    tags.push({ label: t('subVerdicts.network.ofacTag', { count: ofacCount }), kind: 'red' })
   return {
     headline:
       badCount === 0
@@ -137,7 +158,7 @@ export function flaggedIdentifierPairs(files: ApkidFileMatches[]): string[] {
   return [...flagged]
 }
 
-export function categoryLabel(category: string): string {
+export function categoryLabel(category: string, t: Translate): string {
   const map: Record<string, string> = {
     manipulator: t('subVerdicts.categories.manipulator'),
     anti_debug: t('subVerdicts.categories.antiDebug'),
@@ -148,11 +169,11 @@ export function categoryLabel(category: string): string {
   return map[category] ?? capitalize(category)
 }
 
-export function fingerprintsSubVerdict(files: ApkidFileMatches[]): SubVerdict {
+export function fingerprintsSubVerdict(files: ApkidFileMatches[], t: Translate): SubVerdict {
   const flagged = flaggedIdentifierPairs(files)
   const tags = flagged.slice(0, 2).map((pair) => {
     const [category, value] = pair.split(':')
-    return { label: `${categoryLabel(category)}: ${value}`, kind: 'gold' as TagKind }
+    return { label: `${categoryLabel(category ?? '', t)}: ${value}`, kind: 'gold' as TagKind }
   })
   return { headline: t('subVerdicts.fingerprints.headline', { count: flagged.length }), tags }
 }

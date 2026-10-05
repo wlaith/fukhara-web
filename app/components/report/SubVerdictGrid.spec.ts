@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { ref } from 'vue'
 import SubVerdictGrid from './SubVerdictGrid.vue'
 import type { ReportContext } from '../../composables/useReport'
-import i18n from '../../i18n'
+import i18n from '~/test-utils/i18n'
 
 function sectionWith(data: unknown) {
   return { data: ref(data), loading: ref(false), error: ref(null), load: async () => {} }

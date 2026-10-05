@@ -1,4 +1,4 @@
-import i18n from '../i18n'
+import type { Translate } from './translate'
 
 export type Severity = 'high' | 'warning' | 'info' | 'good'
 export type PermissionStatus = 'dangerous' | 'normal' | 'unknown'
@@ -40,23 +40,29 @@ export function permissionStatusKind(status: PermissionStatus | null | undefined
 }
 
 // Falls back to the raw value verbatim for anything unrecognized.
-export function severityLabel(severity: Severity | string | null | undefined): string {
+export function severityLabel(
+  severity: Severity | string | null | undefined,
+  t: Translate,
+): string {
   const key = (severity ?? '').toString().toLowerCase()
   const map: Record<string, string> = {
-    high: i18n.global.t('severity.high'),
-    warning: i18n.global.t('severity.warning'),
-    info: i18n.global.t('severity.info'),
-    good: i18n.global.t('severity.good'),
+    high: t('severity.high'),
+    warning: t('severity.warning'),
+    info: t('severity.info'),
+    good: t('severity.good'),
   }
   return map[key] ?? (severity ?? '').toString()
 }
 
-export function permissionStatusLabel(status: PermissionStatus | string | null | undefined): string {
+export function permissionStatusLabel(
+  status: PermissionStatus | string | null | undefined,
+  t: Translate,
+): string {
   const key = (status ?? '').toString().toLowerCase()
   const map: Record<string, string> = {
-    dangerous: i18n.global.t('severity.dangerous'),
-    normal: i18n.global.t('severity.normal'),
-    unknown: i18n.global.t('severity.unknown'),
+    dangerous: t('severity.dangerous'),
+    normal: t('severity.normal'),
+    unknown: t('severity.unknown'),
   }
   return map[key] ?? (status ?? '').toString()
 }
@@ -67,11 +73,7 @@ const VERDICT_SEVERITY_KIND: Record<string, TagKind> = {
   low: 'green',
 }
 
-/**
- * Maps the VerdictResponse API's `severity` vocabulary ("High" | "Medium" | "Low",
- * case-insensitive) to a tag color. This is a distinct vocabulary from `Severity`
- * above, which is used for code/manifest findings.
- */
+// VerdictResponse severity ("High" | "Medium" | "Low") is a different vocabulary from `Severity` above.
 export function verdictSeverityKind(severity: string | null | undefined): TagKind {
   if (!severity) return 'gray'
   return VERDICT_SEVERITY_KIND[severity.toLowerCase()] ?? 'gray'

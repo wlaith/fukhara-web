@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import FileUploader from './FileUploader.vue'
-import i18n from '../../i18n'
+import i18n from '~/test-utils/i18n'
 
 function makeFile(name: string): File {
   return new File(['content'], name)

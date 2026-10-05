@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import type { ReportContext } from './useReport'
+import type { Translate } from '../domain/translate'
 import type { Severity, PermissionStatus } from '../domain/severity'
 import type { ApkidFileMatches } from '../domain/subVerdicts'
 import {
@@ -28,7 +29,7 @@ interface DomainRaw {
   ofac?: boolean | null
 }
 
-export function useSubVerdicts(report: ReportContext) {
+export function useSubVerdicts(report: ReportContext, t: Translate) {
   const codeAnalysis = computed(() => {
     const data = report.codeAnalysis.data.value as {
       code_vulnerabilities?: Record<string, CodeVulnerabilityCategoryRaw> | null
@@ -37,7 +38,7 @@ export function useSubVerdicts(report: ReportContext) {
     const categories = Object.values(data.code_vulnerabilities).map((v) => ({
       severity: v?.metadata?.severity ?? null,
     }))
-    return codeAnalysisSubVerdict(categories)
+    return codeAnalysisSubVerdict(categories, t)
   })
 
   const behaviorAnalysis = computed(() => {
@@ -46,7 +47,7 @@ export function useSubVerdicts(report: ReportContext) {
     } | null
     if (!data?.permissions) return null
     const permissions = Object.values(data.permissions).map((p) => ({ status: p?.status ?? null }))
-    return behaviorAnalysisSubVerdict(permissions)
+    return behaviorAnalysisSubVerdict(permissions, t)
   })
 
   const appInformation = computed(() => {
@@ -55,7 +56,7 @@ export function useSubVerdicts(report: ReportContext) {
     } | null
     if (!data?.manifest_analysis) return null
     const findings = data.manifest_analysis.map((f) => ({ severity: f?.severity ?? null }))
-    return appInformationSubVerdict(findings)
+    return appInformationSubVerdict(findings, t)
   })
 
   const threatIntelligence = computed(() => {
@@ -71,7 +72,7 @@ export function useSubVerdicts(report: ReportContext) {
     const avCount = Array.isArray(data.av_detections)
       ? data.av_detections.length
       : Object.keys(data.av_detections ?? {}).length
-    return threatIntelligenceSubVerdict(yaraCount, avCount)
+    return threatIntelligenceSubVerdict(yaraCount, avCount, t)
   })
 
   const network = computed(() => {
@@ -83,12 +84,11 @@ export function useSubVerdicts(report: ReportContext) {
       bad: d?.bad ?? null,
       ofac: d?.ofac ?? null,
     }))
-    return networkSubVerdict(domains)
+    return networkSubVerdict(domains, t)
   })
 
   const fingerprints = computed(() => {
-    // identifiers.apkid.files is an object ({ apkid_version, files, ... }), not the match
-    // array itself — the array lives one level deeper at .files.files.
+    // apkid.files is an object; the match array lives at .files.files
     const data = report.fingerprints.data.value as {
       identifiers?: {
         apkid?: {
@@ -98,7 +98,10 @@ export function useSubVerdicts(report: ReportContext) {
     } | null
     const files = data?.identifiers?.apkid?.files?.files
     if (!files) return null
-    return fingerprintsSubVerdict(files.map((f) => ({ matches: f.matches ?? null })))
+    return fingerprintsSubVerdict(
+      files.map((f) => ({ matches: f.matches ?? null })),
+      t,
+    )
   })
 
   return {

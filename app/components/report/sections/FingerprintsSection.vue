@@ -26,7 +26,7 @@ const identifierTags = computed(() => {
   // Unlike the summary card, this detail view renders every flagged pair, uncapped.
   return flaggedIdentifierPairs(apkidFiles.value).map((pair) => {
     const [category, value] = pair.split(':')
-    return { label: `${categoryLabel(category)}: ${value}` }
+    return { label: `${categoryLabel(category ?? '', t)}: ${value}` }
   })
 })
 
@@ -46,19 +46,5 @@ const fuzzyHashes = computed(() => {
     <ContainedList :title="t('fingerprints.fingerprintsTitle')" :rows="fuzzyHashes.map((hash, index) => ({ id: hash.filename ?? index.toString(), title: hash.filename ?? t('fingerprints.unknownFilename'), meta: hash.fuzzy_hash ?? t('fingerprints.noFuzzyHash') }))" />
     <ContainedList :title="t('fingerprints.identifiersTitle')" :rows="identifierTags.map((tag, index) => ({ id: index.toString(), title: tag.label, meta: '' }))" />
     <ContainedList :title="t('fingerprints.checksumsTitle')" :rows="checksums ? [{ id: 'checksums', title: t('fingerprints.checksumsSummary', { md5: checksums.md5, sha1: checksums.sha1, sha256: checksums.sha256, size: checksums.size }), meta: '' }] : []" />
-    <!-- <DetailRow v-if="checksums" :icon-src="deviceUnknownIcon" icon-alt="Checksums" label="Checksums">
-      MD5 {{ checksums.md5 }} · SHA1 {{ checksums.sha1 }} · SHA256 {{ checksums.sha256 }} · Size
-      {{ checksums.size }}
-    </DetailRow>
-    <DetailRow :icon-src="fingerprintIcon" icon-alt="Identifiers" label="Identifiers (APKiD)">
-      <div class="flex flex-wrap gap-2">
-        <Tag v-for="tag in identifierTags" :key="tag.label" kind="gold">{{ tag.label }}</Tag>
-      </div>
-    </DetailRow>
-    <DetailRow :icon-src="sourceIcon" icon-alt="Fuzzy Hashes" label="Fuzzy Hashes (ssdeep)">
-      <div v-for="(hash, index) in fuzzyHashes" :key="hash.filename ?? index">
-        {{ hash.filename }} → {{ hash.fuzzy_hash }}
-      </div>
-    </DetailRow> -->
   </div>
 </template>

@@ -5,8 +5,8 @@ import { useSubVerdicts } from '../../composables/useSubVerdicts'
 import type { ReportContext } from '../../composables/useReport'
 
 const props = defineProps<{ report: ReportContext }>()
-const subVerdicts = useSubVerdicts(props.report)
 const { t } = useI18n()
+const subVerdicts = useSubVerdicts(props.report, t)
 </script>
 
 <template>

@@ -14,10 +14,10 @@ onMounted(() => {
 })
 
 const SEVERITY_TABS = computed<{ id: Severity; label: string }[]>(() => [
-  { id: 'high', label: severityLabel('high') },
-  { id: 'warning', label: severityLabel('warning') },
-  { id: 'info', label: severityLabel('info') },
-  { id: 'good', label: severityLabel('good') },
+  { id: 'high', label: severityLabel('high', t) },
+  { id: 'warning', label: severityLabel('warning', t) },
+  { id: 'info', label: severityLabel('info', t) },
+  { id: 'good', label: severityLabel('good', t) },
 ])
 
 const SEVERITIES: readonly Severity[] = ['high', 'warning', 'info', 'good']
@@ -48,7 +48,7 @@ const rows = computed(() =>
   filteredCategories.value.map(([key, category]) => ({
     id: key,
     title: category?.metadata?.cwe ?? key,
-    meta: `${Object.values(category?.files ?? {})[0] ?? ''} · ${severityLabel(category?.metadata?.severity)} · CVSS ${category?.metadata?.cvss ?? '—'}`,
+    meta: `${Object.values(category?.files ?? {})[0] ?? ''} · ${severityLabel(category?.metadata?.severity, t)} · CVSS ${category?.metadata?.cvss ?? '—'}`,
   })),
 )
 

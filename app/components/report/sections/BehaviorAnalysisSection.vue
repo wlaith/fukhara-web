@@ -18,7 +18,7 @@ const rows = computed(() => {
   return Object.entries(permissions).map(([name, info]) => ({
     id: name,
     title: name,
-    meta: `${permissionStatusLabel(info?.status ?? 'unknown')} · ${info?.info ?? ''}`,
+    meta: `${permissionStatusLabel(info?.status ?? 'unknown', t)} · ${info?.info ?? ''}`,
   }))
 })
 </script>

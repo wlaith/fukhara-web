@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { ref } from 'vue'
 import AppInformationSection from './AppInformationSection.vue'
 import { REPORT_INJECTION_KEY } from '../../../composables/useReport'
-import i18n from '../../../i18n'
+import i18n from '~/test-utils/i18n'
 
 describe('AppInformationSection', () => {
   it('calls load() on mount and renders app details, certificate, components, and manifest findings', () => {

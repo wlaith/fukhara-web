@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { ref } from 'vue'
 import ThreatIntelligenceSection from './ThreatIntelligenceSection.vue'
 import { REPORT_INJECTION_KEY } from '../../../composables/useReport'
-import i18n from '../../../i18n'
+import i18n from '~/test-utils/i18n'
 
 describe('ThreatIntelligenceSection', () => {
   it('calls load() on mount and renders YARA match rows once data is present', async () => {

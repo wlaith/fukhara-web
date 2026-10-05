@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ControlFlowSection from './ControlFlowSection.vue'
-import i18n from '../../../i18n'
+import i18n from '~/test-utils/i18n'
 
 describe('ControlFlowSection', () => {
   it('renders the not-yet-available empty state', () => {

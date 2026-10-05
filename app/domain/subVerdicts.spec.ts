@@ -1,14 +1,16 @@
 import { describe, it, expect } from 'vitest'
-import {
-  codeAnalysisSubVerdict,
-  behaviorAnalysisSubVerdict,
-  appInformationSubVerdict,
-  threatIntelligenceSubVerdict,
-  networkSubVerdict,
-  fingerprintsSubVerdict,
-  categoryLabel,
-} from './subVerdicts'
-import i18n from '../i18n'
+import * as subVerdicts from './subVerdicts'
+import i18n from '~/test-utils/i18n'
+import { withTestT } from '~/test-utils/translate'
+import type { Translate } from '~/domain/translate'
+
+const codeAnalysisSubVerdict = withTestT(subVerdicts.codeAnalysisSubVerdict)
+const behaviorAnalysisSubVerdict = withTestT(subVerdicts.behaviorAnalysisSubVerdict)
+const appInformationSubVerdict = withTestT(subVerdicts.appInformationSubVerdict)
+const threatIntelligenceSubVerdict = withTestT(subVerdicts.threatIntelligenceSubVerdict)
+const networkSubVerdict = withTestT(subVerdicts.networkSubVerdict)
+const fingerprintsSubVerdict = withTestT(subVerdicts.fingerprintsSubVerdict)
+const categoryLabel = withTestT(subVerdicts.categoryLabel)
 
 describe('codeAnalysisSubVerdict', () => {
   it('counts high+warning categories as the headline, tags top severities', () => {
@@ -156,6 +158,35 @@ describe('Arabic locale', () => {
     expect(codeAnalysisSubVerdict([{ severity: 'high' }]).headline).toBe('1 ثغرات')
     expect(networkSubVerdict([{ bad: 'no' }]).headline).toBe('لا نطاقات ضارة')
     expect(categoryLabel('obfuscator')).toBe('أداة التمويه')
+    i18n.global.locale.value = 'en'
+  })
+})
+
+describe('sub-verdict helpers translate through the t argument', () => {
+  const fakeT = ((key: string, named?: { count?: number }) =>
+    named?.count === undefined
+      ? `fake:${key}`
+      : `fake:${key}:${named.count}`) as unknown as Translate
+
+  it('codeAnalysisSubVerdict ignores shared locale state', () => {
+    i18n.global.locale.value = 'ar'
+    const result = subVerdicts.codeAnalysisSubVerdict([{ severity: 'high' }], fakeT)
+    expect(result.headline).toBe('fake:subVerdicts.codeAnalysis.headline:1')
+    i18n.global.locale.value = 'en'
+  })
+
+  it('networkSubVerdict ignores shared locale state', () => {
+    i18n.global.locale.value = 'ar'
+    const result = subVerdicts.networkSubVerdict([{ bad: 'no' }], fakeT)
+    expect(result.headline).toBe('fake:subVerdicts.network.noBadDomains')
+    i18n.global.locale.value = 'en'
+  })
+
+  it('categoryLabel ignores shared locale state', () => {
+    i18n.global.locale.value = 'ar'
+    expect(subVerdicts.categoryLabel('obfuscator', fakeT)).toBe(
+      'fake:subVerdicts.categories.obfuscator',
+    )
     i18n.global.locale.value = 'en'
   })
 })

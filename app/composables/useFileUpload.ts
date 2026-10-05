@@ -1,14 +1,14 @@
 import { ref } from 'vue'
-import i18n from '../i18n'
+import type { Translate } from '~/domain/translate'
 
-export function useFileUpload() {
+export function useFileUpload(t: Translate) {
   const selectedFile = ref<File | null>(null)
   const error = ref<string | null>(null)
 
   function selectFile(file: File) {
     if (!file.name.toLowerCase().endsWith('.apk')) {
       selectedFile.value = null
-       error.value = i18n.global.t('fileUpload.invalidType')
+       error.value = t('fileUpload.invalidType')
       return
     }
     selectedFile.value = file

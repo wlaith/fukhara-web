@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { ref } from 'vue'
 import { useSubVerdicts } from './useSubVerdicts'
 import type { ReportContext } from './useReport'
+import i18n from '~/test-utils/i18n'
 
 function sectionWith(data: unknown) {
   return { data: ref(data), loading: ref(false), error: ref(null), load: async () => {} }
@@ -17,7 +18,7 @@ describe('useSubVerdicts', () => {
       networkAnalysis: sectionWith(null),
       fingerprints: sectionWith(null),
     } as unknown as ReportContext
-    const subVerdicts = useSubVerdicts(report)
+    const subVerdicts = useSubVerdicts(report, i18n.global.t)
     expect(subVerdicts.codeAnalysis.value).toBeNull()
   })
 
@@ -35,7 +36,7 @@ describe('useSubVerdicts', () => {
       networkAnalysis: sectionWith(null),
       fingerprints: sectionWith(null),
     } as unknown as ReportContext
-    const subVerdicts = useSubVerdicts(report)
+    const subVerdicts = useSubVerdicts(report, i18n.global.t)
     expect(subVerdicts.codeAnalysis.value?.headline).toBe('1 Vulnerabilities')
   })
 
@@ -53,7 +54,7 @@ describe('useSubVerdicts', () => {
       }),
       fingerprints: sectionWith(null),
     } as unknown as ReportContext
-    const subVerdicts = useSubVerdicts(report)
+    const subVerdicts = useSubVerdicts(report, i18n.global.t)
     expect(subVerdicts.network.value?.headline).toBe('1 Bad Domains')
   })
 
@@ -88,7 +89,7 @@ describe('useSubVerdicts', () => {
         },
       }),
     } as unknown as ReportContext
-    const subVerdicts = useSubVerdicts(report)
+    const subVerdicts = useSubVerdicts(report, i18n.global.t)
     expect(subVerdicts.fingerprints.value?.headline).toBe('3 Identifiers Flagged')
     expect(subVerdicts.fingerprints.value?.tags).toContainEqual({
       label: 'Manipulator: Resources Confusion',

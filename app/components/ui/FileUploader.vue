@@ -7,7 +7,7 @@ defineProps<{ label: string }>()
 const emit = defineEmits<{ select: [file: File] }>()
 
 const { t } = useI18n()
-const { selectedFile, error, selectFile, clearFile } = useFileUpload()
+const { selectedFile, error, selectFile, clearFile } = useFileUpload(t)
 const isDragging = ref(false)
 
 watch(selectedFile, (file) => {

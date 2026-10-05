@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { ref } from 'vue'
 import BehaviorAnalysisSection from './BehaviorAnalysisSection.vue'
 import { REPORT_INJECTION_KEY } from '../../../composables/useReport'
-import i18n from '../../../i18n'
+import i18n from '~/test-utils/i18n'
 
 describe('BehaviorAnalysisSection', () => {
   it('calls load() on mount and renders permission rows once data is present', async () => {

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ContainedList from './ContainedList.vue'
-import i18n from '../../i18n'
+import i18n from '~/test-utils/i18n'
 
 const rows = [
   {
@@ -32,7 +32,7 @@ describe('ContainedList', () => {
 
   it('emits select-row with the row id when a row is clicked', async () => {
     const wrapper = mount(ContainedList, { props: { title: 'Code Vulnerability', rows } })
-    await wrapper.findAll('.contained-list__row')[1].trigger('click')
+    await wrapper.findAll('.contained-list__row')[1]!.trigger('click')
     expect(wrapper.emitted('select-row')?.[0]).toEqual(['2'])
   })
 

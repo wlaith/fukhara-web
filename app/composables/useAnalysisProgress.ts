@@ -1,20 +1,20 @@
 import { ref } from 'vue'
-import i18n from '../i18n'
-
-function steps(): string[] {
-  return [
-    i18n.global.t('analyzingView.steps.uploading'),
-    i18n.global.t('analyzingView.steps.staticAnalysis'),
-    i18n.global.t('analyzingView.steps.threatIntelligence'),
-    i18n.global.t('analyzingView.steps.generatingReport'),
-  ]
-}
+import type { Translate } from '~/domain/translate'
 
 const STEP_DURATION_MS = 2000
 
-export function useAnalysisProgress(onComplete: () => void) {
+export function useAnalysisProgress(onComplete: () => void, t: Translate) {
+  function steps(): string[] {
+    return [
+      t('analyzingView.steps.uploading'),
+      t('analyzingView.steps.staticAnalysis'),
+      t('analyzingView.steps.threatIntelligence'),
+      t('analyzingView.steps.generatingReport'),
+    ]
+  }
+
   const stepIndex = ref(0)
-  const stepLabel = ref(steps()[0])
+  const stepLabel = ref(steps()[0] ?? '')
   const percent = ref(0)
   let timer: ReturnType<typeof setInterval> | null = null
 
@@ -29,7 +29,7 @@ export function useAnalysisProgress(onComplete: () => void) {
         onComplete()
         return
       }
-      stepLabel.value = currentSteps[stepIndex.value]
+      stepLabel.value = currentSteps[stepIndex.value] ?? ''
       percent.value = Math.round((stepIndex.value / currentSteps.length) * 100)
     }, STEP_DURATION_MS)
   }
