@@ -1,17 +1,15 @@
 import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import { createRouter, createMemoryHistory } from 'vue-router'
-import App from './App.vue'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
+import App from './app.vue'
 
-describe('App', () => {
-  it('mounts and renders the app header', async () => {
-    const router = createRouter({
-      history: createMemoryHistory(),
-      routes: [{ path: '/', name: 'home', component: { template: '<div>home</div>' } }],
-    })
-    router.push('/')
-    await router.isReady()
-    const wrapper = mount(App, { global: { plugins: [router] } })
+describe('app shell', () => {
+  it('renders the app header', async () => {
+    const wrapper = await mountSuspended(App, { route: '/' })
     expect(wrapper.find('img[alt="Fukhara"]').exists()).toBe(true)
+  })
+
+  it('shows the English switcher on /ar', async () => {
+    const wrapper = await mountSuspended(App, { route: '/ar' })
+    expect(wrapper.text()).toContain('English')
   })
 })

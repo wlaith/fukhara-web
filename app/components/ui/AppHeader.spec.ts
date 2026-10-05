@@ -1,39 +1,16 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { mount, flushPromises } from '@vue/test-utils'
-import { createRouter, createMemoryHistory } from 'vue-router'
+import { describe, it, expect, vi } from 'vitest'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
+import type { DOMWrapper } from '@vue/test-utils'
+import { useRouter } from '#imports'
 import AppHeader from './AppHeader.vue'
-import i18n from '../../i18n'
 
-function makeRouter() {
-  return createRouter({
-    history: createMemoryHistory(),
-    routes: [
-      {
-        path: '/:locale(ar)?',
-        component: { template: '<router-view />' },
-        children: [
-          { path: '', name: 'home', component: { template: '<div>home</div>' } },
-          { path: 'report/:id/:section?', name: 'report', component: { template: '<div>report</div>' } },
-        ],
-      },
-    ],
-  })
-}
-
-async function mountAt(path: string) {
-  const router = makeRouter()
-  router.push(path)
-  await router.isReady()
-  return mount(AppHeader, { global: { plugins: [router] } })
+function findButton(wrapper: Awaited<ReturnType<typeof mountSuspended>>, label: string) {
+  return wrapper.findAll('button').find((b: DOMWrapper<Element>) => b.text() === label)
 }
 
 describe('AppHeader', () => {
-  beforeEach(() => {
-    i18n.global.locale.value = 'en'
-  })
-
   it('renders the Fukhara logo and nav links', async () => {
-    const wrapper = await mountAt('/')
+    const wrapper = await mountSuspended(AppHeader, { route: '/' })
     expect(wrapper.find('img[alt="Fukhara"]').exists()).toBe(true)
     expect(wrapper.text()).toContain('About')
     expect(wrapper.text()).toContain('Documentation')
@@ -41,71 +18,47 @@ describe('AppHeader', () => {
   })
 
   it('emits analyze when the Analyze button is clicked', async () => {
-    const wrapper = await mountAt('/')
+    const wrapper = await mountSuspended(AppHeader, { route: '/' })
     await wrapper.find('.button--primary').trigger('click')
     expect(wrapper.emitted('analyze')).toHaveLength(1)
   })
 
   it('shows Arabic nav labels and the English switcher on /ar', async () => {
-    i18n.global.locale.value = 'ar'
-    const wrapper = await mountAt('/ar')
+    const wrapper = await mountSuspended(AppHeader, { route: '/ar' })
     expect(wrapper.text()).toContain('حول')
     expect(wrapper.text()).toContain('التوثيق')
     expect(wrapper.text()).toContain('تحليل')
     expect(wrapper.text()).toContain('English')
   })
 
-  it('shows the Arabic switcher label on the unprefixed (English) route', async () => {
-    const wrapper = await mountAt('/')
+  it('shows the Arabic switcher label on the English route', async () => {
+    const wrapper = await mountSuspended(AppHeader, { route: '/' })
     expect(wrapper.text()).toContain('العربية')
   })
 
-  it('clicking the switcher navigates to the /ar prefix of the current route', async () => {
-    const router = makeRouter()
-    router.push('/')
-    await router.isReady()
-    const wrapper = mount(AppHeader, { global: { plugins: [router] } })
-
-    const switcher = wrapper.findAll('button').find((b) => b.text() === 'العربية')
-    await switcher?.trigger('click')
-    await flushPromises()
-
-    expect(router.currentRoute.value.params.locale).toBe('ar')
-    expect(router.currentRoute.value.name).toBe('home')
+  it('clicking the switcher on the English route navigates to /ar', async () => {
+    const wrapper = await mountSuspended(AppHeader, { route: '/' })
+    await findButton(wrapper, 'العربية')?.trigger('click')
+    await vi.waitFor(() => expect(useRouter().currentRoute.value.fullPath).toBe('/ar'))
   })
 
-  it('clicking the switcher on /ar navigates back to the unprefixed English route', async () => {
-    const router = makeRouter()
-    router.push('/ar')
-    await router.isReady()
-    const wrapper = mount(AppHeader, { global: { plugins: [router] } })
-
-    const switcher = wrapper.findAll('button').find((b) => b.text() === 'English')
-    await switcher?.trigger('click')
-    await flushPromises()
-
-    expect(router.currentRoute.value.fullPath).toBe('/')
-    expect(router.currentRoute.value.params.locale).toBeFalsy()
-    expect(router.currentRoute.value.name).toBe('home')
+  it('clicking the switcher on /ar navigates back to the unprefixed route', async () => {
+    const wrapper = await mountSuspended(AppHeader, { route: '/ar' })
+    await findButton(wrapper, 'English')?.trigger('click')
+    await vi.waitFor(() => expect(useRouter().currentRoute.value.fullPath).toBe('/'))
   })
 
-  it('preserves the id/section params when switching locale mid-report, in both directions', async () => {
-    const router = makeRouter()
-    router.push('/ar/report/abc123/network')
-    await router.isReady()
-    const wrapper = mount(AppHeader, { global: { plugins: [router] } })
+  it('keeps the id and section when switching locale mid-report, in both directions', async () => {
+    const arabic = await mountSuspended(AppHeader, { route: '/ar/report/abc123/network' })
+    await findButton(arabic, 'English')?.trigger('click')
+    await vi.waitFor(() =>
+      expect(useRouter().currentRoute.value.fullPath).toBe('/report/abc123/network'),
+    )
 
-    const toEnglish = wrapper.findAll('button').find((b) => b.text() === 'English')
-    await toEnglish?.trigger('click')
-    await flushPromises()
-    expect(router.currentRoute.value.fullPath).toBe('/report/abc123/network')
-    expect(router.currentRoute.value.params.locale).toBeFalsy()
-
-    const wrapper2 = mount(AppHeader, { global: { plugins: [router] } })
-    const toArabic = wrapper2.findAll('button').find((b) => b.text() === 'العربية')
-    await toArabic?.trigger('click')
-    await flushPromises()
-    expect(router.currentRoute.value.fullPath).toBe('/ar/report/abc123/network')
-    expect(router.currentRoute.value.params.locale).toBe('ar')
+    const english = await mountSuspended(AppHeader, { route: '/report/abc123/network' })
+    await findButton(english, 'العربية')?.trigger('click')
+    await vi.waitFor(() =>
+      expect(useRouter().currentRoute.value.fullPath).toBe('/ar/report/abc123/network'),
+    )
   })
 })

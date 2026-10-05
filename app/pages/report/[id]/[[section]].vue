@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import { computed, onMounted, provide } from 'vue'
+import { computed, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
-import { useLocalizedNavigation } from '../composables/useLocalizedNavigation'
-import VerdictBanner from '../components/report/VerdictBanner.vue'
-import SubVerdictGrid from '../components/report/SubVerdictGrid.vue'
-import VerticalTabs from '../components/ui/VerticalTabs.vue'
-import ControlFlowSection from '../components/report/sections/ControlFlowSection.vue'
-import BehaviorAnalysisSection from '../components/report/sections/BehaviorAnalysisSection.vue'
-import AppInformationSection from '../components/report/sections/AppInformationSection.vue'
-import ThreatIntelligenceSection from '../components/report/sections/ThreatIntelligenceSection.vue'
-import NetworkSection from '../components/report/sections/NetworkSection.vue'
-import FingerprintsSection from '../components/report/sections/FingerprintsSection.vue'
-import CodeAnalysisSection from '../components/report/sections/CodeAnalysisSection.vue'
-import { useReport, REPORT_INJECTION_KEY } from '../composables/useReport'
+import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
+import VerdictBanner from '~/components/report/VerdictBanner.vue'
+import SubVerdictGrid from '~/components/report/SubVerdictGrid.vue'
+import VerticalTabs from '~/components/ui/VerticalTabs.vue'
+import ControlFlowSection from '~/components/report/sections/ControlFlowSection.vue'
+import BehaviorAnalysisSection from '~/components/report/sections/BehaviorAnalysisSection.vue'
+import AppInformationSection from '~/components/report/sections/AppInformationSection.vue'
+import ThreatIntelligenceSection from '~/components/report/sections/ThreatIntelligenceSection.vue'
+import NetworkSection from '~/components/report/sections/NetworkSection.vue'
+import FingerprintsSection from '~/components/report/sections/FingerprintsSection.vue'
+import CodeAnalysisSection from '~/components/report/sections/CodeAnalysisSection.vue'
+import { useReport, REPORT_INJECTION_KEY } from '~/composables/useReport'
+
+definePageMeta({
+  name: 'report',
+  key: (route) => String(route.params.id),
+})
 
 const { t } = useI18n()
 const route = useRoute()
@@ -21,16 +25,6 @@ const { replace } = useLocalizedNavigation()
 
 const report = useReport(route.params.id as string)
 provide(REPORT_INJECTION_KEY, report)
-
-onMounted(() => {
-  report.verdict.load()
-  report.fingerprints.load()
-  report.threatIntelligence.load()
-  report.appAnalysis.load()
-  report.codeAnalysis.load()
-  report.behaviorAnalysis.load()
-  report.networkAnalysis.load()
-})
 
 const TABS = computed(() => [
   { id: 'code-analysis', label: t('reportView.tabs.codeAnalysis') },

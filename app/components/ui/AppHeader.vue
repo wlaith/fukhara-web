@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
 import Button from './Button.vue'
 import { useLocalizedNavigation } from '../../composables/useLocalizedNavigation'
 import fukharaLogoEn from '../../assets/logo/fukhara-logo.svg'
@@ -9,11 +8,11 @@ import fukharaLogoAr from '../../assets/logo/fukhara-logo-ar.svg'
 
 defineEmits<{ analyze: [] }>()
 
-const { t } = useI18n()
-const route = useRoute()
+const { t, locale } = useI18n()
+const switchLocalePath = useSwitchLocalePath()
 const { push } = useLocalizedNavigation()
 
-const isArabic = computed(() => route.params.locale === 'ar')
+const isArabic = computed(() => locale.value === 'ar')
 const logo = computed(() => (isArabic.value ? fukharaLogoAr : fukharaLogoEn))
 const switchToLabel = computed(() => (isArabic.value ? 'English' : 'العربية'))
 const isMenuOpen = ref(false)
@@ -23,11 +22,7 @@ function goHome() {
 }
 
 function switchLocale() {
-  if (isArabic.value) {
-    push(route.fullPath.replace(/^\/ar(\/|$)/, '/'))
-  } else {
-    push(route.fullPath === '/' ? '/ar' : `/ar${route.fullPath}`)
-  }
+  navigateTo(switchLocalePath(isArabic.value ? 'en' : 'ar'))
 }
 </script>
 

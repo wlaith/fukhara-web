@@ -1,16 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { mount } from '@vue/test-utils'
-import { createRouter, createMemoryHistory } from 'vue-router'
+import { flushPromises } from '@vue/test-utils'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
+import { clearNuxtData, useRouter } from '#imports'
 
-const getVerdict = vi.fn().mockResolvedValue({ verdict: 'Malicious', severity: 'High', reason: 'r', response: 'r2' })
-const getFingerprints = vi.fn().mockResolvedValue({})
-const getThreatIntelligence = vi.fn().mockResolvedValue({})
-const getAppAnalysis = vi.fn().mockResolvedValue({})
-const getCodeAnalysis = vi.fn().mockResolvedValue({})
-const getBehaviorAnalysis = vi.fn().mockResolvedValue({})
-const getNetworkAnalysis = vi.fn().mockResolvedValue({})
+const getVerdict = vi.fn()
+const getFingerprints = vi.fn()
+const getThreatIntelligence = vi.fn()
+const getAppAnalysis = vi.fn()
+const getCodeAnalysis = vi.fn()
+const getBehaviorAnalysis = vi.fn()
+const getNetworkAnalysis = vi.fn()
 
-vi.mock('../api/reportApi', () => ({
+vi.mock('~/api/reportApi', () => ({
   getVerdict: (...args: unknown[]) => getVerdict(...args),
   getFingerprints: (...args: unknown[]) => getFingerprints(...args),
   getThreatIntelligence: (...args: unknown[]) => getThreatIntelligence(...args),
@@ -20,24 +21,25 @@ vi.mock('../api/reportApi', () => ({
   getNetworkAnalysis: (...args: unknown[]) => getNetworkAnalysis(...args),
 }))
 
-import ReportView from './ReportView.vue'
-import i18n from '../i18n'
+import ReportPage from './[[section]].vue'
+import ControlFlowSection from '~/components/report/sections/ControlFlowSection.vue'
+import BehaviorAnalysisSection from '~/components/report/sections/BehaviorAnalysisSection.vue'
+import AppInformationSection from '~/components/report/sections/AppInformationSection.vue'
+import ThreatIntelligenceSection from '~/components/report/sections/ThreatIntelligenceSection.vue'
+import NetworkSection from '~/components/report/sections/NetworkSection.vue'
+import FingerprintsSection from '~/components/report/sections/FingerprintsSection.vue'
+import CodeAnalysisSection from '~/components/report/sections/CodeAnalysisSection.vue'
 
-async function mountReportView(initialPath = '/report/abc123') {
-  const router = createRouter({
-    history: createMemoryHistory(),
-    routes: [{ path: '/report/:id/:section?', name: 'report', component: ReportView }],
-  })
-  router.push(initialPath)
-  await router.isReady()
-  const wrapper = mount(ReportView, { global: { plugins: [router] } })
-  await new Promise((resolve) => setTimeout(resolve, 0))
-  return { wrapper, router }
+async function mountReport(route = '/report/abc123') {
+  const wrapper = await mountSuspended(ReportPage, { route })
+  await flushPromises()
+  return wrapper
 }
 
-describe('ReportView', () => {
+describe('report page', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    clearNuxtData()
     getVerdict.mockResolvedValue({ verdict: 'Malicious', severity: 'High', reason: 'r', response: 'r2' })
     getFingerprints.mockResolvedValue({})
     getThreatIntelligence.mockResolvedValue({})
@@ -48,12 +50,12 @@ describe('ReportView', () => {
   })
 
   it('fetches and renders the verdict banner', async () => {
-    const { wrapper } = await mountReportView()
+    const wrapper = await mountReport()
     expect(wrapper.text()).toContain('Malicious')
   })
 
   it('defaults to the code-analysis section and shows all 7 vertical tabs', async () => {
-    const { wrapper } = await mountReportView()
+    const wrapper = await mountReport()
     for (const label of [
       'Code Analysis',
       'Behavior Analysis',
@@ -67,8 +69,8 @@ describe('ReportView', () => {
     }
   })
 
-  it('eagerly loads all 6 data sections on mount, not just the active tab (regression: SubVerdictGrid needs all 6)', async () => {
-    await mountReportView()
+  it('loads all 6 data sections up front, not just the active tab (SubVerdictGrid needs all 6)', async () => {
+    await mountReport()
     expect(getFingerprints).toHaveBeenCalledTimes(1)
     expect(getThreatIntelligence).toHaveBeenCalledTimes(1)
     expect(getAppAnalysis).toHaveBeenCalledTimes(1)
@@ -78,20 +80,40 @@ describe('ReportView', () => {
   })
 
   it('renders the Control Flow section and updates the route when its tab is selected', async () => {
-    const { wrapper, router } = await mountReportView()
-    const controlFlowTab = wrapper.findAll('.vertical-tabs__item').find((el) => el.text() === 'Control Flow')
+    const wrapper = await mountReport()
+    const controlFlowTab = wrapper
+      .findAll('.vertical-tabs__item')
+      .find((el) => el.text() === 'Control Flow')
     await controlFlowTab?.trigger('click')
-    await new Promise((resolve) => setTimeout(resolve, 0))
-    expect(router.currentRoute.value.params.section).toBe('control-flow')
+    await vi.waitFor(() =>
+      expect(useRouter().currentRoute.value.params.section).toBe('control-flow'),
+    )
+    await flushPromises()
     expect(wrapper.text()).toContain('Not yet available')
   })
 
-  it('shows Arabic tab labels when the locale is ar', async () => {
-    i18n.global.locale.value = 'ar'
-    const { wrapper } = await mountReportView()
+  it('renders the tabs and no section panel for an unknown section id', async () => {
+    const wrapper = await mountReport('/report/abc123/not-a-section')
+    expect(wrapper.text()).toContain('Code Analysis')
+    expect(wrapper.text()).not.toContain('Not yet available')
+    expect(wrapper.find('.section-error').exists()).toBe(false)
+    for (const section of [
+      ControlFlowSection,
+      BehaviorAnalysisSection,
+      AppInformationSection,
+      ThreatIntelligenceSection,
+      NetworkSection,
+      FingerprintsSection,
+      CodeAnalysisSection,
+    ]) {
+      expect(wrapper.findComponent(section).exists()).toBe(false)
+    }
+  })
+
+  it('shows Arabic tab labels on /ar', async () => {
+    const wrapper = await mountReport('/ar/report/abc123')
     for (const label of ['تحليل الشيفرة', 'تحليل السلوك', 'معلومات التطبيق', 'الشبكة', 'البصمات']) {
       expect(wrapper.text()).toContain(label)
     }
-    i18n.global.locale.value = 'en'
   })
 })

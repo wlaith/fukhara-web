@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import FileUploader from '../components/ui/FileUploader.vue'
-import { analyzeApk } from '../api/reportApi'
-import { useLocalizedNavigation } from '../composables/useLocalizedNavigation'
+import FileUploader from '~/components/ui/FileUploader.vue'
+import { analyzeApk } from '~/api/reportApi'
+import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
+
+definePageMeta({ name: 'home' })
 
 const { t } = useI18n()
 const { push } = useLocalizedNavigation()
