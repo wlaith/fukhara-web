@@ -1,4 +1,5 @@
 import { apiGet, apiPostFile } from './client'
+import { apiConfig } from './config'
 import { unwrap, type Envelope } from './envelope'
 import { verdictFixture } from './mocks/verdict'
 import rawSample from './mocks/fixtures/sample-report-raw.json'
@@ -20,22 +21,20 @@ type CodeAnalysisResponse = components['schemas']['CodeAnalysisResponse']
 type BehaviorAnalysisResponse = components['schemas']['BehaviorAnalysisResponse']
 type NetworkAnalysisResponse = components['schemas']['NetworkAnalysisResponse']
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false'
-
 export interface AnalyzeResult {
   id: string
   status: string
 }
 
 export async function analyzeApk(file: File): Promise<AnalyzeResult> {
-  if (USE_MOCK) {
+  if (apiConfig().useMock) {
     return { id: rawSample.fingerprints['checksums[mobsf]'].sha256, status: 'success' }
   }
   return apiPostFile<AnalyzeResult>('/api/analyze/', file)
 }
 
 export async function getVerdict(id: string) {
-  if (USE_MOCK) return verdictFixture
+  if (apiConfig().useMock) return verdictFixture
   const res = await apiGet<components['schemas']['VerdictSectionResponse']>(
     `/api/report/${id}/verdict/`,
   )
@@ -43,7 +42,7 @@ export async function getVerdict(id: string) {
 }
 
 export async function getFingerprints(id: string) {
-  if (USE_MOCK) {
+  if (apiConfig().useMock) {
     return {
       checksums: rawSample.fingerprints['checksums[mobsf]'],
       identifiers: rawSample.fingerprints['identifiers[apkid]'],
@@ -59,7 +58,7 @@ export async function getFingerprints(id: string) {
 }
 
 export async function getThreatIntelligence(id: string) {
-  if (USE_MOCK) {
+  if (apiConfig().useMock) {
     return {
       sample_timeline: rawSample.threat_intelligence["sample_timeline[['fukhara', 'virustotal']]"],
       yara_matches: rawSample.threat_intelligence['yara_matches[yara]'],
@@ -77,7 +76,7 @@ export async function getThreatIntelligence(id: string) {
 }
 
 export async function getAppAnalysis(id: string) {
-  if (USE_MOCK) {
+  if (apiConfig().useMock) {
     return {
       apk_details: rawSample.apk_analysis["apk_details[['mobsf', 'apk_info']]"],
       certificate_details: rawSample.apk_analysis['certificate_details[apk_info]'],
@@ -99,7 +98,7 @@ export async function getAppAnalysis(id: string) {
 }
 
 export async function getCodeAnalysis(id: string) {
-  if (USE_MOCK) {
+  if (apiConfig().useMock) {
     return {
       niap_analysis: rawSample.code_analysis['niap_analysis[mobsf]'],
       code_vulnerabilities: rawSample.code_analysis['code_vulnerabilties[mobsf]'],
@@ -113,7 +112,7 @@ export async function getCodeAnalysis(id: string) {
 }
 
 export async function getBehaviorAnalysis(id: string) {
-  if (USE_MOCK) {
+  if (apiConfig().useMock) {
     return {
       threats: rawSample.behavior_analysis['threats[quark_engine]'],
       permissions: rawSample.behavior_analysis['permissions[mobsf]'],
@@ -129,7 +128,7 @@ export async function getBehaviorAnalysis(id: string) {
 }
 
 export async function getNetworkAnalysis(id: string) {
-  if (USE_MOCK) {
+  if (apiConfig().useMock) {
     return {
       domains: rawSample.network_analysis['domains[mobsf]'],
       urls: rawSample.network_analysis['urls[mobsf]'],

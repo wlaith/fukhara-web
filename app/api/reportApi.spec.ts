@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 describe('reportApi (mock mode)', () => {
   beforeEach(() => {
-    vi.stubEnv('VITE_USE_MOCK', 'true')
     vi.resetModules()
   })
 
