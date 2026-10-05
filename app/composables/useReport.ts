@@ -1,4 +1,4 @@
-import { ref, type InjectionKey, type Ref } from 'vue'
+import { computed, type InjectionKey, type Ref } from 'vue'
 import {
   getVerdict,
   getFingerprints,
@@ -16,38 +16,31 @@ interface Section<T> {
   load: () => Promise<void>
 }
 
-function createSection<T>(fetcher: () => Promise<T>): Section<T> {
-  const data = ref<T | null>(null) as Ref<T | null>
-  const loading = ref(false)
-  const error = ref<string | null>(null)
-  let loaded = false
+function createSection<T>(key: string, fetcher: () => Promise<T>): Section<T> {
+  const { data, status, error, refresh } = useAsyncData<T | null>(key, fetcher, {
+    default: () => null,
+  })
 
-  async function load() {
-    if (loaded || loading.value) return
-    loading.value = true
-    error.value = null
-    try {
-      data.value = await fetcher()
-      loaded = true
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : String(err)
-    } finally {
-      loading.value = false
-    }
+  return {
+    data: data as Ref<T | null>,
+    loading: computed(() => status.value === 'pending'),
+    error: computed(() => error.value?.message ?? null),
+    load: async () => {
+      if (status.value === 'idle' || status.value === 'error') await refresh()
+    },
   }
-
-  return { data, loading, error, load }
 }
 
 export function useReport(id: string) {
+  const key = (section: string) => `report:${id}:${section}`
   return {
-    verdict: createSection(() => getVerdict(id)),
-    fingerprints: createSection(() => getFingerprints(id)),
-    threatIntelligence: createSection(() => getThreatIntelligence(id)),
-    appAnalysis: createSection(() => getAppAnalysis(id)),
-    codeAnalysis: createSection(() => getCodeAnalysis(id)),
-    behaviorAnalysis: createSection(() => getBehaviorAnalysis(id)),
-    networkAnalysis: createSection(() => getNetworkAnalysis(id)),
+    verdict: createSection(key('verdict'), () => getVerdict(id)),
+    fingerprints: createSection(key('fingerprints'), () => getFingerprints(id)),
+    threatIntelligence: createSection(key('threat-intelligence'), () => getThreatIntelligence(id)),
+    appAnalysis: createSection(key('app-analysis'), () => getAppAnalysis(id)),
+    codeAnalysis: createSection(key('code-analysis'), () => getCodeAnalysis(id)),
+    behaviorAnalysis: createSection(key('behavior-analysis'), () => getBehaviorAnalysis(id)),
+    networkAnalysis: createSection(key('network-analysis'), () => getNetworkAnalysis(id)),
   }
 }
 
