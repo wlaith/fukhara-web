@@ -26,7 +26,7 @@ describe('Tabs', () => {
   it('emits select with the clicked item id', async () => {
     const wrapper = mount(Tabs, { props: { items, activeId: 'high' } })
     const rows = wrapper.findAll('.tabs__item')
-    await rows[3].trigger('click')
+    await rows[3]!.trigger('click')
     expect(wrapper.emitted('select')?.[0]).toEqual(['good'])
   })
 })

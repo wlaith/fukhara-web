@@ -25,7 +25,7 @@ describe('VerticalTabs', () => {
   it('emits select with the clicked item id', async () => {
     const wrapper = mount(VerticalTabs, { props: { items, activeId: 'code-analysis' } })
     const rows = wrapper.findAll('.vertical-tabs__item')
-    await rows[2].trigger('click')
+    await rows[2]!.trigger('click')
     expect(wrapper.emitted('select')?.[0]).toEqual(['fingerprints'])
   })
 })
