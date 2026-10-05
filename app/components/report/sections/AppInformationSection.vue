@@ -42,24 +42,5 @@ const componentsSummary = computed(() => {
     <ContainedList :title="t('appInformation.certificateTitle')" :rows="certificate ? [{ id: 'certificate', title: t('appInformation.certificateSummary', { issuer: certificate.issuer, sha256: certificate.sha256, notBefore: certificate.not_before, notAfter: certificate.not_after }), meta: '' }] : []" />
     <ContainedList :title="t('appInformation.componentsTitle')" :rows="[{ id: 'components', title: componentsSummary, meta: '' }]" />
     <ContainedList :title="t('appInformation.manifestFindingsTitle')" :rows="manifestFindings.map((finding, index) => ({ id: index.toString(), title: `${finding.title} — ${finding.description}`, meta: t('appInformation.severityPrefix', { severity: finding.severity }) }))" />
-    <!-- <DetailRow v-if="apkDetails" :icon-src="deviceUnknownIcon" icon-alt="App Details" label="App Details">
-      {{ apkDetails.package }} · {{ apkDetails.app_name }} · {{ apkDetails.version_name }} · SDK {{ apkDetails.sdk }}
-    </DetailRow>
-    <DetailRow v-if="certificate" :icon-src="shieldIcon" icon-alt="Certificate" label="Certificate">
-      Issuer: {{ certificate.issuer }} · SHA-256: {{ certificate.sha256 }} · Valid {{ certificate.not_before }} →
-      {{ certificate.not_after }}
-    </DetailRow>
-    <DetailRow :icon-src="sourceIcon" icon-alt="Components" label="Components">
-      {{ componentsSummary }}
-    </DetailRow>
-    <DetailRow
-      v-for="(finding, index) in manifestFindings"
-      :key="index"
-      :icon-src="warningIcon"
-      icon-alt="Manifest Finding"
-      :label="`Manifest Finding — ${finding.severity}`"
-    >
-      {{ finding.title }} — {{ finding.description }}
-    </DetailRow> -->
   </div>
 </template>
