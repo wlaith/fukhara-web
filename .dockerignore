@@ -27,8 +27,6 @@ docs
 
 .woodpecker/
 
-*.yaml
-*.yml
 
 node_modules/
 dist
