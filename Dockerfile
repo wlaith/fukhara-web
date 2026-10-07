@@ -1,4 +1,4 @@
-ARG NODE_VERSION=24 USER=node WORKSPACE_PATH=/workspace APP_PATH=/app
+ARG NODE_VERSION=24 PNPM_VERSION=12.8.1 USER=node WORKSPACE_PATH=/workspace APP_PATH=/app
 
 # Build metadata passed by Woodpecker
 ARG CI_REPO_URL
@@ -11,17 +11,20 @@ ARG CI_PIPELINE_FORGE_URL
 FROM node:${NODE_VERSION} AS builder
 
 ARG WORKSPACE_PATH
+ARG PNPM_VERSION
+
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
 
 WORKDIR $WORKSPACE_PATH
-COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # nuxt prepare needs the sources
 COPY . .
-RUN npm run postinstall
+RUN pnpm run postinstall
 
-RUN npm run lint
-RUN NODE_ENV=production npm run build
+RUN pnpm run lint
+RUN NODE_ENV=production pnpm run build
 
 FROM node:${NODE_VERSION}-slim
 
