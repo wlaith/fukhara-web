@@ -144,5 +144,37 @@
   "controlFlow": {
     "title": "Not yet available",
     "description": "Control-flow graph visualization is not yet defined by the backend. Check back once this section's data contract is finalized."
+  },
+  "aboutView": {
+    "title": "About Fukhara",
+    "onThisPage": "In this page",
+    "intro": "Fukhara checks Android apps and tells you whether they look dangerous. It is built and run by Jordan Open Source Association, in the open.",
+    "sections": {
+      "who": "Who is behind Fukhara",
+      "why": "Why Fukhara exists"
+    },
+    "who": {
+      "orgName": "Jordan Open Source Association",
+      "orgDescription": "JOSA is the not-for-profit organisation that works for a better Jordan through openness in technology.",
+      "body": "JOSA builds Fukhara, runs it, and answers for it. If a result looks wrong, or you want to know who has access to what, you can reach the people responsible.",
+      "glance": {
+        "organization": {
+          "label": "Organization",
+          "value": "Non-Profit"
+        },
+        "basedIn": {
+          "label": "Based in",
+          "value": "Amman, Jordan"
+        },
+        "founded": {
+          "label": "Founded",
+          "value": "2011"
+        }
+      }
+    },
+    "why": {
+      "p1": "An Android app is just a file, and anyone can send you one. Apps shared through chats, email or websites don't pass through a store's checks, and you can't tell a safe one from a dangerous one by looking at it.",
+      "p2": "Fukhara gives you a clear answer. Upload the file and we tell you whether it looks dangerous and why: plain language first, technical detail if you want it."
+    }
   }
 }
