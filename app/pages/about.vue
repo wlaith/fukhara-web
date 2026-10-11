@@ -31,7 +31,7 @@ const activeId = computed(() => route.hash.slice(1) || sectionIds[0])
 
     <div class="page-shell">
       <div class="grid grid-cols-1 lg:grid-cols-[263px_1fr]">
-        <nav :aria-label="t('aboutView.onThisPage')" class="flex flex-col gap-3 border-subtle bg-canvas py-8">
+        <nav :aria-label="t('aboutView.onThisPage')" class="hidden flex-col gap-3 border-subtle bg-canvas py-8 lg:flex">
           <p class="px-4 font-heading text-body-lg text-secondary">{{ t('aboutView.onThisPage') }}</p>
           <ul class="flex flex-col gap-1">
             <li v-for="id in sectionIds" :key="id">
