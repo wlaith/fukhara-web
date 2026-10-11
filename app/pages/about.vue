@@ -4,6 +4,8 @@ import { useI18n } from 'vue-i18n'
 import fukharaLogoEn from '~/assets/logo/fukhara-logo.svg'
 import fukharaLogoAr from '~/assets/logo/fukhara-logo-ar.svg'
 import josaLogoMark from '~/assets/logo/josa-logo-mark.svg'
+import arrowUpRight from '~/assets/icons/arrow--up-right.svg'
+import arrowUpLeft from '~/assets/icons/arrow--up-left.svg'
 
 definePageMeta({ name: 'about' })
 
@@ -13,7 +15,9 @@ const route = useRoute()
 const sectionIds = ['who', 'why'] as const
 const glanceKeys = ['organization', 'basedIn', 'founded'] as const
 
-const logo = computed(() => (locale.value === 'ar' ? fukharaLogoAr : fukharaLogoEn))
+const isArabic = computed(() => locale.value === 'ar')
+const logo = computed(() => (isArabic.value ? fukharaLogoAr : fukharaLogoEn))
+const josaUrl = computed(() => (isArabic.value ? 'https://josa.ngo/ar' : 'https://josa.ngo'))
 const activeId = computed(() => route.hash.slice(1) || sectionIds[0])
 </script>
 
@@ -60,9 +64,15 @@ const activeId = computed(() => route.hash.slice(1) || sectionIds[0])
               <div class="flex items-start gap-4 border-subtle bg-panel p-4">
                 <img :src="josaLogoMark" alt="" class="h-[54px] w-[55px] shrink-0">
                 <div class="flex flex-col gap-1">
-                  <p class="font-heading text-display-sm font-semibold text-primary">
+                  <a
+                    :href="josaUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center gap-2 font-heading text-display-sm font-semibold text-primary hover:underline"
+                  >
                     {{ t('aboutView.who.orgName') }}
-                  </p>
+                    <img :src="isArabic ? arrowUpLeft : arrowUpRight" alt="" class="h-4 w-4">
+                  </a>
                   <p class="font-body text-body-lg text-secondary">{{ t('aboutView.who.orgDescription') }}</p>
                 </div>
               </div>
