@@ -57,6 +57,11 @@
         "note": "Your report can be exported",
         "link": "Fukhara API on GitHub"
       }
+    },
+    "builtBy": {
+      "title": "Transparent. Open. Accountable.",
+      "body": "This tool is built by {josa}, a Jordanian non-profit that promotes open source and digital rights.",
+      "josa": "Jordan Open Source Association (JOSA)"
     }
   },
   "reportHeader": {

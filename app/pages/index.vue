@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FileUploader from '~/components/ui/FileUploader.vue'
 import { analyzeApk } from '~/api/reportApi'
@@ -7,15 +7,17 @@ import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
 import applicationMobileIcon from '~/assets/icons/application--mobile.svg'
 import cloudUploadIcon from '~/assets/icons/cloud--upload.svg'
 import reportDataIcon from '~/assets/icons/report--data.svg'
+import josaLogoMark from '~/assets/logo/josa-logo-mark-muted.svg'
 
 definePageMeta({ name: 'home' })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { push } = useLocalizedNavigation()
 const uploadError = ref<string | null>(null)
 
 const APK_GUIDE_URL = 'https://developer.android.com/studio/run#reference'
 const API_REPO = 'https://github.com/jordanopensource/fukhara-api'
+const josaUrl = computed(() => (locale.value === 'ar' ? 'https://josa.ngo/ar' : 'https://josa.ngo'))
 
 const howToSteps = [
   { key: 'getApk', icon: applicationMobileIcon, notes: false, link: APK_GUIDE_URL },
@@ -44,6 +46,17 @@ async function onSelect(file: File) {
       </p>
       <FileUploader label="" @select="onSelect" />
       <p v-if="uploadError" class="p-4 font-body text-body text-tag-red-border">{{ uploadError }}</p>
+    </section>
+    <section class="flex flex-col gap-4 border-subtle p-6">
+      <h2 class="font-heading text-display-sm text-primary">{{ t('homeView.builtBy.title') }}</h2>
+      <i18n-t keypath="homeView.builtBy.body" tag="p" class="font-body text-body text-primary">
+        <template #josa>
+          <a :href="josaUrl" target="_blank" rel="noopener noreferrer" class="text-link underline">
+            {{ t('homeView.builtBy.josa') }}<span class="sr-only"> {{ t('common.opensInNewTab') }}</span>
+          </a>
+        </template>
+      </i18n-t>
+      <img :src="josaLogoMark" alt="" class="mt-auto h-14 w-14 self-end">
     </section></div>
     <section class="page-shell grid grid-cols-1  border-subtle lg:grid-cols-3">
           <div class="border-subtle px-6 py-6">

@@ -7,6 +7,7 @@ export default {
         canvas: '#1A1F21',
         panel: '#2B3336',
         'layer-01': '#22282A',
+        'layer-02': '#2B3336',
         subtle: '#3A4245',
         link: '#DE822B',
         'subtle-hover': '#4C5659',
