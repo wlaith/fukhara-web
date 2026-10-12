@@ -3,39 +3,37 @@ import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 
 const config = vi.hoisted(() => ({
   app: { baseURL: '/', buildAssetsDir: '/_nuxt/', cdnURL: '' },
-  public: { apiBaseUrl: 'https://api.example.test', useMock: false },
+  public: { useMock: false },
 }))
 mockNuxtImport('useRuntimeConfig', () => () => config)
+
+const { fukharaMock } = vi.hoisted(() => ({ fukharaMock: vi.fn() }))
+mockNuxtImport('$fukhara', () => fukharaMock)
 
 import { getVerdict, analyzeApk } from './reportApi'
 
 describe('reportApi with useMock=false', () => {
   afterEach(() => {
-    vi.unstubAllGlobals()
+    fukharaMock.mockReset()
   })
 
-  it('GETs the verdict from the configured base URL', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue({ ok: true, status: 200, json: async () => ({ verdict: null }) })
-    vi.stubGlobal('fetch', fetchMock)
+  it('GETs the verdict through the API client', async () => {
+    fukharaMock.mockResolvedValue({ verdict: null })
     const result = await getVerdict('abc123')
-    expect(fetchMock).toHaveBeenCalledWith('https://api.example.test/api/report/abc123/verdict/')
+    expect(fukharaMock).toHaveBeenCalledWith('/api/report/{id}/verdict/', {
+      path: { id: 'abc123' },
+    })
     expect(result).toBeNull()
   })
 
-  it('POSTs the file to the configured base URL', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ id: 'abc123', status: 'success' }),
-    })
-    vi.stubGlobal('fetch', fetchMock)
+  it('POSTs the file as multipart form data', async () => {
+    fukharaMock.mockResolvedValue({ id: 'abc123', status: 'success' })
     const result = await analyzeApk(new File(['x'], 'sample.apk'))
-    expect(fetchMock).toHaveBeenCalledWith(
-      'https://api.example.test/api/analyze/',
-      expect.objectContaining({ method: 'POST' }),
-    )
+    const [path, options] = fukharaMock.mock.calls[0]!
+    expect(path).toBe('/api/analyze/')
+    expect(options.method).toBe('POST')
+    expect(options.body).toBeInstanceOf(FormData)
+    expect((options.body as FormData).get('file')).toBeInstanceOf(File)
     expect(result).toEqual({ id: 'abc123', status: 'success' })
   })
 })

@@ -1,5 +1,3 @@
-import { apiConfig } from './config'
-
 export class ApiError extends Error {
   status: number
 
@@ -10,22 +8,12 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiGet<T>(path: string): Promise<T> {
-  const { baseUrl } = apiConfig()
-  const response = await fetch(`${baseUrl}${path}`)
-  if (!response.ok) {
-    throw new ApiError(response.status, `GET ${path} failed with ${response.status}`)
+export async function apiRequest<T>(description: string, request: () => Promise<T>): Promise<T> {
+  try {
+    return await request()
+  } catch (err) {
+    const status = (err as { statusCode?: number } | null)?.statusCode
+    if (status === undefined) throw err
+    throw new ApiError(status, `${description} failed with ${status}`)
   }
-  return (await response.json()) as T
-}
-
-export async function apiPostFile<T>(path: string, file: File): Promise<T> {
-  const { baseUrl } = apiConfig()
-  const formData = new FormData()
-  formData.append('file', file)
-  const response = await fetch(`${baseUrl}${path}`, { method: 'POST', body: formData })
-  if (!response.ok) {
-    throw new ApiError(response.status, `POST ${path} failed with ${response.status}`)
-  }
-  return (await response.json()) as T
 }
