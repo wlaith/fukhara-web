@@ -33,7 +33,7 @@ function switchLocale() {
 <template>
   <header class="page-shell relative flex h-fit items-center justify-between bg-panel">
     <button type="button" class="border-none bg-transparent p-0 cursor-pointer" @click="goHome">
-      <img :src="logo" alt="Fukhara" class="h-[27.5px] w-auto" />
+      <img :src="logo" alt="Fukhara" class="h-[27.5px] w-auto" >
     </button>
 
     <nav class="hidden items-center gap-2 lg:flex">

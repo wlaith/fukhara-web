@@ -78,3 +78,10 @@ export function verdictSeverityKind(severity: string | null | undefined): TagKin
   if (!severity) return 'gray'
   return VERDICT_SEVERITY_KIND[severity.toLowerCase()] ?? 'gray'
 }
+
+const SEVERITY_VALUES: readonly string[] = ['high', 'warning', 'info', 'good']
+
+export function toSeverity(value: unknown): Severity | null {
+  const key = typeof value === 'string' ? value.trim().toLowerCase() : ''
+  return SEVERITY_VALUES.includes(key) ? (key as Severity) : null
+}

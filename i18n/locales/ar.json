@@ -8,6 +8,19 @@
   "containedList": {
     "noFindings": "لا نتائج"
   },
+  "common": {
+    "loading": "جارٍ التحميل…",
+    "copyValue": "نسخ {label}",
+    "copied": "تم النسخ",
+    "opensInNewTab": "(يُفتح في علامة تبويب جديدة)",
+    "showMore": "عرض {count} إضافية"
+  },
+  "affectedFiles": {
+    "title": "الملفات المتأثرة",
+    "lines": "الأسطر",
+    "showAll": "عرض جميع الملفات ({count})",
+    "showFewer": "عرض ملفات أقل"
+  },
   "fileUpload": {
     "dropPrompt": "اسحب الملفات وأفلتها هنا أو انقر للرفع",
     "invalidType": "يُسمح فقط بملفات .apk."
@@ -71,6 +84,7 @@
     }
   },
   "severity": {
+    "all": "الكل",
     "high": "عالية",
     "warning": "تحذير",
     "info": "معلومة",
@@ -102,7 +116,8 @@
       "yaraTag": "{count} تطابقات YARA",
       "noYaraTag": "لا تطابقات YARA",
       "avTag": "{count} اكتشافات مكافح الفيروسات",
-      "notDetectedTag": "لم يُكتشف بواسطة مكافح الفيروسات"
+      "notDetectedTag": "لم يُكتشف بواسطة مكافح الفيروسات",
+      "avUnavailableTag": "نتائج مكافحة الفيروسات غير متاحة"
     },
     "network": {
       "noBadDomains": "لا نطاقات ضارة",
@@ -121,34 +136,111 @@
     }
   },
   "codeAnalysis": {
-    "listTitle": "ثغرات الشيفرة · {count} من {total}"
+    "listTitle": "ثغرات الشيفرة · {count} من {total}",
+    "listTitleAll": "ثغرات الشيفرة · {total}",
+    "cvss": "CVSS {score}",
+    "filesCount": "الملفات: {count}",
+    "owaspMobile": "OWASP Mobile",
+    "learnMore": "اعرف المزيد",
+    "opensInNewTab": "(يُفتح في علامة تبويب جديدة)"
   },
   "behaviorAnalysis": {
-    "permissionsTitle": "الأذونات"
+    "permissionsTitle": "الأذونات",
+    "permissionsTab": "الأذونات ({count})",
+    "behavioursTab": "السلوكيات ({count})",
+    "apiUsageTab": "استخدام الواجهات البرمجية ({count})",
+    "behavioursTitle": "السلوكيات المكتشفة",
+    "apiUsageTitle": "استخدام الواجهات البرمجية الحساسة",
+    "confidence": "ثقة {value}%",
+    "noDescription": "لم يُبلَّغ عن وصف.",
+    "noPermissions": "لم يُبلَّغ عن أي أذونات لهذا التطبيق.",
+    "noBehaviours": "لم يُبلّغ Quark Engine عن أي سلوكيات لهذا التطبيق.",
+    "noApiUsage": "لم يُبلَّغ عن استخدام لواجهات برمجية حساسة."
   },
   "appInformation": {
     "appDetailsTitle": "تفاصيل التطبيق",
     "certificateTitle": "الشهادة",
     "componentsTitle": "المكوّنات",
     "manifestFindingsTitle": "نتائج البيان (Manifest)",
-    "certificateSummary": "الجهة المُصدرة: {issuer} · SHA-256: {sha256} · صالحة {notBefore} → {notAfter}",
-    "componentsSummary": "{activities} أنشطة · {receivers} مستقبِلات · {services} خدمات",
-    "severityPrefix": "الخطورة: {severity}"
+    "appName": "اسم التطبيق",
+    "package": "الحزمة",
+    "version": "الإصدار",
+    "versionValue": "{name} (البناء {code})",
+    "sdk": "إصدارات Android المدعومة",
+    "sdkMin": "من API {min} فما فوق",
+    "sdkRange": "من API {min} إلى {max}",
+    "signing": "التوقيع",
+    "signed": "موقَّع",
+    "unsigned": "غير موقَّع",
+    "scheme": "مخطط v{version}",
+    "validity": "الحالة",
+    "certValid": "صالحة",
+    "certExpired": "منتهية الصلاحية",
+    "certNotYetValid": "لم تصبح صالحة بعد",
+    "issuer": "الجهة المُصدرة",
+    "validFrom": "صالحة من",
+    "validTo": "صالحة حتى",
+    "activities": "الأنشطة ({count})",
+    "receivers": "المستقبِلات ({count})",
+    "services": "الخدمات ({count})",
+    "mainActivity": "الرئيسي",
+    "components": "المكوّنات المتأثرة",
+    "noComponentsForFinding": "لم يُبلَّغ عن مكوّنات محددة لهذه النتيجة.",
+    "noDetails": "لم يُبلَّغ عن تفاصيل التطبيق.",
+    "noCertificate": "لم يُبلَّغ عن تفاصيل الشهادة.",
+    "noComponents": "لم يُبلَّغ عن أي مكوّنات.",
+    "noManifest": "لم يُبلَّغ عن نتائج في البيان."
   },
   "threatIntelligence": {
-    "yaraMatchesTitle": "تطابقات YARA"
+    "yaraMatchesTitle": "تطابقات YARA",
+    "noYara": "لم يُبلَّغ عن أي تطابقات YARA.",
+    "unknownSource": "ملف غير معروف",
+    "avTitle": "اكتشافات مكافحة الفيروسات",
+    "avCount": "المحركات: {count}",
+    "noAv": "لم يُرجع VirusTotal أي اكتشافات لهذه العيّنة.",
+    "timelineTitle": "الخط الزمني للعيّنة",
+    "noTimeline": "لم يُبلَّغ عن خط زمني لهذه العيّنة.",
+    "externalTitle": "تقارير خارجية",
+    "openReportFor": "فتح تقرير {service}",
+    "timeline": {
+      "oldest_file_found_in_apk": "أقدم ملف في الحزمة",
+      "latest_file_found_in_apk": "أحدث ملف في الحزمة",
+      "certificate_valid_not_before": "الشهادة صالحة من",
+      "certificate_valid_not_after": "الشهادة صالحة حتى",
+      "first_submission_on_vt": "أول إرسال إلى VirusTotal",
+      "last_submission_on_vt": "آخر إرسال إلى VirusTotal",
+      "upload_on_fukhara": "الرفع إلى فخّارة"
+    }
   },
   "network": {
     "domainsTitle": "النطاقات",
-    "badLabel": "ضار: {value}"
+    "domainsTab": "النطاقات ({count})",
+    "urlsTab": "الروابط ({count})",
+    "urlsTitle": "الروابط حسب الملف المصدر",
+    "malicious": "ضار",
+    "ofac": "OFAC",
+    "ofacNote": "مُعلَّم بواسطة فحص عقوبات OFAC في MobSF.",
+    "ip": "عنوان IP",
+    "location": "الموقع",
+    "coordinates": "الإحداثيات",
+    "url": "الرابط",
+    "urlCount": "الروابط: {count}",
+    "unknownSource": "ملف غير معروف",
+    "urlsNote": "تُعرض كنص فقط. هذه الروابط مأخوذة من التطبيق المُحلَّل ولا يمكن فتحها من التقرير.",
+    "noDomains": "لم يُبلَّغ عن أي نطاقات.",
+    "noUrls": "لم يُبلَّغ عن أي روابط.",
+    "noGeolocation": "لم يُبلَّغ عن بيانات موقع لهذا النطاق."
   },
   "fingerprints": {
     "fingerprintsTitle": "البصمات",
     "identifiersTitle": "المعرّفات",
     "checksumsTitle": "قيم التحقق (Checksums)",
-    "checksumsSummary": "MD5 {md5} · SHA1 {sha1} · SHA256 {sha256} · الحجم {size}",
+    "size": "الحجم",
+    "apkFile": "حزمة APK",
     "unknownFilename": "غير معروف",
-    "noFuzzyHash": "لا تجزئة تقريبية"
+    "noChecksums": "لم يُبلَّغ عن قيم تحقق.",
+    "noIdentifiers": "لم يُبلَّغ عن معرّفات مُعلَّمة.",
+    "noFuzzyHashes": "لم يُبلَّغ عن بصمات تقريبية."
   },
   "controlFlow": {
     "title": "غير متاح بعد",

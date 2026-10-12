@@ -3,6 +3,7 @@ import type { ReportContext } from './useReport'
 import type { Translate } from '../domain/translate'
 import type { Severity, PermissionStatus } from '../domain/severity'
 import type { ApkidFileMatches } from '../domain/subVerdicts'
+import { toAvDetections, toYaraMatches, virusTotalAvailable } from '../domain/threatIntelligence'
 import {
   codeAnalysisSubVerdict,
   behaviorAnalysisSubVerdict,
@@ -54,25 +55,27 @@ export function useSubVerdicts(report: ReportContext, t: Translate) {
     const data = report.appAnalysis.data.value as {
       manifest_analysis?: ManifestFindingRaw[] | null
     } | null
-    if (!data?.manifest_analysis) return null
+    // manifest_analysis is {} (not []) when MobSF fails.
+    if (!Array.isArray(data?.manifest_analysis)) return null
     const findings = data.manifest_analysis.map((f) => ({ severity: f?.severity ?? null }))
     return appInformationSubVerdict(findings, t)
   })
 
   const threatIntelligence = computed(() => {
     const data = report.threatIntelligence.data.value as {
-      yara_matches?: { matches?: { rules?: string[] }[] } | null
-      av_detections?: unknown[] | Record<string, number> | null
+      yara_matches?: unknown
+      av_detections?: unknown
+      third_party_apps?: unknown
     } | null
     if (!data) return null
-    const yaraCount = (data.yara_matches?.matches ?? []).reduce(
-      (sum, m) => sum + (m.rules?.length ?? 0),
-      0,
+    const yaraCount = toYaraMatches(data.yara_matches).reduce((sum, match) => sum + match.rules.length, 0)
+    const avCount = toAvDetections(data.av_detections).length
+    return threatIntelligenceSubVerdict(
+      yaraCount,
+      avCount,
+      virusTotalAvailable(data.third_party_apps, data.av_detections),
+      t,
     )
-    const avCount = Array.isArray(data.av_detections)
-      ? data.av_detections.length
-      : Object.keys(data.av_detections ?? {}).length
-    return threatIntelligenceSubVerdict(yaraCount, avCount, t)
   })
 
   const network = computed(() => {

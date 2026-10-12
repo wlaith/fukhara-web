@@ -11,7 +11,8 @@ defineProps<{ label: string; subVerdict: SubVerdict }>()
     <p class="font-heading text-display-md font-[350] tracking-label text-primary">
       {{ subVerdict.headline }}
     </p>
-    <div v-if="subVerdict.tags.length > 0" class="flex flex-wrap gap-2">
+    <div v-if="subVerdict.headlineKind || subVerdict.tags.length > 0" class="flex flex-wrap gap-2">
+      <Tag v-if="subVerdict.headlineKind" :kind="subVerdict.headlineKind" size="compact">{{ subVerdict.headline }}</Tag>
       <Tag v-for="tag in subVerdict.tags" :key="tag.label" :kind="tag.kind" size="compact">
         {{ tag.label }}
       </Tag>

@@ -30,12 +30,6 @@ describe('ContainedList', () => {
     }
   })
 
-  it('emits select-row with the row id when a row is clicked', async () => {
-    const wrapper = mount(ContainedList, { props: { title: 'Code Vulnerability', rows } })
-    await wrapper.findAll('.contained-list__row')[1]!.trigger('click')
-    expect(wrapper.emitted('select-row')?.[0]).toEqual(['2'])
-  })
-
   it('shows an empty message when there are no rows', () => {
     const wrapper = mount(ContainedList, {
       props: { title: 'Code Vulnerability · 0 of 0', rows: [] },

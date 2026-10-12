@@ -25,7 +25,7 @@ describe('NetworkSection', () => {
     })
     expect(load).toHaveBeenCalledTimes(1)
     expect(wrapper.text()).toContain('evil.example.com')
-    expect(wrapper.text()).toContain('Bad: yes')
+    expect(wrapper.text()).toContain('Malicious')
   })
 
   it('shows Arabic title and label when the locale is ar', () => {
@@ -42,7 +42,7 @@ describe('NetworkSection', () => {
       global: { provide: { [REPORT_INJECTION_KEY as symbol]: report } },
     })
     expect(wrapper.text()).toContain('النطاقات')
-    expect(wrapper.text()).toContain('ضار: yes')
+    expect(wrapper.text()).toContain('ضار')
     i18n.global.locale.value = 'en'
   })
 })

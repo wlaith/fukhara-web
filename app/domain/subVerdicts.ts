@@ -4,6 +4,7 @@ import type { Translate } from './translate'
 
 export interface SubVerdict {
   headline: string
+  headlineKind?: TagKind
   tags: { label: string; kind: TagKind }[]
 }
 
@@ -31,6 +32,7 @@ export function codeAnalysisSubVerdict(
   if (tags.length === 0) tags.push({ label: t('subVerdicts.codeAnalysis.noIssues'), kind: 'green' })
   return {
     headline: t('subVerdicts.codeAnalysis.headline', { count: highCount + warningCount }),
+    headlineKind: highCount > 0 ? 'red' : warningCount > 0 ? 'gold' : 'gray',
     tags,
   }
 }
@@ -57,7 +59,11 @@ export function behaviorAnalysisSubVerdict(
       label: t('subVerdicts.behaviorAnalysis.unclassifiedTag', { count: unclassified }),
       kind: permissionStatusKind('unknown'),
     })
-  return { headline: t('subVerdicts.behaviorAnalysis.headline', { count: dangerous }), tags }
+  return {
+    headline: t('subVerdicts.behaviorAnalysis.headline', { count: dangerous }),
+    headlineKind: dangerous > 0 ? 'red' : 'gray',
+    tags,
+  }
 }
 
 export interface ManifestFinding {
@@ -79,12 +85,17 @@ export function appInformationSubVerdict(findings: ManifestFinding[], t: Transla
       label: t('subVerdicts.appInformation.lowTag', { count: low }),
       kind: severityKind('info'),
     })
-  return { headline: t('subVerdicts.appInformation.headline', { count: critical }), tags }
+  return {
+    headline: t('subVerdicts.appInformation.headline', { count: critical }),
+    headlineKind: critical > 0 ? 'red' : 'gray',
+    tags,
+  }
 }
 
 export function threatIntelligenceSubVerdict(
   yaraMatchCount: number,
   avDetectionCount: number,
+  virusTotalAvailable: boolean,
   t: Translate,
 ): SubVerdict {
   const total = yaraMatchCount + avDetectionCount
@@ -100,7 +111,9 @@ export function threatIntelligenceSubVerdict(
           label: t('subVerdicts.threatIntelligence.avTag', { count: avDetectionCount }),
           kind: 'red',
         }
-      : { label: t('subVerdicts.threatIntelligence.notDetectedTag'), kind: 'green' },
+      : virusTotalAvailable
+        ? { label: t('subVerdicts.threatIntelligence.notDetectedTag'), kind: 'green' }
+        : { label: t('subVerdicts.threatIntelligence.avUnavailableTag'), kind: 'gray' },
   ]
   return {
     headline:
@@ -127,6 +140,7 @@ export function networkSubVerdict(domains: DomainEntry[], t: Translate): SubVerd
       badCount === 0
         ? t('subVerdicts.network.noBadDomains')
         : t('subVerdicts.network.badDomainsHeadline', { count: badCount }),
+    headlineKind: badCount === 0 ? 'green' : 'red',
     tags,
   }
 }
@@ -175,7 +189,10 @@ export function fingerprintsSubVerdict(files: ApkidFileMatches[], t: Translate):
     const [category, value] = pair.split(':')
     return { label: `${categoryLabel(category ?? '', t)}: ${value}`, kind: 'gold' as TagKind }
   })
-  return { headline: t('subVerdicts.fingerprints.headline', { count: flagged.length }), tags }
+  return {
+    headline: t('subVerdicts.fingerprints.headline', { count: flagged.length }),
+    tags,
+  }
 }
 
 export function capitalize(value: string): string {

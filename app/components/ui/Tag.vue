@@ -7,20 +7,20 @@ const props = withDefaults(defineProps<{ kind: TagKind; size?: 'operational' | '
 })
 
 const sizeClasses = computed(() =>
-  props.size === 'operational' ? 'rounded-tag-lg px-3 pt-[7px] pb-[5px]' : 'rounded-tag-sm px-2 pt-0.5 pb-0',
+  props.size === 'operational' ? 'rounded-full px-3  py-[5px]' : 'rounded-full px-2 py-1 ',
 )
 
 const kindClasses = computed(() => {
   switch (props.kind) {
     case 'red':
-      return 'bg-tag-red-bg border-tag-red-border text-tag-red-text'
+      return 'border-tag-red-border bg-tag-red-bg/30 text-tag-red-text'
     case 'gold':
-      return 'bg-tag-gold-bg border-tag-gold-border text-tag-gold-text'
+      return 'border-tag-gold-border bg-tag-gold-bg text-tag-gold-text'
     case 'green':
-      return 'bg-tag-green-bg border-tag-green-border text-tag-green-text'
+      return 'border-tag-green-border bg-tag-green-bg/30 text-tag-green-text'
     case 'gray':
     default:
-      return 'bg-tag-gray-bg border-tag-gray-border text-tag-gray-text'
+      return 'border-tag-gray-border bg-white/5 text-tag-gray-text'
   }
 })
 </script>

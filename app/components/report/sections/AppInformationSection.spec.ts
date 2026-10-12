@@ -31,7 +31,9 @@ describe('AppInformationSection', () => {
     expect(load).toHaveBeenCalledTimes(1)
     expect(wrapper.text()).toContain('com.example.app')
     expect(wrapper.text()).toContain('Example CA')
-    expect(wrapper.text()).toContain('2 Activities · 1 Receivers · 1 Services')
+    expect(wrapper.text()).toContain('Activities (2)')
+    expect(wrapper.text()).toContain('Receivers (1)')
+    expect(wrapper.text()).toContain('Services (1)')
     expect(wrapper.text()).toContain('Vulnerable OS version')
     expect(wrapper.text()).toContain('Old Android version')
 
@@ -43,7 +45,7 @@ describe('AppInformationSection', () => {
     expect(componentsImg?.attributes('src')).toContain('source')
   })
 
-  it('handles the default mock-mode data shapes: double-nested activities.all_activities and a non-array manifest_analysis', () => {
+  it('handles the real API failure shape for manifest_analysis ({}) and flat activities', () => {
     const load = vi.fn()
     const report = {
       appAnalysis: {
@@ -51,10 +53,7 @@ describe('AppInformationSection', () => {
           apk_details: { package: 'com.example.app', app_name: 'Example', version_name: '1.0.0', sdk: '21 - None' },
           certificate_details: { issuer: 'Example CA', sha256: 'abc123', not_before: '2024-01-01', not_after: '2025-01-01' },
           manifest_analysis: {} as unknown,
-          activities: {
-            main_activity: { main_activity: 'com.example.MainActivity' },
-            all_activities: { all_activities: ['A', 'B', 'C'] },
-          },
+          activities: { main_activity: 'com.example.MainActivity', all_activities: ['A', 'B', 'C'] },
           receivers: ['R1'],
           services: ['S1', 'S2'],
         }),
@@ -67,9 +66,9 @@ describe('AppInformationSection', () => {
       global: { provide: { [REPORT_INJECTION_KEY as symbol]: report } },
     })
     expect(load).toHaveBeenCalledTimes(1)
-    expect(wrapper.text()).toContain('3 Activities · 1 Receivers · 2 Services')
-    // Non-array manifest_analysis must not throw and must render zero finding rows.
-    expect(wrapper.text()).not.toContain('Manifest Finding')
+    expect(wrapper.text()).toContain('Activities (3)')
+    expect(wrapper.text()).toContain('Services (2)')
+    expect(wrapper.text()).toContain('No manifest findings were reported.')
   })
 
   it('renders an inline error message when error.value is set', () => {
@@ -109,8 +108,9 @@ describe('AppInformationSection', () => {
     })
     expect(wrapper.text()).toContain('تفاصيل التطبيق')
     expect(wrapper.text()).toContain('الشهادة')
-    expect(wrapper.text()).toContain('2 أنشطة · 1 مستقبِلات · 1 خدمات')
-    expect(wrapper.text()).toContain('الجهة المُصدرة: Example CA')
+    expect(wrapper.text()).toContain('الأنشطة (2)')
+    expect(wrapper.text()).toContain('الجهة المُصدرة')
+    expect(wrapper.text()).toContain('Example CA')
     i18n.global.locale.value = 'en'
   })
 })

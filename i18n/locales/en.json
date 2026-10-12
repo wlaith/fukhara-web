@@ -8,6 +8,19 @@
   "containedList": {
     "noFindings": "No findings"
   },
+  "common": {
+    "loading": "Loading…",
+    "copyValue": "Copy {label}",
+    "copied": "Copied",
+    "opensInNewTab": "(opens in a new tab)",
+    "showMore": "Show {count} more"
+  },
+  "affectedFiles": {
+    "title": "Affected files",
+    "lines": "Lines",
+    "showAll": "Show all {count} files",
+    "showFewer": "Show fewer files"
+  },
   "fileUpload": {
     "dropPrompt": "Drag and drop files here or click to upload",
     "invalidType": "Only .apk files are supported."
@@ -71,6 +84,7 @@
     }
   },
   "severity": {
+    "all": "All",
     "high": "High",
     "warning": "Warning",
     "info": "Info",
@@ -102,7 +116,8 @@
       "yaraTag": "{count} YARA Matches",
       "noYaraTag": "No YARA Matches",
       "avTag": "{count} AV Detections",
-      "notDetectedTag": "Not Detected by AV"
+      "notDetectedTag": "Not Detected by AV",
+      "avUnavailableTag": "AV results unavailable"
     },
     "network": {
       "noBadDomains": "No Bad Domains",
@@ -121,34 +136,111 @@
     }
   },
   "codeAnalysis": {
-    "listTitle": "Code Vulnerability · {count} of {total}"
+    "listTitle": "Code Vulnerability · {count} of {total}",
+    "listTitleAll": "Code Vulnerability · {total}",
+    "cvss": "CVSS {score}",
+    "filesCount": "Files: {count}",
+    "owaspMobile": "OWASP Mobile",
+    "learnMore": "Learn more",
+    "opensInNewTab": "(opens in a new tab)"
   },
   "behaviorAnalysis": {
-    "permissionsTitle": "Permissions"
+    "permissionsTitle": "Permissions",
+    "permissionsTab": "Permissions ({count})",
+    "behavioursTab": "Behaviours ({count})",
+    "apiUsageTab": "API usage ({count})",
+    "behavioursTitle": "Detected behaviours",
+    "apiUsageTitle": "Sensitive API usage",
+    "confidence": "{value}% confidence",
+    "noDescription": "No description was reported.",
+    "noPermissions": "No permissions were reported for this app.",
+    "noBehaviours": "Quark Engine reported no behaviours for this app.",
+    "noApiUsage": "No sensitive API usage was reported."
   },
   "appInformation": {
     "appDetailsTitle": "App Details",
     "certificateTitle": "Certificate",
     "componentsTitle": "Components",
     "manifestFindingsTitle": "Manifest Findings",
-    "certificateSummary": "Issuer: {issuer} · SHA-256: {sha256} · Valid {notBefore} → {notAfter}",
-    "componentsSummary": "{activities} Activities · {receivers} Receivers · {services} Services",
-    "severityPrefix": "Severity: {severity}"
+    "appName": "App name",
+    "package": "Package",
+    "version": "Version",
+    "versionValue": "{name} (build {code})",
+    "sdk": "Supported Android",
+    "sdkMin": "API {min} or later",
+    "sdkRange": "API {min} – {max}",
+    "signing": "Signing",
+    "signed": "Signed",
+    "unsigned": "Not signed",
+    "scheme": "v{version} scheme",
+    "validity": "Status",
+    "certValid": "Valid",
+    "certExpired": "Expired",
+    "certNotYetValid": "Not yet valid",
+    "issuer": "Issuer",
+    "validFrom": "Valid from",
+    "validTo": "Valid until",
+    "activities": "Activities ({count})",
+    "receivers": "Receivers ({count})",
+    "services": "Services ({count})",
+    "mainActivity": "Main",
+    "components": "Affected components",
+    "noComponentsForFinding": "No specific components were reported for this finding.",
+    "noDetails": "No app details were reported.",
+    "noCertificate": "No certificate details were reported.",
+    "noComponents": "No components were reported.",
+    "noManifest": "No manifest findings were reported."
   },
   "threatIntelligence": {
-    "yaraMatchesTitle": "YARA Matches"
+    "yaraMatchesTitle": "YARA Matches",
+    "noYara": "No YARA matches were reported.",
+    "unknownSource": "Unknown file",
+    "avTitle": "Antivirus detections",
+    "avCount": "{count} engine | {count} engines",
+    "noAv": "VirusTotal returned no antivirus detections for this sample.",
+    "timelineTitle": "Sample timeline",
+    "noTimeline": "No timeline was reported for this sample.",
+    "externalTitle": "External reports",
+    "openReportFor": "Open {service} report",
+    "timeline": {
+      "oldest_file_found_in_apk": "Oldest file in APK",
+      "latest_file_found_in_apk": "Newest file in APK",
+      "certificate_valid_not_before": "Certificate valid from",
+      "certificate_valid_not_after": "Certificate valid until",
+      "first_submission_on_vt": "First submitted to VirusTotal",
+      "last_submission_on_vt": "Last submitted to VirusTotal",
+      "upload_on_fukhara": "Uploaded to Fukhara"
+    }
   },
   "network": {
     "domainsTitle": "Domains",
-    "badLabel": "Bad: {value}"
+    "domainsTab": "Domains ({count})",
+    "urlsTab": "URLs ({count})",
+    "urlsTitle": "URLs by source file",
+    "malicious": "Malicious",
+    "ofac": "OFAC",
+    "ofacNote": "Flagged by MobSF's OFAC sanctions check.",
+    "ip": "IP address",
+    "location": "Location",
+    "coordinates": "Coordinates",
+    "url": "URL",
+    "urlCount": "URLs: {count}",
+    "unknownSource": "Unknown file",
+    "urlsNote": "Shown as text only. These URLs came from the analysed app and can't be opened from the report.",
+    "noDomains": "No domains were reported.",
+    "noUrls": "No URLs were reported.",
+    "noGeolocation": "No location data was reported for this domain."
   },
   "fingerprints": {
     "fingerprintsTitle": "Fingerprints",
     "identifiersTitle": "Identifiers",
     "checksumsTitle": "Checksums",
-    "checksumsSummary": "MD5 {md5} · SHA1 {sha1} · SHA256 {sha256} · Size {size}",
+    "size": "Size",
+    "apkFile": "APK",
     "unknownFilename": "Unknown",
-    "noFuzzyHash": "No fuzzy hash"
+    "noChecksums": "No checksums were reported.",
+    "noIdentifiers": "No flagged identifiers were reported.",
+    "noFuzzyHashes": "No fuzzy hashes were reported."
   },
   "controlFlow": {
     "title": "Not yet available",
