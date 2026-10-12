@@ -38,7 +38,6 @@ function switchLocale() {
 
     <nav class="hidden items-center gap-2 lg:flex">
       <Button variant="secondary" @click="goAbout">{{ t('appHeader.about') }}</Button>
-      <Button variant="secondary">{{ t('appHeader.documentation') }}</Button>
       <Button variant="secondary" @click="switchLocale">{{ switchToLabel }}</Button>
       <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
     </nav>
@@ -60,7 +59,6 @@ function switchLocale() {
 
     <div v-if="isMenuOpen" class="absolute inset-x-0 top-10 z-10 flex flex-col gap-2 bg-panel p-4 lg:hidden">
       <Button variant="secondary" @click="goAbout">{{ t('appHeader.about') }}</Button>
-      <Button variant="secondary">{{ t('appHeader.documentation') }}</Button>
       <Button variant="secondary" @click="switchLocale">{{ switchToLabel }}</Button>
     </div>
   </header>
