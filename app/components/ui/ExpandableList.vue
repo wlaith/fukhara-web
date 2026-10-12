@@ -1,8 +1,9 @@
 <script setup lang="ts" generic="T extends { id: string }">
 import { ref, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
+import ListSkeleton from './ListSkeleton.vue'
 
-defineProps<{ title: string; items: T[] }>()
+defineProps<{ title?: string; iconSrc?: string; items: T[]; loading?: boolean; emptyText?: string }>()
 defineSlots<{
   title(props: { item: T }): unknown
   subtitle?(props: { item: T; open: boolean }): unknown
@@ -13,11 +14,13 @@ defineSlots<{
 const { t } = useI18n()
 const baseId = useId()
 const openIds = ref(new Set<string>())
+const renderedIds = ref(new Set<string>())
 
 function toggle(id: string) {
   const next = new Set(openIds.value)
   if (!next.delete(id)) next.add(id)
   openIds.value = next
+  if (next.has(id) && !renderedIds.value.has(id)) renderedIds.value = new Set(renderedIds.value).add(id)
 }
 
 const isOpen = (id: string) => openIds.value.has(id)
@@ -27,10 +30,17 @@ const headingId = (index: number) => `${baseId}-heading-${index}`
 
 <template>
   <div class="w-full bg-canvas">
-    <div class="expandable-list__header px-4 py-[15px] font-body text-body font-semibold tracking-tight text-primary bg-layer-01 border-y border-subtle">
+    <div
+      v-if="title"
+      class="expandable-list__header flex items-center gap-2 px-4 py-[15px] font-body text-body font-semibold tracking-tight text-primary bg-layer-01 border-y border-subtle"
+    >
+      <img v-if="iconSrc" :src="iconSrc" :alt="title" class="h-4 w-4" >
       {{ title }}
     </div>
-    <p v-if="items.length === 0" class="p-4 font-body text-body text-secondary">{{ t('containedList.noFindings') }}</p>
+    <ListSkeleton v-if="loading" />
+    <p v-else-if="items.length === 0" class="p-4 font-body text-body text-secondary">
+      {{ emptyText ?? t('containedList.noFindings') }}
+    </p>
     <ul v-else class="m-0 list-none p-0">
       <li
         v-for="(item, index) in items"
@@ -73,7 +83,7 @@ const headingId = (index: number) => `${baseId}-heading-${index}`
           :aria-labelledby="headingId(index)"
           class="expandable-list__panel px-4 pb-6 pt-2"
         >
-          <slot name="detail" :item="item" />
+          <slot v-if="renderedIds.has(item.id)" name="detail" :item="item" />
         </div>
       </li>
     </ul>
