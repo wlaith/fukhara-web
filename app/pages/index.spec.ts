@@ -43,6 +43,6 @@ describe('home page', () => {
   it('renders the Arabic hero heading and marketing copy on /ar', async () => {
     const wrapper = await mountSuspended(HomePage, { route: '/ar' })
     expect(wrapper.text()).toContain('تحقق من التطبيق قبل أن تثق به.')
-    expect(wrapper.text()).toContain('تقرير قابل للتحميل والمشاركة')
+    expect(wrapper.text()).toContain('03 اقرأ التقرير')
   })
 })

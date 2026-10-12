@@ -58,26 +58,6 @@ async function onSelect(file: File) {
       </i18n-t>
       <img :src="josaLogoMark" alt="" class="mt-auto h-14 w-14 self-end">
     </section></div>
-    <section class="page-shell grid grid-cols-1  border-subtle lg:grid-cols-3">
-          <div class="border-subtle px-6 py-6">
-        <h2 class="mb-2 font-heading text-display-sm text-primary ">{{ t('homeView.transparent.title') }}</h2>
-        <p class="font-body text-body text-secondary">
-          {{ t('homeView.transparent.body') }}
-        </p>
-      </div>
-      <div class="border-subtle px-6 py-6">
-        <h2 class="mb-2 font-heading text-display-sm text-primary">{{ t('homeView.deepAnalysis.title') }}</h2>
-        <p class="font-body text-body text-secondary">
-          {{ t('homeView.deepAnalysis.body') }}
-        </p>
-      </div>
-      <div class="border-subtle px-6 py-6">
-        <h2 class="mb-2 font-heading text-display-sm text-primary">{{ t('homeView.report.title') }}</h2>
-        <p class="font-body text-body text-secondary">
-          {{ t('homeView.report.body') }}
-        </p>
-      </div>
-    </section>
     <section class="page-shell grid grid-cols-1 border-subtle lg:grid-cols-3">
       <div v-for="step in howToSteps" :key="step.key" class="flex flex-col items-start gap-4 border-subtle p-6">
         <img :src="step.icon" alt="" width="36" height="36" class="h-9 w-9" >

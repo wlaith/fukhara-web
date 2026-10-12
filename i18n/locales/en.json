@@ -28,18 +28,6 @@
     "heroTitle": "Check an app before you trust it.",
     "heroBody": "Upload an Android app file (.apk). We tell you whether it looks dangerous or not and why.",
     "uploadFailed": "Something went wrong analyzing this file. Please try again.",
-    "transparent": {
-      "title": "Transparent. Open. Accountable.",
-      "body": "This tool is built by Jordan Open Source Association (JOSA), open-source, and audited. See exactly how it works. See the reasoning behind every finding."
-    },
-    "deepAnalysis": {
-      "title": "Deep Technical Analysis",
-      "body": "We analyze the APK's permissions, code, and network behavior. Cross-check against threat databases. Flag obfuscation, suspicious libraries, and known malware signatures. You get the technical details if you want them, or just the plain-language verdict."
-    },
-    "report": {
-      "title": "Downloadable Sharable Report",
-      "body": "Export results in a format you can safely share with colleagues. Works offline. Nothing stored in the cloud after you leave."
-    },
     "howTo": {
       "getApk": {
         "title": "01 Get APK file",
