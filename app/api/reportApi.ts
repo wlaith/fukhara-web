@@ -13,6 +13,13 @@ function unwrapSection<T>(
   return unwrap(section as Envelope<T> | null | undefined)
 }
 
+// The raw fixture nests these one level deeper than the real API (which returns them flat).
+function unnest(value: unknown, key: string): unknown {
+  return value !== null && typeof value === 'object' && !Array.isArray(value) && key in value
+    ? (value as Record<string, unknown>)[key]
+    : value
+}
+
 type VerdictResponse = components['schemas']['VerdictResponse']
 
 export interface AnalyzeResult {
@@ -82,7 +89,8 @@ export async function getThreatIntelligence(id: string) {
       sample_timeline: rawSample.threat_intelligence["sample_timeline[['fukhara', 'virustotal']]"],
       yara_matches: rawSample.threat_intelligence['yara_matches[yara]'],
       av_detections: rawSample.threat_intelligence['av-detections'],
-      third_party_apps: rawSample.threat_intelligence['third-party-apps'],
+      // Real API shape when neither service knows the sample.
+      third_party_apps: { virustotal: '', malwarebazaar: '' },
     }
   }
   const res = await apiRequest(`GET /api/report/${id}/threat-intelligence/`, () =>
@@ -102,7 +110,10 @@ export async function getAppAnalysis(id: string) {
       apk_details: rawSample.apk_analysis["apk_details[['mobsf', 'apk_info']]"],
       certificate_details: rawSample.apk_analysis['certificate_details[apk_info]'],
       manifest_analysis: rawSample.apk_analysis['manifest_analysis[mobsf]'],
-      activities: rawSample.apk_analysis['acitivities[mobsf]'],
+      activities: {
+        main_activity: unnest(rawSample.apk_analysis['acitivities[mobsf]'].main_activity, 'main_activity') as string,
+        all_activities: unnest(rawSample.apk_analysis['acitivities[mobsf]'].all_activities, 'all_activities') as string[],
+      },
       receivers: rawSample.apk_analysis['receivers[mobsf]'],
       services: rawSample.apk_analysis['services[mobsf]'],
     }

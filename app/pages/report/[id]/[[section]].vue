@@ -66,7 +66,7 @@ function onSelectTab(id: string) {
       :package-name="apkDetails.package ?? undefined"
     />
     <VerdictBanner
-      v-if="report.verdict.data.value"
+      v-if="report.verdict.data.value?.verdict"
       class="page-shell border-subtle"
       :verdict="report.verdict.data.value.verdict ?? undefined"
       :severity="report.verdict.data.value.severity ?? undefined"
