@@ -33,12 +33,17 @@ function goAbout() {
 
     <nav class="hidden items-center gap-2 lg:flex">
       <Button variant="secondary" @click="goAbout">{{ t('appHeader.about') }}</Button>
-      <Button variant="secondary">{{ t('appHeader.documentation') }}</Button>
-      <Button variant="secondary" @click="switchLocale">{{ switchToLabel }}</Button>
-      <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+      <div class="flex items-stretch">
+        <LanguageToggle />
+        <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+      </div>
     </nav>
 
     <div class="flex items-center gap-2 lg:hidden">
+      <div class="flex items-stretch">
+        <LanguageToggle />
+        <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+      </div>
       <div class="flex items-stretch">
         <LanguageToggle />
         <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
@@ -58,8 +63,6 @@ function goAbout() {
 
     <div v-if="isMenuOpen" class="absolute inset-x-0 top-10 z-10 flex flex-col gap-2 bg-panel p-4 lg:hidden">
       <Button variant="secondary" @click="goAbout">{{ t('appHeader.about') }}</Button>
-      <Button variant="secondary">{{ t('appHeader.documentation') }}</Button>
-      <Button variant="secondary" @click="switchLocale">{{ switchToLabel }}</Button>
     </div>
   </header>
 </template>
