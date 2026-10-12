@@ -59,10 +59,10 @@ function onSelectTab(id: string) {
     <VerdictBanner
       v-if="report.verdict.data.value"
       class="page-shell border-subtle"
-      :verdict="report.verdict.data.value.verdict ?? ''"
-      :severity="report.verdict.data.value.severity ?? ''"
-      :reason="report.verdict.data.value.reason ?? ''"
-      :response="report.verdict.data.value.response ?? ''"
+      :verdict="report.verdict.data.value.verdict ?? undefined"
+      :severity="report.verdict.data.value.severity ?? undefined"
+      :reason="report.verdict.data.value.reason ?? undefined"
+      :response="report.verdict.data.value.response ?? undefined"
     />
     <SubVerdictGrid class="page-shell border-subtle" :report="report" />
     <div class="page-shell flex flex-col border-subtle box-content lg:flex-row">
