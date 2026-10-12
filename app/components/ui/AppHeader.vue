@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Button from './Button.vue'
+import LanguageToggle from './LanguageToggle.vue'
 import { useLocalizedNavigation } from '../../composables/useLocalizedNavigation'
 import fukharaLogoEn from '../../assets/logo/fukhara-logo.svg'
 import fukharaLogoAr from '../../assets/logo/fukhara-logo-ar.svg'
@@ -9,12 +10,10 @@ import fukharaLogoAr from '../../assets/logo/fukhara-logo-ar.svg'
 defineEmits<{ analyze: [] }>()
 
 const { t, locale } = useI18n()
-const switchLocalePath = useSwitchLocalePath()
 const { push } = useLocalizedNavigation()
 
 const isArabic = computed(() => locale.value === 'ar')
 const logo = computed(() => (isArabic.value ? fukharaLogoAr : fukharaLogoEn))
-const switchToLabel = computed(() => (isArabic.value ? 'English' : 'العربية'))
 const isMenuOpen = ref(false)
 
 function goHome() {
@@ -23,10 +22,6 @@ function goHome() {
 
 function goAbout() {
   push({ name: 'about' })
-}
-
-function switchLocale() {
-  navigateTo(switchLocalePath(isArabic.value ? 'en' : 'ar'))
 }
 </script>
 
@@ -38,13 +33,17 @@ function switchLocale() {
 
     <nav class="hidden items-center gap-2 lg:flex">
       <Button variant="secondary" @click="goAbout">{{ t('appHeader.about') }}</Button>
-      <Button variant="secondary">{{ t('appHeader.documentation') }}</Button>
-      <Button variant="secondary" @click="switchLocale">{{ switchToLabel }}</Button>
-      <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+      <div class="flex items-stretch">
+        <LanguageToggle />
+        <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+      </div>
     </nav>
 
     <div class="flex items-center gap-2 lg:hidden">
-      <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+      <div class="flex items-stretch">
+        <LanguageToggle />
+        <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+      </div>
       <button
         type="button"
         class="flex h-10 w-10 items-center justify-center border-none bg-transparent text-primary cursor-pointer"
@@ -60,8 +59,6 @@ function switchLocale() {
 
     <div v-if="isMenuOpen" class="absolute inset-x-0 top-10 z-10 flex flex-col gap-2 bg-panel p-4 lg:hidden">
       <Button variant="secondary" @click="goAbout">{{ t('appHeader.about') }}</Button>
-      <Button variant="secondary">{{ t('appHeader.documentation') }}</Button>
-      <Button variant="secondary" @click="switchLocale">{{ switchToLabel }}</Button>
     </div>
   </header>
 </template>

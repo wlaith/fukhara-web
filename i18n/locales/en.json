@@ -1,7 +1,6 @@
 {
   "appHeader": {
     "about": "About",
-    "documentation": "Documentation",
     "analyze": "Analyze",
     "toggleMenu": "Toggle menu"
   },
@@ -277,5 +276,20 @@
       "p1": "An Android app is just a file, and anyone can send you one. Apps shared through chats, email or websites don't pass through a store's checks, and you can't tell a safe one from a dangerous one by looking at it.",
       "p2": "Fukhara gives you a clear answer. Upload the file and we tell you whether it looks dangerous and why: plain language first, technical detail if you want it."
     }
+  },
+  "footer": {
+    "ariaLabel": "Site footer",
+    "tagline": "Fukhara checks Android apps (.apk) and tells you, in plain language, whether they look dangerous and why.",
+    "aboutFukhara": "About Fukhara",
+    "builtBy": "Built and run by Jordan Open Source Association (JOSA).",
+    "josaWebsite": "Visit josa.ngo",
+    "dataTitle": "Your data",
+    "dataBody": "No account is needed. Your file is analyzed on JOSA's own servers. Threat databases such as VirusTotal and MalwareBazaar only receive the file's fingerprint (SHA-256), never the file itself.",
+    "privacyPolicy": "Privacy policy",
+    "openSourceTitle": "Open source",
+    "openSourceBody": "Every part of Fukhara is public. Read the code, audit how verdicts are made, or run your own copy.",
+    "webUiSource": "Web interface on GitHub",
+    "apiSource": "Analysis API on GitHub",
+    "newTab": "(opens in a new tab)"
   }
 }

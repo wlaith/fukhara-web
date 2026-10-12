@@ -13,7 +13,7 @@ describe('AppHeader', () => {
     const wrapper = await mountSuspended(AppHeader, { route: '/' })
     expect(wrapper.find('img[alt="Fukhara"]').exists()).toBe(true)
     expect(wrapper.text()).toContain('About')
-    expect(wrapper.text()).toContain('Documentation')
+    expect(wrapper.text()).not.toContain('Documentation')
     expect(wrapper.text()).toContain('Analyze')
   })
 
@@ -26,7 +26,6 @@ describe('AppHeader', () => {
   it('shows Arabic nav labels and the English switcher on /ar', async () => {
     const wrapper = await mountSuspended(AppHeader, { route: '/ar' })
     expect(wrapper.text()).toContain('حول')
-    expect(wrapper.text()).toContain('التوثيق')
     expect(wrapper.text()).toContain('تحليل')
     expect(wrapper.text()).toContain('English')
   })

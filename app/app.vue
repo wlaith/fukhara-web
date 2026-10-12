@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppFooter from './components/footer/AppFooter.vue'
 import AppHeader from './components/ui/AppHeader.vue'
 import { useLocalizedNavigation } from './composables/useLocalizedNavigation'
 
@@ -11,6 +12,11 @@ useHead(() => ({
 </script>
 
 <template>
-  <AppHeader @analyze="push({ name: 'home' })" />
-  <NuxtPage />
+  <div class="flex min-h-dvh flex-col">
+    <AppHeader @analyze="push({ name: 'home' })" />
+    <div class="flex flex-1 flex-col">
+      <NuxtPage />
+    </div>
+    <AppFooter />
+  </div>
 </template>
