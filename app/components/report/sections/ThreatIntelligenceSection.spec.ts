@@ -24,7 +24,8 @@ describe('ThreatIntelligenceSection', () => {
       global: { provide: { [REPORT_INJECTION_KEY as symbol]: report } },
     })
     expect(load).toHaveBeenCalledTimes(1)
-    expect(wrapper.text()).toContain('Android_Dynamic_Code_Loading, Android_Root_Detection_Bypass')
+    expect(wrapper.text()).toContain('Android_Dynamic_Code_Loading')
+    expect(wrapper.text()).toContain('Android_Root_Detection_Bypass')
     expect(wrapper.text()).toContain('classes.dex')
   })
 

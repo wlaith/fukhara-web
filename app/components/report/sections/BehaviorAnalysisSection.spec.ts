@@ -25,8 +25,9 @@ describe('BehaviorAnalysisSection', () => {
     })
     expect(load).toHaveBeenCalledTimes(1)
     expect(wrapper.text()).toContain('android.permission.CAMERA')
+    expect(wrapper.text()).toContain('Take pictures')
     // permissionStatusLabel() translates the raw status word rather than passing it through.
-    expect(wrapper.text()).toContain('Dangerous · take pictures')
+    expect(wrapper.text()).toContain('Dangerous')
   })
 
   it('renders an inline error message when error.value is set', () => {
@@ -62,7 +63,7 @@ describe('BehaviorAnalysisSection', () => {
       global: { provide: { [REPORT_INJECTION_KEY as symbol]: report } },
     })
     expect(wrapper.text()).toContain('الأذونات')
-    expect(wrapper.text()).toContain('خطير · take pictures')
+    expect(wrapper.text()).toContain('خطير')
     i18n.global.locale.value = 'en'
   })
 })

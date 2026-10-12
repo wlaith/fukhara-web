@@ -18,6 +18,8 @@ export default defineConfig({
       {
         plugins: [vue()],
         resolve: { alias: { '~': fileURLToPath(new URL('./app', import.meta.url)) } },
+        // Keep SVG imports as file URLs (not data URIs) so specs can assert on icon names.
+        build: { assetsInlineLimit: 0 },
         test: {
           name: 'unit',
           environment: 'jsdom',
