@@ -12,7 +12,11 @@ useHead(() => ({
 </script>
 
 <template>
-  <AppHeader @analyze="push({ name: 'home' })" />
-  <NuxtPage />
-  <AppFooter />
+  <div class="flex min-h-dvh flex-col">
+    <AppHeader @analyze="push({ name: 'home' })" />
+    <div class="flex flex-1 flex-col">
+      <NuxtPage />
+    </div>
+    <AppFooter />
+  </div>
 </template>
