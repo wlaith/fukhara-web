@@ -7,7 +7,7 @@ describe('SubVerdictCard', () => {
     const wrapper = mount(SubVerdictCard, {
       props: {
         label: 'Code Analysis',
-        subVerdict: { headline: '10 Vulnerabilities', tags: [] },
+        subVerdict: { headline: '10 Vulnerabilities', headlineKind: 'red', tags: [] },
       },
     })
     expect(wrapper.text()).toContain('Code Analysis')
@@ -20,6 +20,7 @@ describe('SubVerdictCard', () => {
         label: 'Behavior Analysis',
         subVerdict: {
           headline: '1 Dangerous',
+          headlineKind: 'red',
           tags: [
             { label: '16 Moderate', kind: 'gold' },
             { label: '20 Unclassified', kind: 'gray' },
@@ -33,8 +34,8 @@ describe('SubVerdictCard', () => {
 
   it('renders nothing extra when there are no tags', () => {
     const wrapper = mount(SubVerdictCard, {
-      props: { label: 'Network', subVerdict: { headline: 'No Bad Domains', tags: [] } },
+      props: { label: 'Network', subVerdict: { headline: 'No Bad Domains', headlineKind: 'green', tags: [] } },
     })
-    expect(wrapper.findAll('.tag')).toHaveLength(0)
+    expect(wrapper.findAll('.tag--compact')).toHaveLength(1)
   })
 })
