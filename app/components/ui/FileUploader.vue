@@ -38,7 +38,7 @@ function onDrop(event: DragEvent) {
       @dragleave.prevent="isDragging = false"
       @drop.prevent="onDrop"
     >
-      <input type="file" accept=".apk" class="hidden" @change="onInputChange" />
+      <input type="file" accept=".apk" class="hidden" @change="onInputChange" >
       {{ t('fileUpload.dropPrompt') }}
     </label>
     <p v-if="error" class="font-body text-label text-tag-red-border">{{ error }}</p>
