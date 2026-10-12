@@ -85,6 +85,7 @@ export function appInformationSubVerdict(findings: ManifestFinding[], t: Transla
 export function threatIntelligenceSubVerdict(
   yaraMatchCount: number,
   avDetectionCount: number,
+  virusTotalAvailable: boolean,
   t: Translate,
 ): SubVerdict {
   const total = yaraMatchCount + avDetectionCount
@@ -100,7 +101,9 @@ export function threatIntelligenceSubVerdict(
           label: t('subVerdicts.threatIntelligence.avTag', { count: avDetectionCount }),
           kind: 'red',
         }
-      : { label: t('subVerdicts.threatIntelligence.notDetectedTag'), kind: 'green' },
+      : virusTotalAvailable
+        ? { label: t('subVerdicts.threatIntelligence.notDetectedTag'), kind: 'green' }
+        : { label: t('subVerdicts.threatIntelligence.avUnavailableTag'), kind: 'gray' },
   ]
   return {
     headline:

@@ -69,7 +69,7 @@ describe('appInformationSubVerdict', () => {
 
 describe('threatIntelligenceSubVerdict', () => {
   it('sums yara and av counts into the headline', () => {
-    const result = threatIntelligenceSubVerdict(3, 2)
+    const result = threatIntelligenceSubVerdict(3, 2, true)
     expect(result.headline).toBe('Flagged 5×')
     expect(result.tags).toEqual([
       { label: '3 YARA Matches', kind: 'red' },
@@ -78,7 +78,7 @@ describe('threatIntelligenceSubVerdict', () => {
   })
 
   it('shows "No Detections" when both are zero', () => {
-    const result = threatIntelligenceSubVerdict(0, 0)
+    const result = threatIntelligenceSubVerdict(0, 0, true)
     expect(result.headline).toBe('No Detections')
     expect(result.tags).toEqual([
       { label: 'No YARA Matches', kind: 'green' },
