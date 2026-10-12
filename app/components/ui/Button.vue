@@ -5,10 +5,12 @@ defineEmits<{ click: [event: MouseEvent] }>()
 
 <template>
   <button
-    class="inline-flex min-h-11 items-center justify-center border-none py-3 font-body text-body-lg tracking-tight cursor-pointer"
+    class="inline-flex min-h-11 items-center justify-center border-none py-3 font-body text-body-lg tracking-tight cursor-pointer disabled:cursor-not-allowed"
     :class="[
       `button--${variant}`,
-      variant === 'primary' ? 'bg-accent text-accent-text-on ps-4 pe-16' : 'bg-transparent text-accent px-4',
+      variant === 'primary'
+        ? 'bg-accent text-accent-text-on ps-4 pe-16 disabled:bg-button-disabled disabled:text-on-color-disabled'
+        : 'bg-transparent text-accent px-4',
     ]"
     @click="$emit('click', $event)"
   >

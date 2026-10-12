@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FileUploader from '~/components/ui/FileUploader.vue'
+import Button from '~/components/ui/Button.vue'
 import { analyzeApk } from '~/api/reportApi'
 import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
 import applicationMobileIcon from '~/assets/icons/application--mobile.svg'
@@ -14,6 +15,8 @@ definePageMeta({ name: 'home' })
 const { t, locale } = useI18n()
 const { push } = useLocalizedNavigation()
 const uploadError = ref<string | null>(null)
+const selectedFile = ref<File | null>(null)
+const isAnalyzing = ref(false)
 
 const APK_GUIDE_URL = 'https://developer.android.com/studio/run#reference'
 const API_REPO = 'https://github.com/jordanopensource/fukhara-api'
@@ -25,13 +28,27 @@ const howToSteps = [
   { key: 'readReport', icon: reportDataIcon, notes: true, link: API_REPO },
 ] as const
 
-async function onSelect(file: File) {
+function onSelect(file: File) {
+  selectedFile.value = file
   uploadError.value = null
+}
+
+function onClear() {
+  selectedFile.value = null
+  uploadError.value = null
+}
+
+async function onAnalyze() {
+  if (!selectedFile.value || isAnalyzing.value) return
+  uploadError.value = null
+  isAnalyzing.value = true
   try {
-    const result = await analyzeApk(file)
+    const result = await analyzeApk(selectedFile.value)
     push({ name: 'analyzing', params: { id: result.id } })
   } catch (err) {
     uploadError.value = err instanceof Error ? err.message : t('homeView.uploadFailed')
+  } finally {
+    isAnalyzing.value = false
   }
 }
 </script>
@@ -44,7 +61,15 @@ async function onSelect(file: File) {
       <p class="font-body text-body text-secondary">
         {{ t('homeView.heroBody') }}
       </p>
-      <FileUploader label="" @select="onSelect" />
+      <FileUploader label="" @select="onSelect" @clear="onClear" />
+      <Button
+        variant="primary"
+        class="analyze-button self-start"
+        :disabled="!selectedFile || isAnalyzing"
+        @click="onAnalyze"
+      >
+        {{ isAnalyzing ? t('homeView.analyzing') : t('homeView.analyze') }}
+      </Button>
       <p v-if="uploadError" class="p-4 font-body text-body text-tag-red-border">{{ uploadError }}</p>
     </section>
     <section class="flex flex-col gap-4 border-subtle p-6">

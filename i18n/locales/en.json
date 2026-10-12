@@ -22,12 +22,15 @@
   },
   "fileUpload": {
     "dropPrompt": "Drag and drop files here or click to upload",
-    "invalidType": "Only .apk files are supported."
+    "invalidType": "Only .apk files are supported.",
+    "remove": "Remove {name}"
   },
   "homeView": {
     "heroTitle": "Check an app before you trust it.",
     "heroBody": "Upload an Android app file (.apk). We tell you whether it looks dangerous or not and why.",
     "uploadFailed": "Something went wrong analyzing this file. Please try again.",
+    "analyze": "Analyze",
+    "analyzing": "Analyzing…",
     "howTo": {
       "getApk": {
         "title": "01 Get APK file",

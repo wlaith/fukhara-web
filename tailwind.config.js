@@ -18,6 +18,8 @@ export default {
         'on-color': '#ffffff',
         accent: '#ED7B3D',
         'accent-text-on': '#ffffff',
+        'button-disabled': '#A9A9A9',
+        'on-color-disabled': '#CECECE',
         'tag-red-bg': '#B81C23',
         'tag-red-border': '#FA6B6B',
         'tag-red-text': '#FFD9D6',

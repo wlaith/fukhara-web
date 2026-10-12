@@ -18,15 +18,22 @@ async function selectFile(wrapper: Awaited<ReturnType<typeof mountSuspended>>) {
   await flushPromises()
 }
 
+async function analyze(wrapper: Awaited<ReturnType<typeof mountSuspended>>) {
+  await wrapper.get('.analyze-button').trigger('click')
+  await flushPromises()
+}
+
 describe('home page', () => {
   it('renders the hero heading and file uploader', async () => {
     const wrapper = await mountSuspended(HomePage, { route: '/' })
     expect(wrapper.text()).toContain('Check an app before you trust it.')
   })
 
-  it('navigates to /analyzing/:id after a file is selected', async () => {
+  it('navigates to /analyzing/:id after a file is selected and analyze is clicked', async () => {
     const wrapper = await mountSuspended(HomePage, { route: '/' })
     await selectFile(wrapper)
+    expect(analyzeApk).not.toHaveBeenCalled()
+    await analyze(wrapper)
     await vi.waitFor(() =>
       expect(useRouter().currentRoute.value.fullPath).toBe('/analyzing/abc123'),
     )
@@ -36,6 +43,7 @@ describe('home page', () => {
     analyzeApk.mockRejectedValueOnce(new Error('Upload failed'))
     const wrapper = await mountSuspended(HomePage, { route: '/' })
     await selectFile(wrapper)
+    await analyze(wrapper)
     expect(wrapper.text()).toContain('Upload failed')
     expect(useRouter().currentRoute.value.fullPath).toBe('/')
   })

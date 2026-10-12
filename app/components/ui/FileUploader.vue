@@ -2,9 +2,10 @@
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useFileUpload } from '../../composables/useFileUpload'
+import closeIcon from '../../assets/icons/close.svg'
 
 defineProps<{ label: string }>()
-const emit = defineEmits<{ select: [file: File] }>()
+const emit = defineEmits<{ select: [file: File]; clear: [] }>()
 
 const { t } = useI18n()
 const { selectedFile, error, selectFile, clearFile } = useFileUpload(t)
@@ -12,6 +13,7 @@ const isDragging = ref(false)
 
 watch(selectedFile, (file) => {
   if (file) emit('select', file)
+  else emit('clear')
 })
 
 function onInputChange(event: Event) {
@@ -42,14 +44,15 @@ function onDrop(event: DragEvent) {
       {{ t('fileUpload.dropPrompt') }}
     </label>
     <p v-if="error" class="font-body text-label text-tag-red-border">{{ error }}</p>
-    <div v-if="selectedFile" class="flex items-center justify-between gap-2 bg-layer-01 p-4 font-body text-body text-primary">
+    <div v-if="selectedFile" class="flex h-12 items-center gap-4 bg-panel px-4 font-body text-body tracking-tight text-primary">
       <span class="min-w-0 flex-1 truncate">{{ selectedFile.name }}</span>
       <button
         type="button"
-        class="file-uploader__remove flex h-10 w-10 shrink-0 items-center justify-center border-none bg-transparent text-body-lg text-primary cursor-pointer"
+        :aria-label="t('fileUpload.remove', { name: selectedFile.name })"
+        class="file-uploader__remove flex shrink-0 cursor-pointer items-center justify-center border-none bg-layer-01 p-0"
         @click="clearFile"
       >
-        ×
+        <img :src="closeIcon" alt="" width="20" height="20" >
       </button>
     </div>
   </div>
