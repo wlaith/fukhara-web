@@ -123,7 +123,16 @@
   },
   "codeAnalysis": {
     "listTitle": "ثغرات الشيفرة · {count} من {total}",
-    "listTitleAll": "ثغرات الشيفرة · {total}"
+    "listTitleAll": "ثغرات الشيفرة · {total}",
+    "cvss": "CVSS {score}",
+    "filesCount": "الملفات: {count}",
+    "affectedFiles": "الملفات المتأثرة",
+    "showAllFiles": "عرض جميع الملفات ({count})",
+    "showFewerFiles": "عرض ملفات أقل",
+    "lines": "الأسطر",
+    "owaspMobile": "OWASP Mobile",
+    "learnMore": "اعرف المزيد",
+    "opensInNewTab": "(يُفتح في علامة تبويب جديدة)"
   },
   "behaviorAnalysis": {
     "permissionsTitle": "الأذونات"

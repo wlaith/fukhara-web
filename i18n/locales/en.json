@@ -123,7 +123,16 @@
   },
   "codeAnalysis": {
     "listTitle": "Code Vulnerability · {count} of {total}",
-    "listTitleAll": "Code Vulnerability · {total}"
+    "listTitleAll": "Code Vulnerability · {total}",
+    "cvss": "CVSS {score}",
+    "filesCount": "Files: {count}",
+    "affectedFiles": "Affected files",
+    "showAllFiles": "Show all {count} files",
+    "showFewerFiles": "Show fewer files",
+    "lines": "Lines",
+    "owaspMobile": "OWASP Mobile",
+    "learnMore": "Learn more",
+    "opensInNewTab": "(opens in a new tab)"
   },
   "behaviorAnalysis": {
     "permissionsTitle": "Permissions"
