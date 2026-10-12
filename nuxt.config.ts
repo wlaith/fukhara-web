@@ -2,7 +2,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-02-17',
   devtools: { enabled: false },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/eslint'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/eslint', 'nuxt-api-party'],
 
   css: ['~/assets/css/fonts.css'],
 
@@ -37,9 +37,26 @@ export default defineNuxtConfig({
     ],
   },
 
+  // The browser and SSR both call the backend through the Nuxt server proxy
+  // (/api/__api_party/fukhara/proxy/...), so the backend URL stays server-side.
+  // Set it at runtime with NUXT_API_PARTY_ENDPOINTS_FUKHARA_URL.
+  apiParty: {
+    endpoints: {
+      fukhara: {
+        url: 'http://localhost:8000',
+        schema: './docs/openapi.json',
+      },
+    },
+    server: {
+      // Forward requests unchanged, so APK uploads stream as multipart
+      proxyMode: 'passthrough',
+    },
+    // useAsyncData already transfers responses in the SSR payload
+    payloadCache: false,
+  },
+
   runtimeConfig: {
     public: {
-      apiBaseUrl: '',
       useMock: true,
       ciBuildNumber: '',
       ciBuildLink: '',

@@ -2,6 +2,7 @@
 import { computed, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
+import ReportHeader from '~/components/report/ReportHeader.vue'
 import VerdictBanner from '~/components/report/VerdictBanner.vue'
 import SubVerdictGrid from '~/components/report/SubVerdictGrid.vue'
 import VerticalTabs from '~/components/ui/VerticalTabs.vue'
@@ -25,6 +26,8 @@ const { replace } = useLocalizedNavigation()
 
 const report = useReport(route.params.id as string)
 provide(REPORT_INJECTION_KEY, report)
+
+const apkDetails = computed(() => report.appAnalysis.data.value?.apk_details)
 
 const TABS = computed(() => [
   { id: 'code-analysis', label: t('reportView.tabs.codeAnalysis') },
@@ -56,13 +59,19 @@ function onSelectTab(id: string) {
 
 <template>
   <main class="flex flex-col ">
+    <ReportHeader
+      v-if="apkDetails?.app_name || apkDetails?.package"
+      class="page-shell border-subtle"
+      :app-name="apkDetails.app_name ?? undefined"
+      :package-name="apkDetails.package ?? undefined"
+    />
     <VerdictBanner
       v-if="report.verdict.data.value"
       class="page-shell border-subtle"
-      :verdict="report.verdict.data.value.verdict ?? ''"
-      :severity="report.verdict.data.value.severity ?? ''"
-      :reason="report.verdict.data.value.reason ?? ''"
-      :response="report.verdict.data.value.response ?? ''"
+      :verdict="report.verdict.data.value.verdict ?? undefined"
+      :severity="report.verdict.data.value.severity ?? undefined"
+      :reason="report.verdict.data.value.reason ?? undefined"
+      :response="report.verdict.data.value.response ?? undefined"
     />
     <SubVerdictGrid class="page-shell border-subtle" :report="report" />
     <div class="page-shell flex flex-col border-subtle box-content lg:flex-row">

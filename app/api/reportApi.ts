@@ -1,4 +1,4 @@
-import { apiGet, apiPostFile } from './client'
+import { apiRequest } from './client'
 import { apiConfig } from './config'
 import { unwrap, type Envelope } from './envelope'
 import { verdictFixture } from './mocks/verdict'
@@ -14,12 +14,6 @@ function unwrapSection<T>(
 }
 
 type VerdictResponse = components['schemas']['VerdictResponse']
-type FingerprintsResponse = components['schemas']['FingerprintsResponse']
-type ThreatIntelligenceResponse = components['schemas']['ThreatIntelligenceResponse']
-type AppAnalysisResponse = components['schemas']['AppAnalysisResponse']
-type CodeAnalysisResponse = components['schemas']['CodeAnalysisResponse']
-type BehaviorAnalysisResponse = components['schemas']['BehaviorAnalysisResponse']
-type NetworkAnalysisResponse = components['schemas']['NetworkAnalysisResponse']
 
 export interface AnalyzeResult {
   id: string
@@ -30,13 +24,36 @@ export async function analyzeApk(file: File): Promise<AnalyzeResult> {
   if (apiConfig().useMock) {
     return { id: rawSample.fingerprints['checksums[mobsf]'].sha256, status: 'success' }
   }
-  return apiPostFile<AnalyzeResult>('/api/analyze/', file)
+  const body = new FormData()
+  body.append('file', file)
+  const res = await apiRequest('POST /api/analyze/', () =>
+    $fukhara('/api/analyze/', { method: 'POST', body: body as never }),
+  )
+  return { id: res.id ?? '', status: res.status ?? '' }
+}
+
+export interface AnalysisStatus {
+  status: 'pending' | 'completed' | 'failed'
+  toolsDone: number
+  toolsTotal: number
+}
+
+export async function getAnalysisStatus(id: string): Promise<AnalysisStatus> {
+  if (apiConfig().useMock) return { status: 'completed', toolsDone: 1, toolsTotal: 1 }
+  const res = await apiRequest(`GET /api/report/${id}/status/`, () =>
+    $fukhara('/api/report/{id}/status/', { path: { id } }),
+  )
+  return {
+    status: res.status as AnalysisStatus['status'],
+    toolsDone: res.tools_done?.length ?? 0,
+    toolsTotal: res.tools_total,
+  }
 }
 
 export async function getVerdict(id: string) {
   if (apiConfig().useMock) return verdictFixture
-  const res = await apiGet<components['schemas']['VerdictSectionResponse']>(
-    `/api/report/${id}/verdict/`,
+  const res = await apiRequest(`GET /api/report/${id}/verdict/`, () =>
+    $fukhara('/api/report/{id}/verdict/', { path: { id } }),
   )
   return unwrapSection<VerdictResponse>(res.verdict)
 }
@@ -49,7 +66,9 @@ export async function getFingerprints(id: string) {
       fuzzy_hashes: rawSample.fingerprints["fuzzy_hashes[['ssdeep']]"],
     }
   }
-  const res = await apiGet<FingerprintsResponse>(`/api/report/${id}/fingerprints/`)
+  const res = await apiRequest(`GET /api/report/${id}/fingerprints/`, () =>
+    $fukhara('/api/report/{id}/fingerprints/', { path: { id } }),
+  )
   return {
     checksums: unwrapSection(res.checksums),
     identifiers: unwrapSection(res.identifiers),
@@ -66,7 +85,9 @@ export async function getThreatIntelligence(id: string) {
       third_party_apps: rawSample.threat_intelligence['third-party-apps'],
     }
   }
-  const res = await apiGet<ThreatIntelligenceResponse>(`/api/report/${id}/threat-intelligence/`)
+  const res = await apiRequest(`GET /api/report/${id}/threat-intelligence/`, () =>
+    $fukhara('/api/report/{id}/threat-intelligence/', { path: { id } }),
+  )
   return {
     sample_timeline: unwrapSection(res.sample_timeline),
     yara_matches: unwrapSection(res.yara_matches),
@@ -86,7 +107,9 @@ export async function getAppAnalysis(id: string) {
       services: rawSample.apk_analysis['services[mobsf]'],
     }
   }
-  const res = await apiGet<AppAnalysisResponse>(`/api/report/${id}/app/`)
+  const res = await apiRequest(`GET /api/report/${id}/app/`, () =>
+    $fukhara('/api/report/{id}/app/', { path: { id } }),
+  )
   return {
     apk_details: unwrapSection(res.apk_details),
     certificate_details: unwrapSection(res.certificate_details),
@@ -104,7 +127,9 @@ export async function getCodeAnalysis(id: string) {
       code_vulnerabilities: rawSample.code_analysis['code_vulnerabilties[mobsf]'],
     }
   }
-  const res = await apiGet<CodeAnalysisResponse>(`/api/report/${id}/code/`)
+  const res = await apiRequest(`GET /api/report/${id}/code/`, () =>
+    $fukhara('/api/report/{id}/code/', { path: { id } }),
+  )
   return {
     niap_analysis: unwrapSection(res.niap_analysis),
     code_vulnerabilities: unwrapSection(res.code_vulnerabilties),
@@ -119,7 +144,9 @@ export async function getBehaviorAnalysis(id: string) {
       detailed_permissions: rawSample.behavior_analysis['detailed_permissions[mobsf]'],
     }
   }
-  const res = await apiGet<BehaviorAnalysisResponse>(`/api/report/${id}/behavior/`)
+  const res = await apiRequest(`GET /api/report/${id}/behavior/`, () =>
+    $fukhara('/api/report/{id}/behavior/', { path: { id } }),
+  )
   return {
     threats: unwrapSection(res.threats),
     permissions: unwrapSection(res.permissions),
@@ -134,7 +161,9 @@ export async function getNetworkAnalysis(id: string) {
       urls: rawSample.network_analysis['urls[mobsf]'],
     }
   }
-  const res = await apiGet<NetworkAnalysisResponse>(`/api/report/${id}/network/`)
+  const res = await apiRequest(`GET /api/report/${id}/network/`, () =>
+    $fukhara('/api/report/{id}/network/', { path: { id } }),
+  )
   return {
     domains: unwrapSection(res.domains),
     urls: unwrapSection(res.urls),

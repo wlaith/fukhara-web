@@ -1,47 +1,23 @@
-import { describe, it, expect, vi, afterEach } from 'vitest'
-import { apiGet, apiPostFile, ApiError } from './client'
+import { describe, it, expect } from 'vitest'
+import { apiRequest, ApiError } from './client'
 
-describe('apiGet', () => {
-  afterEach(() => {
-    vi.unstubAllGlobals()
-  })
-
-  it('returns parsed JSON on success', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ hello: 'world' }) }),
-    )
-    const result = await apiGet<{ hello: string }>('/api/reports/')
+describe('apiRequest', () => {
+  it('returns the response on success', async () => {
+    const result = await apiRequest('GET /api/reports/', async () => ({ hello: 'world' }))
     expect(result).toEqual({ hello: 'world' })
   })
 
-  it('throws ApiError on a non-ok response', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({ ok: false, status: 404, json: async () => ({}) }),
-    )
-    await expect(apiGet('/api/report/missing/')).rejects.toBeInstanceOf(ApiError)
-  })
-})
-
-describe('apiPostFile', () => {
-  afterEach(() => {
-    vi.unstubAllGlobals()
+  it('turns an HTTP error into an ApiError with its status', async () => {
+    const fetchError = Object.assign(new Error('Not Found'), { statusCode: 404 })
+    const request = apiRequest('GET /api/report/missing/status/', () => Promise.reject(fetchError))
+    await expect(request).rejects.toBeInstanceOf(ApiError)
+    await expect(request).rejects.toMatchObject({ status: 404 })
   })
 
-  it('posts a FormData body and returns parsed JSON', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({ id: 'abc123', status: 'success' }),
-    })
-    vi.stubGlobal('fetch', fetchMock)
-    const file = new File(['content'], 'sample.apk')
-    const result = await apiPostFile<{ id: string; status: string }>('/api/analyze/', file)
-    expect(result).toEqual({ id: 'abc123', status: 'success' })
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('/api/analyze/'),
-      expect.objectContaining({ method: 'POST' }),
+  it('rethrows errors that carry no HTTP status', async () => {
+    const networkError = new TypeError('fetch failed')
+    await expect(apiRequest('GET /api/reports/', () => Promise.reject(networkError))).rejects.toBe(
+      networkError,
     )
   })
 })

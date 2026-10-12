@@ -10,7 +10,9 @@ compose.yaml
 
 *.md
 LICENSE
-docs
+docs/*
+# nuxt-api-party generates the API types from the OpenAPI spec at build time
+!docs/openapi.json
 
 .yamlignore
 .gitignore

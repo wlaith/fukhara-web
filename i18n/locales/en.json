@@ -29,6 +29,9 @@
       "body": "Export results in a format you can safely share with colleagues. Works offline. Nothing stored in the cloud after you leave."
     }
   },
+  "reportHeader": {
+    "eyebrow": "Analyzed Application"
+  },
   "verdictBanner": {
     "reason": "Reason",
     "recommendedResponse": "Recommended Response",
@@ -59,6 +62,12 @@
       "staticAnalysis": "Running static analysis",
       "threatIntelligence": "Checking threat intelligence",
       "generatingReport": "Generating report"
+    },
+    "errors": {
+      "failed": "The analysis could not be completed. Please try uploading the file again.",
+      "notFound": "We could not find an analysis for this file. Please upload it again.",
+      "timeout": "The analysis is taking longer than expected. Please check back later.",
+      "unreachable": "We could not reach the analysis service. Please try again later."
     }
   },
   "severity": {

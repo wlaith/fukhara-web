@@ -2,6 +2,8 @@
 import { onBeforeUnmount, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProgressBar from '~/components/ui/ProgressBar.vue'
+import { apiConfig } from '~/api/config'
+import { getAnalysisStatus } from '~/api/reportApi'
 import { useAnalysisProgress } from '~/composables/useAnalysisProgress'
 import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
 
@@ -11,9 +13,15 @@ const { t } = useI18n()
 const route = useRoute()
 const { push } = useLocalizedNavigation()
 
-const { stepLabel, percent, start, stop } = useAnalysisProgress(() => {
-  push({ name: 'report', params: { id: route.params.id as string } })
-}, t)
+const id = route.params.id as string
+
+const { stepLabel, percent, error, start, stop } = useAnalysisProgress(
+  () => {
+    push({ name: 'report', params: { id } })
+  },
+  t,
+  apiConfig().useMock ? undefined : () => getAnalysisStatus(id),
+)
 
 onMounted(start)
 onBeforeUnmount(stop)
@@ -28,6 +36,8 @@ onBeforeUnmount(stop)
       :percent="percent"
       :label="stepLabel"
       :helper-text="t('analyzingView.helperText')"
-    /></div>
+    />
+    <p v-if="error" role="alert" class="pt-4 font-body text-body text-tag-red-border">{{ error }}</p>
+    </div>
   </main>
 </template>
