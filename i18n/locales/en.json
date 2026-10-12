@@ -29,6 +29,9 @@
       "body": "Export results in a format you can safely share with colleagues. Works offline. Nothing stored in the cloud after you leave."
     }
   },
+  "reportHeader": {
+    "eyebrow": "Analyzed Application"
+  },
   "verdictBanner": {
     "reason": "Reason",
     "recommendedResponse": "Recommended Response",
