@@ -32,6 +32,24 @@ export async function analyzeApk(file: File): Promise<AnalyzeResult> {
   return { id: res.id ?? '', status: res.status ?? '' }
 }
 
+export interface AnalysisStatus {
+  status: 'pending' | 'completed' | 'failed'
+  toolsDone: number
+  toolsTotal: number
+}
+
+export async function getAnalysisStatus(id: string): Promise<AnalysisStatus> {
+  if (apiConfig().useMock) return { status: 'completed', toolsDone: 1, toolsTotal: 1 }
+  const res = await apiRequest(`GET /api/report/${id}/status/`, () =>
+    $fukhara('/api/report/{id}/status/', { path: { id } }),
+  )
+  return {
+    status: res.status as AnalysisStatus['status'],
+    toolsDone: res.tools_done?.length ?? 0,
+    toolsTotal: res.tools_total,
+  }
+}
+
 export async function getVerdict(id: string) {
   if (apiConfig().useMock) return verdictFixture
   const res = await apiRequest(`GET /api/report/${id}/verdict/`, () =>
