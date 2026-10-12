@@ -39,6 +39,24 @@
     "report": {
       "title": "Downloadable Sharable Report",
       "body": "Export results in a format you can safely share with colleagues. Works offline. Nothing stored in the cloud after you leave."
+    },
+    "howTo": {
+      "getApk": {
+        "title": "01 Get APK file",
+        "body": "Fukhara analyzes .APK files, your android apps can be exported as apks for fukhara to analyze them",
+        "link": "How to get an APK file"
+      },
+      "upload": {
+        "title": "02 Upload APK file",
+        "body": "Drag and drop your apk file to fukhara and wait for analysis",
+        "note": "avg. wait time is 2 minutes, do not close the tab"
+      },
+      "readReport": {
+        "title": "03 Read Report",
+        "body": "Fukhara produces a report with all its findings, the reasoning, and the verdict reached.",
+        "note": "Your report can be exported",
+        "link": "Fukhara API on GitHub"
+      }
     }
   },
   "reportHeader": {
