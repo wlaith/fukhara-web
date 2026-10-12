@@ -7,6 +7,7 @@ const nuxtSpecs = [
   'app/app.spec.ts',
   'app/pages/**/*.spec.ts',
   'app/api/**/*.spec.ts',
+  'app/components/footer/AppFooter.spec.ts',
   'app/components/ui/AppHeader.spec.ts',
   'app/composables/useLocalizedNavigation.spec.ts',
   'app/composables/useReport.spec.ts',

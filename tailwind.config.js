@@ -8,6 +8,7 @@ export default {
         panel: '#2B3336',
         'layer-01': '#22282A',
         subtle: '#3A4245',
+        link: '#DE822B',
         'subtle-hover': '#4C5659',
         strong: '#5C6669',
         primary: '#F9F9F9',
