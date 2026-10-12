@@ -71,6 +71,7 @@
     }
   },
   "severity": {
+    "all": "الكل",
     "high": "عالية",
     "warning": "تحذير",
     "info": "معلومة",
@@ -121,7 +122,8 @@
     }
   },
   "codeAnalysis": {
-    "listTitle": "ثغرات الشيفرة · {count} من {total}"
+    "listTitle": "ثغرات الشيفرة · {count} من {total}",
+    "listTitleAll": "ثغرات الشيفرة · {total}"
   },
   "behaviorAnalysis": {
     "permissionsTitle": "الأذونات"

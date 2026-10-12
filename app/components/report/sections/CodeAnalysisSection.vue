@@ -13,23 +13,26 @@ onMounted(() => {
   report.codeAnalysis.load()
 })
 
-const SEVERITY_TABS = computed<{ id: Severity; label: string }[]>(() => [
+type SeverityFilter = Severity | 'all'
+
+const SEVERITY_TABS = computed<{ id: SeverityFilter; label: string }[]>(() => [
+  { id: 'all', label: t('severity.all') },
   { id: 'high', label: severityLabel('high', t) },
   { id: 'warning', label: severityLabel('warning', t) },
   { id: 'info', label: severityLabel('info', t) },
   { id: 'good', label: severityLabel('good', t) },
 ])
 
-const SEVERITIES: readonly Severity[] = ['high', 'warning', 'info', 'good']
+const SEVERITIES: readonly SeverityFilter[] = ['all', 'high', 'warning', 'info', 'good']
 
-function isSeverity(value: string): value is Severity {
+function isSeverityFilter(value: string): value is SeverityFilter {
   return (SEVERITIES as readonly string[]).includes(value)
 }
 
-const activeSeverity = ref<Severity>('high')
+const activeSeverity = ref<SeverityFilter>('all')
 
 function onSelectSeverity(id: string) {
-  if (isSeverity(id)) {
+  if (isSeverityFilter(id)) {
     activeSeverity.value = id
   }
 }
@@ -41,7 +44,9 @@ const categories = computed(() => {
 })
 
 const filteredCategories = computed(() =>
-  categories.value.filter(([, category]) => category?.metadata?.severity === activeSeverity.value),
+  activeSeverity.value === 'all'
+    ? categories.value
+    : categories.value.filter(([, category]) => category?.metadata?.severity === activeSeverity.value),
 )
 
 const rows = computed(() =>
@@ -53,7 +58,9 @@ const rows = computed(() =>
 )
 
 const listTitle = computed(() =>
-  t('codeAnalysis.listTitle', { count: filteredCategories.value.length, total: categories.value.length }),
+  activeSeverity.value === 'all'
+    ? t('codeAnalysis.listTitleAll', { total: categories.value.length })
+    : t('codeAnalysis.listTitle', { count: filteredCategories.value.length, total: categories.value.length }),
 )
 </script>
 

@@ -28,18 +28,18 @@ describe('CodeAnalysisSection', () => {
     }
   }
 
-  it('calls load() on mount and defaults to showing High-severity vulnerabilities', () => {
+  it('calls load() on mount and defaults to showing all vulnerabilities', () => {
     const report = makeReport()
     const wrapper = mount(CodeAnalysisSection, {
       global: { provide: { [REPORT_INJECTION_KEY as symbol]: report } },
     })
     expect(report.codeAnalysis.load).toHaveBeenCalledTimes(1)
     expect(wrapper.text()).toContain('CWE-532')
-    expect(wrapper.text()).toContain('1 of 2')
-    expect(wrapper.text()).not.toContain('CWE-999')
+    expect(wrapper.text()).toContain('CWE-999')
+    expect(wrapper.text()).toContain('Code Vulnerability · 2')
   })
 
-  it('switching the severity tab shows the matching vulnerabilities', async () => {
+  it('switching the severity tab shows only the matching vulnerabilities', async () => {
     const report = makeReport()
     const wrapper = mount(CodeAnalysisSection, {
       global: { provide: { [REPORT_INJECTION_KEY as symbol]: report } },
@@ -57,7 +57,7 @@ describe('CodeAnalysisSection', () => {
       global: { provide: { [REPORT_INJECTION_KEY as symbol]: report } },
     })
     expect(wrapper.text()).toContain('عالية')
-    expect(wrapper.text()).toContain('ثغرات الشيفرة · 1 من 2')
+    expect(wrapper.text()).toContain('ثغرات الشيفرة · 2')
     i18n.global.locale.value = 'en'
   })
 })

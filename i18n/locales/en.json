@@ -71,6 +71,7 @@
     }
   },
   "severity": {
+    "all": "All",
     "high": "High",
     "warning": "Warning",
     "info": "Info",
@@ -121,7 +122,8 @@
     }
   },
   "codeAnalysis": {
-    "listTitle": "Code Vulnerability · {count} of {total}"
+    "listTitle": "Code Vulnerability · {count} of {total}",
+    "listTitleAll": "Code Vulnerability · {total}"
   },
   "behaviorAnalysis": {
     "permissionsTitle": "Permissions"
