@@ -11,10 +11,13 @@ defineEmits<{ analyze: [] }>()
 
 const { t, locale } = useI18n()
 const { push } = useLocalizedNavigation()
+const route = useRoute()
+const getRouteBaseName = useRouteBaseName()
 
 const isArabic = computed(() => locale.value === 'ar')
 const logo = computed(() => (isArabic.value ? fukharaLogoAr : fukharaLogoEn))
 const isMenuOpen = ref(false)
+const isHome = computed(() => getRouteBaseName(route) === 'home')
 
 function goHome() {
   push({ name: 'home' })
@@ -35,18 +38,18 @@ function goAbout() {
       <Button variant="secondary" @click="goAbout">{{ t('appHeader.about') }}</Button>
       <div class="flex items-stretch">
         <LanguageToggle />
-        <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+        <Button v-if="!isHome" variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
       </div>
     </nav>
 
     <div class="flex items-center gap-2 lg:hidden">
       <div class="flex items-stretch">
         <LanguageToggle />
-        <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+        <Button v-if="!isHome" variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
       </div>
       <div class="flex items-stretch">
         <LanguageToggle />
-        <Button variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
+        <Button v-if="!isHome" variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
       </div>
       <button
         type="button"

@@ -14,17 +14,17 @@ describe('AppHeader', () => {
     expect(wrapper.find('img[alt="Fukhara"]').exists()).toBe(true)
     expect(wrapper.text()).toContain('About')
     expect(wrapper.text()).not.toContain('Documentation')
-    expect(wrapper.text()).toContain('Analyze')
+    expect(wrapper.text()).not.toContain('Analyze')
   })
 
   it('emits analyze when the Analyze button is clicked', async () => {
-    const wrapper = await mountSuspended(AppHeader, { route: '/' })
+    const wrapper = await mountSuspended(AppHeader, { route: '/about' })
     await wrapper.find('.button--primary').trigger('click')
     expect(wrapper.emitted('analyze')).toHaveLength(1)
   })
 
-  it('shows Arabic nav labels and the English switcher on /ar', async () => {
-    const wrapper = await mountSuspended(AppHeader, { route: '/ar' })
+  it('shows Arabic nav labels and the English switcher on /ar/about', async () => {
+    const wrapper = await mountSuspended(AppHeader, { route: '/ar/about' })
     expect(wrapper.text()).toContain('حول')
     expect(wrapper.text()).toContain('تحليل')
     expect(wrapper.text()).toContain('English')
