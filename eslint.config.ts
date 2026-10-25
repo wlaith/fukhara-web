@@ -29,7 +29,7 @@ export default withNuxt(defineConfig([
     language: "css/css",
     languageOptions: { tolerant: true },
     extends: ["css/recommended"],
-    rules: { "css/no-invalid-at-rules": "off" },
+    rules: { "css/no-invalid-at-rules": "off", "css/no-invalid-properties": "off" },
   },
   { files: ["**/*.spec.ts"], rules: { "import/first": "off" } },
 ])).onResolved((configs) => {

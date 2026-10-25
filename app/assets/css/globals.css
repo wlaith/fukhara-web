@@ -1,21 +1,72 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --color-canvas: #1a1f21;
+  --color-panel: #2b3336;
+  --color-layer-01: #22282a;
+  --color-subtle: #3a4245;
+  --color-subtle-hover: #4c5659;
+  --color-strong: #5c6669;
+  --color-primary: #f9f9f9;
+  --color-secondary: #c9c7c4;
+  --color-helper: #8c8782;
+  --color-on-color: #ffffff;
+  --color-accent: #ed7b3d;
+  --color-accent-text-on: #ffffff;
+  --color-tag-red-bg: #b81c23;
+  --color-tag-red-border: #fa6b6b;
+  --color-tag-red-text: #ffd9d6;
+  --color-tag-gold-bg: #3a3220;
+  --color-tag-gold-border: #f5d45a;
+  --color-tag-gold-text: #fcefc2;
+  --color-tag-green-bg: #198038;
+  --color-tag-green-border: #5cb87a;
+  --color-tag-green-text: #d3f2de;
+  --color-tag-teal-bg: #0e6c60;
+  --color-tag-teal-border: #5bb5a6;
+  --color-tag-teal-text: #cbede6;
+  --color-tag-gray-bg: #2b3336;
+  --color-tag-gray-border: #4c5659;
+  --color-tag-gray-text: #f9f9f9;
+
+  --font-heading: 'Aleo', 'Fustat', Georgia, 'Times New Roman', serif;
+  --font-body: 'IBM Plex Sans', 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont,
+    sans-serif;
+
+  --text-display-lg: 32px;
+  --text-display-md: 25px;
+  --text-display-sm: 21px;
+  --text-body-lg: 16px;
+  --text-body-md: 15px;
+  --text-body: 14px;
+  --text-caption: 13px;
+  --text-label: 12px;
+  --text-eyebrow: 10px;
+
+  --tracking-tight: 0.16px;
+  --tracking-label: 0.32px;
+
+  --radius-tag-lg: 16px;
+  --radius-tag-sm: 9px;
+}
 
 @layer base {
   body {
-    @apply bg-canvas text-primary font-body text-body;
+    background-color: var(--color-canvas);
+    color: var(--color-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
     line-height: 1.4;
   }
 
   h1,
   h2,
   h3 {
-    @apply font-heading;
+    font-family: var(--font-heading);
   }
 
   a {
-    @apply text-accent;
+    color: var(--color-accent);
   }
 }
 
@@ -25,6 +76,14 @@
   }
 
   .page-shell {
-    @apply px-4 md:px-8 md:px-[8vw] xl:px-[14vw];
+    padding-inline: 1rem;
+
+    @media (min-width: 48rem) {
+      padding-inline: 8vw;
+    }
+
+    @media (min-width: 80rem) {
+      padding-inline: 14vw;
+    }
   }
 }

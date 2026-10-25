@@ -1,10 +1,12 @@
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-02-17',
   devtools: { enabled: false },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', '@nuxt/eslint'],
+  modules: ['@nuxtjs/i18n', '@nuxt/eslint'],
 
-  css: ['~/assets/css/fonts.css'],
+  css: ['~/assets/css/fonts.css', '~/assets/css/globals.css'],
 
   components: [{ path: '~/components', pathPrefix: false }],
 
@@ -21,9 +23,8 @@ export default defineNuxtConfig({
     },
   },
 
-  tailwindcss: {
-    cssPath: '~/assets/css/globals.css',
-    viewer: false,
+  vite: {
+    plugins: [tailwindcss()],
   },
 
   i18n: {
