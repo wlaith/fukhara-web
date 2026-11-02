@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useFileUpload } from '../../composables/useFileUpload'
 import closeIcon from '../../assets/icons/close.svg'
 
-defineProps<{ label: string }>()
+defineProps<{ label?: string }>()
 const emit = defineEmits<{ select: [file: File]; clear: [] }>()
 
 const { t } = useI18n()
@@ -32,15 +32,15 @@ function onDrop(event: DragEvent) {
 
 <template>
   <div class="flex w-full flex-col gap-4">
-    <p class="font-body text-body-md font-medium text-primary">{{ label }}</p>
+    <p v-if="label" class="font-body text-body-md font-medium text-primary">{{ label }}</p>
     <label
-      class="file-uploader__dropzone block cursor-pointer border border-dashed border-strong px-4 py-5 font-body text-body text-accent"
+      class="file-uploader__dropzone relative block cursor-pointer border border-dashed border-strong px-4 py-5 font-body text-body text-accent focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent"
       :class="{ 'file-uploader__dropzone--dragging border-accent bg-layer-01': isDragging }"
       @dragover.prevent="isDragging = true"
       @dragleave.prevent="isDragging = false"
       @drop.prevent="onDrop"
     >
-      <input type="file" accept=".apk" class="hidden" @change="onInputChange" >
+      <input type="file" accept=".apk" class="sr-only" @change="onInputChange" >
       {{ t('fileUpload.dropPrompt') }}
     </label>
     <p v-if="error" class="font-body text-label text-tag-red-border">{{ error }}</p>

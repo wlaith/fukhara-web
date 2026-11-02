@@ -61,7 +61,7 @@ async function onAnalyze() {
       <p class="font-body text-body text-secondary">
         {{ t('homeView.heroBody') }}
       </p>
-      <FileUploader label="" @select="onSelect" @clear="onClear" />
+      <FileUploader @select="onSelect" @clear="onClear" />
       <Button
         variant="primary"
         class="analyze-button self-start"
