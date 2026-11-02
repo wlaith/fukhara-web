@@ -61,6 +61,12 @@ async function onAnalyze() {
         {{ t('homeView.heroBody') }}
       </p>
       <FileUploader @select="onSelect" @clear="onClear" />
+      <p class="flex items-center gap-2 font-body text-label tracking-label text-helper">
+        <svg class="size-[1em] shrink-0 fill-current" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M24,14H22V8A6,6,0,0,0,10,8v6H8a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H24a2,2,0,0,0,2-2V16A2,2,0,0,0,24,14ZM12,8a4,4,0,0,1,8,0v6H12ZM24,28H8V16H24Z" />
+        </svg>
+        {{ t('homeView.privacyNote') }}
+      </p>
       <Button
         variant="primary"
         class="analyze-button self-start"

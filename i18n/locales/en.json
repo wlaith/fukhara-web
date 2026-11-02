@@ -30,6 +30,7 @@
     "heroBody": "Upload an Android app file (.apk). We tell you whether it looks dangerous or not and why.",
     "uploadFailed": "Something went wrong analyzing this file. Please try again.",
     "analyze": "Analyze",
+    "privacyNote": "Your file is stored on the Fukhara server. Only its fingerprint (SHA-256) is checked with VirusTotal and MalwareBazaar, never the file itself. Anyone with the report link can open the report.",
     "analyzing": "Analyzing…",
     "howTo": {
       "getApk": {
