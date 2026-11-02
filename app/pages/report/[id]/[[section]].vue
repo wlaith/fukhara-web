@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, watch } from 'vue'
+import { computed, provide, useTemplateRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
 import VerdictBanner from '~/components/report/VerdictBanner.vue'
@@ -71,8 +71,15 @@ const SECTION_COMPONENTS: Record<string, unknown> = {
 const activeSection = computed(() => (route.params.section as string) || 'code-analysis')
 const activeComponent = computed(() => SECTION_COMPONENTS[activeSection.value] ?? null)
 
+const sections = useTemplateRef<HTMLElement>('sections')
+
 function onSelectTab(id: string) {
   replace({ name: 'report', params: { id: route.params.id, section: id } })
+}
+
+function onSelectCard(id: string) {
+  onSelectTab(id)
+  sections.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 </script>
 
@@ -95,8 +102,8 @@ function onSelectTab(id: string) {
       <span class="block h-4 w-1/3 animate-pulse bg-panel motion-reduce:animate-none" aria-hidden="true" />
       <span class="mt-4 block h-10 w-1/2 animate-pulse bg-panel motion-reduce:animate-none" aria-hidden="true" />
     </div>
-    <SubVerdictGrid class="page-shell border-subtle" :report="report" />
-    <div class="page-shell flex flex-col border-subtle box-content lg:flex-row">
+    <SubVerdictGrid class="page-shell border-subtle" :report="report" @select="onSelectCard" />
+    <div ref="sections" class="page-shell flex scroll-mt-4 flex-col border-subtle box-content lg:flex-row">
       <VerticalTabs :items="TABS" :active-id="activeSection" @select="onSelectTab" />
       <div class="flex-1  border-subtle w-full text-wrap">
         <component :is="activeComponent" v-if="activeComponent" />

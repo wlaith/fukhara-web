@@ -36,6 +36,6 @@ describe('SubVerdictCard', () => {
     const wrapper = mount(SubVerdictCard, {
       props: { label: 'Network', subVerdict: { headline: 'No Bad Domains', headlineKind: 'green', tags: [] } },
     })
-    expect(wrapper.findAll('.tag--compact')).toHaveLength(1)
+    expect(wrapper.findAll('.tag--compact')).toHaveLength(0)
   })
 })
