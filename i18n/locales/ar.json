@@ -89,11 +89,19 @@
     "title": "نقوم بتحليل ملفك",
     "subtitle": "يستغرق تحليل الملف 3 دقائق في المتوسط",
     "helperText": "تجمع فخارة بين أدوات متعددة لاستخبارات التهديدات لإنتاج تحليل شامل لتطبيقات الجوال",
-    "steps": {
-      "uploading": "جارٍ رفع الملف",
-      "staticAnalysis": "جارٍ إجراء التحليل الساكن",
-      "threatIntelligence": "جارٍ فحص استخبارات التهديدات",
-      "generatingReport": "جارٍ إنشاء التقرير"
+    "progress": "اكتمل {done} من {total} فحوصات",
+    "elapsed": "الوقت المنقضي: {time}",
+    "finished": "الفحوص المكتملة",
+    "tools": {
+      "mobsf": "التحليل الثابت (MobSF)",
+      "apkid": "كشف أدوات التعمية والتغليف (APKiD)",
+      "ssdeep": "بصمات التشابه (ssdeep)",
+      "quark_engine": "كشف السلوك الخبيث (Quark)",
+      "androcfg": "تحليل تدفق التحكم (AndroCFG)",
+      "virustotal": "البحث في VirusTotal",
+      "malwarebazaar": "البحث في MalwareBazaar",
+      "apk_info": "تفاصيل التطبيق وتوقيعه",
+      "yara": "فحص قواعد YARA"
     },
     "errors": {
       "failed": "تعذّر إكمال التحليل. يُرجى محاولة رفع الملف مرة أخرى.",

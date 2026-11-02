@@ -13,80 +13,33 @@ describe('useAnalysisProgress', () => {
     vi.useRealTimers()
   })
 
-  it('starts at the first step label and 0%', () => {
-    const { stepLabel, percent } = useAnalysisProgress(() => {}, i18n.global.t)
-    expect(stepLabel.value).toBe('Uploading file')
-    expect(percent.value).toBe(0)
+  const pending = (toolsDone: string[]) => ({
+    status: 'pending' as const,
+    toolsDone,
+    toolsTotal: 8,
   })
 
-  it('advances through steps and increases percent as time passes', () => {
-    const { stepLabel, percent, start } = useAnalysisProgress(() => {}, i18n.global.t)
-    start()
-    vi.advanceTimersByTime(2000)
-    expect(stepLabel.value).toBe('Running static analysis')
-    expect(percent.value).toBeGreaterThan(0)
-  })
-
-  it('calls onComplete once all steps finish', () => {
-    const onComplete = vi.fn()
-    const { start } = useAnalysisProgress(onComplete, i18n.global.t)
-    start()
-    vi.advanceTimersByTime(10000)
-    expect(onComplete).toHaveBeenCalledTimes(1)
-  })
-
-  it('stop() prevents further step advancement', () => {
-    const { stepLabel, start, stop } = useAnalysisProgress(() => {}, i18n.global.t)
-    start()
-    vi.advanceTimersByTime(2000)
-    stop()
-    const labelAfterStop = stepLabel.value
-    vi.advanceTimersByTime(8000)
-    expect(stepLabel.value).toBe(labelAfterStop)
-  })
-
-  it('uses Arabic step labels when the locale is ar', () => {
-    i18n.global.locale.value = 'ar'
-    const { stepLabel } = useAnalysisProgress(() => {}, i18n.global.t)
-    expect(stepLabel.value).toBe('جارٍ رفع الملف')
-    i18n.global.locale.value = 'en'
-  })
-})
-
-describe('useAnalysisProgress translator argument', () => {
-  it('builds step labels with the supplied t, not shared locale state', () => {
-    i18n.global.locale.value = 'ar'
-    const { stepLabel } = useAnalysisProgress(() => {}, ((key: string) => `fake:${key}`) as never)
-    expect(stepLabel.value).toBe('fake:analyzingView.steps.uploading')
-    i18n.global.locale.value = 'en'
-  })
-})
-
-describe('useAnalysisProgress with a status source', () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  const pending = (toolsDone: number) => ({ status: 'pending' as const, toolsDone, toolsTotal: 8 })
+  const eight = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
   it('follows the reported tool progress', async () => {
-    const fetchStatus = vi.fn().mockResolvedValueOnce(pending(2)).mockResolvedValueOnce(pending(6))
-    const { stepLabel, percent, start, stop } = useAnalysisProgress(
+    const fetchStatus = vi
+      .fn()
+      .mockResolvedValueOnce(pending(['apkid', 'yara']))
+      .mockResolvedValueOnce(
+        pending(['apkid', 'yara', 'mobsf', 'virustotal', 'exodus', 'trufflehog']),
+      )
+    const { toolsDone, percent, start, stop } = useAnalysisProgress(
       () => {},
       i18n.global.t,
       fetchStatus,
     )
     start()
     await vi.advanceTimersByTimeAsync(0)
-    expect(stepLabel.value).toBe('Running static analysis')
-    expect(percent.value).toBe(24)
+    expect(toolsDone.value).toEqual(['apkid', 'yara'])
+    expect(percent.value).toBe(25)
     await vi.advanceTimersByTimeAsync(3000)
-    expect(stepLabel.value).toBe('Checking threat intelligence')
-    expect(percent.value).toBe(71)
+    expect(toolsDone.value).toHaveLength(6)
+    expect(percent.value).toBe(75)
     stop()
   })
 
@@ -94,8 +47,8 @@ describe('useAnalysisProgress with a status source', () => {
     const onComplete = vi.fn()
     const fetchStatus = vi
       .fn()
-      .mockResolvedValueOnce(pending(4))
-      .mockResolvedValueOnce({ status: 'completed', toolsDone: 8, toolsTotal: 8 })
+      .mockResolvedValueOnce(pending(['apkid', 'yara', 'mobsf', 'exodus']))
+      .mockResolvedValueOnce({ status: 'completed', toolsDone: eight, toolsTotal: 8 })
     const { percent, start } = useAnalysisProgress(onComplete, i18n.global.t, fetchStatus)
     start()
     await vi.advanceTimersByTimeAsync(3000)
@@ -106,12 +59,15 @@ describe('useAnalysisProgress with a status source', () => {
   })
 
   it('reports a failed analysis and stops polling', async () => {
-    const fetchStatus = vi.fn().mockResolvedValue({ status: 'failed', toolsDone: 8, toolsTotal: 8 })
+    const fetchStatus = vi
+      .fn()
+      .mockResolvedValue({ status: 'failed', toolsDone: eight, toolsTotal: 8 })
     const onComplete = vi.fn()
-    const { error, start } = useAnalysisProgress(onComplete, i18n.global.t, fetchStatus)
+    const fakeT = ((key: string) => `fake:${key}`) as never
+    const { error, start } = useAnalysisProgress(onComplete, fakeT, fetchStatus)
     start()
     await vi.advanceTimersByTimeAsync(30000)
-    expect(error.value).toBe(en.analyzingView.errors.failed)
+    expect(error.value).toBe('fake:analyzingView.errors.failed')
     expect(fetchStatus).toHaveBeenCalledTimes(1)
     expect(onComplete).not.toHaveBeenCalled()
   })
@@ -136,7 +92,7 @@ describe('useAnalysisProgress with a status source', () => {
   })
 
   it('gives up after the maximum wait', async () => {
-    const fetchStatus = vi.fn().mockResolvedValue(pending(1))
+    const fetchStatus = vi.fn().mockResolvedValue(pending(['apkid']))
     const { error, start } = useAnalysisProgress(() => {}, i18n.global.t, fetchStatus)
     start()
     await vi.advanceTimersByTimeAsync(15 * 60 * 1000)
@@ -144,12 +100,27 @@ describe('useAnalysisProgress with a status source', () => {
   })
 
   it('stop() prevents further polling', async () => {
-    const fetchStatus = vi.fn().mockResolvedValue(pending(1))
+    const fetchStatus = vi.fn().mockResolvedValue(pending(['apkid']))
     const { start, stop } = useAnalysisProgress(() => {}, i18n.global.t, fetchStatus)
     start()
     await vi.advanceTimersByTimeAsync(0)
     stop()
     await vi.advanceTimersByTimeAsync(30000)
     expect(fetchStatus).toHaveBeenCalledTimes(1)
+  })
+
+  it('counts elapsed seconds until stop()', async () => {
+    const fetchStatus = vi.fn().mockResolvedValue(pending(['apkid']))
+    const { elapsedSeconds, start, stop } = useAnalysisProgress(
+      () => {},
+      i18n.global.t,
+      fetchStatus,
+    )
+    start()
+    await vi.advanceTimersByTimeAsync(5000)
+    expect(elapsedSeconds.value).toBe(5)
+    stop()
+    await vi.advanceTimersByTimeAsync(5000)
+    expect(elapsedSeconds.value).toBe(5)
   })
 })

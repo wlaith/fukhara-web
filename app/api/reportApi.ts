@@ -56,18 +56,18 @@ export async function analyzeApk(file: File, options: UploadOptions = {}): Promi
 
 export interface AnalysisStatus {
   status: 'pending' | 'completed' | 'failed'
-  toolsDone: number
+  toolsDone: string[]
   toolsTotal: number
 }
 
 export async function getAnalysisStatus(id: string): Promise<AnalysisStatus> {
-  if (apiConfig().useMock) return { status: 'completed', toolsDone: 1, toolsTotal: 1 }
+  if (apiConfig().useMock) return { status: 'completed', toolsDone: [], toolsTotal: 0 }
   const res = await apiRequest(`GET /api/report/${id}/status/`, () =>
     $fukhara('/api/report/{id}/status/', { path: { id } }),
   )
   return {
     status: res.status as AnalysisStatus['status'],
-    toolsDone: res.tools_done?.length ?? 0,
+    toolsDone: res.tools_done ?? [],
     toolsTotal: res.tools_total,
   }
 }

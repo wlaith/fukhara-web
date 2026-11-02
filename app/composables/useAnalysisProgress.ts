@@ -1,67 +1,39 @@
-import { ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 import { ApiError } from '~/api/client'
 import type { AnalysisStatus } from '~/api/reportApi'
 import type { Translate } from '~/domain/translate'
 
-const STEP_DURATION_MS = 2000
 const POLL_INTERVAL_MS = 3000
 const MAX_WAIT_MS = 15 * 60 * 1000
 const MAX_CONSECUTIVE_ERRORS = 5
 
-
 export function useAnalysisProgress(
   onComplete: () => void,
   t: Translate,
-  fetchStatus?: () => Promise<AnalysisStatus>,
+  fetchStatus: () => Promise<AnalysisStatus>,
 ) {
-  function steps(): string[] {
-    return [
-      t('analyzingView.steps.uploading'),
-      t('analyzingView.steps.staticAnalysis'),
-      t('analyzingView.steps.threatIntelligence'),
-      t('analyzingView.steps.generatingReport'),
-    ]
-  }
+  const toolsDone = ref<string[]>([])
+  const toolsTotal = shallowRef(0)
+  const elapsedSeconds = shallowRef(0)
+  const error = shallowRef<string | null>(null)
+  const percent = computed(() =>
+    toolsTotal.value > 0 ? Math.round((toolsDone.value.length / toolsTotal.value) * 100) : 0,
+  )
 
-  const stepIndex = ref(0)
-  const stepLabel = ref(steps()[0] ?? '')
-  const percent = ref(0)
-  const error = ref<string | null>(null)
-  let timer: ReturnType<typeof setInterval> | null = null
   let pollTimer: ReturnType<typeof setTimeout> | null = null
+  let clockTimer: ReturnType<typeof setInterval> | null = null
   let polling = false
 
-  function setStep(index: number) {
-    stepIndex.value = index
-    stepLabel.value = steps()[index] ?? ''
-  }
-
   function start() {
-    if (fetchStatus) startPolling(fetchStatus)
-    else startTimer()
-  }
-
-  function startTimer() {
-    if (timer) return
-    const currentSteps = steps()
-    timer = setInterval(() => {
-      stepIndex.value += 1
-      if (stepIndex.value >= currentSteps.length) {
-        percent.value = 100
-        stop()
-        onComplete()
-        return
-      }
-      stepLabel.value = currentSteps[stepIndex.value] ?? ''
-      percent.value = Math.round((stepIndex.value / currentSteps.length) * 100)
-    }, STEP_DURATION_MS)
-  }
-
-  function startPolling(fetch: () => Promise<AnalysisStatus>) {
     if (polling) return
     polling = true
+    error.value = null
     const startedAt = Date.now()
     let consecutiveErrors = 0
+    elapsedSeconds.value = 0
+    clockTimer = setInterval(() => {
+      elapsedSeconds.value = Math.floor((Date.now() - startedAt) / 1000)
+    }, 1000)
 
     function fail(message: string) {
       error.value = message
@@ -71,22 +43,18 @@ export function useAnalysisProgress(
     async function poll() {
       pollTimer = null
       try {
-        const status = await fetch()
+        const status = await fetchStatus()
         if (!polling) return
         consecutiveErrors = 0
+        toolsDone.value = status.toolsDone
+        toolsTotal.value = status.toolsTotal
 
         if (status.status === 'completed') {
-          setStep(steps().length - 1)
-          percent.value = 100
           stop()
           onComplete()
           return
         }
         if (status.status === 'failed') return fail(t('analyzingView.errors.failed'))
-
-        const fraction = status.toolsTotal > 0 ? status.toolsDone / status.toolsTotal : 0
-        setStep(fraction < 0.5 ? 1 : 2)
-        percent.value = Math.min(95, Math.round(fraction * 95))
       } catch (err) {
         if (!polling) return
         if (err instanceof ApiError && err.status === 404) {
@@ -106,16 +74,16 @@ export function useAnalysisProgress(
   }
 
   function stop() {
-    if (timer) {
-      clearInterval(timer)
-      timer = null
-    }
     if (pollTimer) {
       clearTimeout(pollTimer)
       pollTimer = null
     }
+    if (clockTimer) {
+      clearInterval(clockTimer)
+      clockTimer = null
+    }
     polling = false
   }
 
-  return { stepLabel, percent, error, start, stop }
+  return { toolsDone, toolsTotal, percent, elapsedSeconds, error, start, stop }
 }

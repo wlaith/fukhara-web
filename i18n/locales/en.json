@@ -89,11 +89,19 @@
     "title": "We are analyzing your file",
     "subtitle": "On average, it takes 3 minutes to analyze a file",
     "helperText": "Fukhara combines multiple threat intelligence tools to produce thorough analysis of mobile apps",
-    "steps": {
-      "uploading": "Uploading file",
-      "staticAnalysis": "Running static analysis",
-      "threatIntelligence": "Checking threat intelligence",
-      "generatingReport": "Generating report"
+    "progress": "{done} of {total} checks done",
+    "elapsed": "Elapsed: {time}",
+    "finished": "Finished checks",
+    "tools": {
+      "mobsf": "Static analysis (MobSF)",
+      "apkid": "Packer and obfuscator detection (APKiD)",
+      "ssdeep": "Similarity fingerprints (ssdeep)",
+      "quark_engine": "Malicious behaviour detection (Quark)",
+      "androcfg": "Control flow analysis (AndroCFG)",
+      "virustotal": "VirusTotal lookup",
+      "malwarebazaar": "MalwareBazaar lookup",
+      "apk_info": "App details and signature",
+      "yara": "YARA rule scan"
     },
     "errors": {
       "failed": "The analysis could not be completed. Please try uploading the file again.",

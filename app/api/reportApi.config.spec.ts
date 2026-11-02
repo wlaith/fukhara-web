@@ -68,7 +68,7 @@ describe('reportApi with useMock=false', () => {
     expect(fukharaMock).toHaveBeenCalledWith('/api/report/{id}/status/', {
       path: { id: 'abc123' },
     })
-    expect(result).toEqual({ status: 'pending', toolsDone: 2, toolsTotal: 9 })
+    expect(result).toEqual({ status: 'pending', toolsDone: ['mobsf', 'apkid'], toolsTotal: 9 })
   })
 
   it('raises an ApiError when the API responds with an error', async () => {
