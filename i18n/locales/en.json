@@ -105,6 +105,8 @@
     },
     "source": "Your APK",
     "report": "Report",
+    "retry": "Try again",
+    "uploadAgain": "Upload another file",
     "errors": {
       "failed": "The analysis could not be completed. Please try uploading the file again.",
       "notFound": "We could not find an analysis for this file. Please upload it again.",

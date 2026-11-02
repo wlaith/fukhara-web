@@ -2,6 +2,8 @@
 import { computed, onBeforeUnmount, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import AnalysisFlow from '~/components/analyzing/AnalysisFlow.vue'
+import InlineNotification from '~/components/ui/InlineNotification.vue'
+import Button from '~/components/ui/Button.vue'
 import { getAnalysisStatus } from '~/api/reportApi'
 import { useAnalysisProgress } from '~/composables/useAnalysisProgress'
 import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
@@ -72,7 +74,13 @@ onBeforeUnmount(() => {
         </ul>
       </div>
       <p class="font-body text-label tracking-label text-helper">{{ t('analyzingView.helperText') }}</p>
-      <p v-if="error" role="alert" class="font-body text-body text-tag-red-border">{{ error }}</p>
+      <template v-if="error">
+        <InlineNotification>{{ error }}</InlineNotification>
+        <div class="flex flex-wrap gap-2">
+          <Button variant="primary" class="retry-button" @click="start">{{ t('analyzingView.retry') }}</Button>
+          <Button class="upload-again-button" @click="push({ name: 'home' })">{{ t('analyzingView.uploadAgain') }}</Button>
+        </div>
+      </template>
     </div>
   </main>
 </template>
