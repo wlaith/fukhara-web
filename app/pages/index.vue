@@ -68,9 +68,10 @@ async function onAnalyze() {
         {{ t('homeView.privacyNote') }}
       </p>
       <Button
+        v-if="selectedFile"
         variant="primary"
         class="analyze-button self-start"
-        :disabled="!selectedFile || isAnalyzing"
+        :disabled="isAnalyzing"
         @click="onAnalyze"
       >
         {{ isAnalyzing ? t('homeView.analyzing') : t('homeView.analyze') }}
