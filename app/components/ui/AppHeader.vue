@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Button from './Button.vue'
 import LanguageToggle from './LanguageToggle.vue'
@@ -26,10 +26,14 @@ function goHome() {
 function goAbout() {
   push({ name: 'about' })
 }
+
+watch(() => route.fullPath, () => {
+  isMenuOpen.value = false
+})
 </script>
 
 <template>
-  <header class="page-shell relative flex h-fit items-center justify-between bg-panel">
+  <header class="page-shell relative flex h-fit items-center justify-between bg-panel" @keydown.esc="isMenuOpen = false">
     <button type="button" class="border-none bg-transparent p-0 cursor-pointer" @click="goHome">
       <img :src="logo" alt="Fukhara" class="h-[27.5px] w-auto" >
     </button>
@@ -43,10 +47,6 @@ function goAbout() {
     </nav>
 
     <div class="flex items-center gap-2 lg:hidden">
-      <div class="flex items-stretch">
-        <LanguageToggle />
-        <Button v-if="!isHome" variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
-      </div>
       <div class="flex items-stretch">
         <LanguageToggle />
         <Button v-if="!isHome" variant="primary" @click="$emit('analyze')">{{ t('appHeader.analyze') }}</Button>
