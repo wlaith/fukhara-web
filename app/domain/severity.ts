@@ -20,7 +20,7 @@ const SEVERITY_RANK: Record<Severity, number> = {
 
 const PERMISSION_STATUS_KIND: Record<PermissionStatus, TagKind> = {
   dangerous: 'red',
-  normal: 'gold',
+  normal: 'gray',
   unknown: 'gray',
 }
 
@@ -39,7 +39,6 @@ export function permissionStatusKind(status: PermissionStatus | null | undefined
   return PERMISSION_STATUS_KIND[status] ?? 'gray'
 }
 
-// Falls back to the raw value verbatim for anything unrecognized.
 export function severityLabel(
   severity: Severity | string | null | undefined,
   t: Translate,
@@ -47,9 +46,9 @@ export function severityLabel(
   const key = (severity ?? '').toString().toLowerCase()
   const map: Record<string, string> = {
     high: t('severity.high'),
-    warning: t('severity.warning'),
+    warning: t('severity.medium'),
     info: t('severity.info'),
-    good: t('severity.good'),
+    good: t('severity.secure'),
   }
   return map[key] ?? (severity ?? '').toString()
 }
@@ -60,8 +59,8 @@ export function permissionStatusLabel(
 ): string {
   const key = (status ?? '').toString().toLowerCase()
   const map: Record<string, string> = {
-    dangerous: t('severity.dangerous'),
-    normal: t('severity.normal'),
+    dangerous: t('severity.high'),
+    normal: t('severity.low'),
     unknown: t('severity.unknown'),
   }
   return map[key] ?? (status ?? '').toString()

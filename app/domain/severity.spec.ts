@@ -42,9 +42,9 @@ describe('severityRank', () => {
 })
 
 describe('permissionStatusKind', () => {
-  it('maps dangerous to red, normal to gold, unknown to gray', () => {
+  it('maps dangerous to red, normal to gray, unknown to gray', () => {
     expect(permissionStatusKind('dangerous')).toBe('red')
-    expect(permissionStatusKind('normal')).toBe('gold')
+    expect(permissionStatusKind('normal')).toBe('gray')
     expect(permissionStatusKind('unknown')).toBe('gray')
   })
 
@@ -72,16 +72,19 @@ describe('verdictSeverityKind', () => {
 })
 
 describe('severityLabel', () => {
-  it('capitalizes each known severity in English', () => {
+  it('labels each known severity in English', () => {
     expect(severityLabel('high')).toBe('High')
-    expect(severityLabel('warning')).toBe('Warning')
+    expect(severityLabel('warning')).toBe('Medium')
     expect(severityLabel('info')).toBe('Info')
-    expect(severityLabel('good')).toBe('Good')
+    expect(severityLabel('good')).toBe('Secure')
   })
 
   it('translates to Arabic when the locale is ar', () => {
     i18n.global.locale.value = 'ar'
     expect(severityLabel('high')).toBe('عالية')
+    expect(severityLabel('warning')).toBe('متوسطة')
+    expect(severityLabel('info')).toBe('معلومة')
+    expect(severityLabel('good')).toBe('آمن')
     i18n.global.locale.value = 'en'
   })
 
@@ -91,15 +94,17 @@ describe('severityLabel', () => {
 })
 
 describe('permissionStatusLabel', () => {
-  it('capitalizes each known status in English', () => {
-    expect(permissionStatusLabel('dangerous')).toBe('Dangerous')
-    expect(permissionStatusLabel('normal')).toBe('Normal')
+  it('labels each known status in English', () => {
+    expect(permissionStatusLabel('dangerous')).toBe('High')
+    expect(permissionStatusLabel('normal')).toBe('Low')
     expect(permissionStatusLabel('unknown')).toBe('Unknown')
   })
 
   it('translates to Arabic when the locale is ar', () => {
     i18n.global.locale.value = 'ar'
-    expect(permissionStatusLabel('dangerous')).toBe('خطير')
+    expect(permissionStatusLabel('dangerous')).toBe('عالية')
+    expect(permissionStatusLabel('normal')).toBe('منخفضة')
+    expect(permissionStatusLabel('unknown')).toBe('غير معروف')
     i18n.global.locale.value = 'en'
   })
 })
@@ -115,7 +120,7 @@ describe('label helpers translate through the t argument', () => {
 
   it('permissionStatusLabel ignores shared locale state', () => {
     i18n.global.locale.value = 'ar'
-    expect(permissionStatusLabelWithT('dangerous', fakeT)).toBe('fake:severity.dangerous')
+    expect(permissionStatusLabelWithT('dangerous', fakeT)).toBe('fake:severity.high')
     i18n.global.locale.value = 'en'
   })
 

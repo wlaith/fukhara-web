@@ -97,29 +97,28 @@
   "severity": {
     "all": "All",
     "high": "High",
-    "warning": "Warning",
+    "medium": "Medium",
+    "low": "Low",
     "info": "Info",
-    "good": "Good",
-    "dangerous": "Dangerous",
-    "normal": "Normal",
+    "secure": "Secure",
     "unknown": "Unknown"
   },
   "subVerdicts": {
     "codeAnalysis": {
       "headline": "{count} Vulnerabilities",
       "highTag": "{count} High",
-      "warningTag": "{count} Warning",
+      "mediumTag": "{count} Medium",
       "noIssues": "No Issues Found"
     },
     "behaviorAnalysis": {
-      "headline": "{count} Dangerous",
-      "moderateTag": "{count} Moderate",
-      "unclassifiedTag": "{count} Unclassified"
+      "headline": "{count} High-risk permissions",
+      "lowTag": "{count} Low",
+      "unknownTag": "{count} Unknown"
     },
     "appInformation": {
-      "headline": "{count} Critical",
-      "moderateTag": "{count} Moderate",
-      "lowTag": "{count} Low"
+      "headline": "{count} High-risk issues",
+      "mediumTag": "{count} Medium",
+      "infoTag": "{count} Info"
     },
     "threatIntelligence": {
       "flaggedHeadline": "Flagged {count}×",

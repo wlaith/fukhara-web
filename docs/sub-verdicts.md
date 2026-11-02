@@ -9,7 +9,8 @@ one place (`src/domain/subVerdicts.ts`) as real-world samples reveal better
 rules.
 
 Severity color mapping used throughout (`src/domain/severity.ts`):
-`high` → red, `warning` → purple, `info` → gray, `good` → green.
+`high` → red "High", `warning` → gold "Medium", `info` → gray "Info", `good` → green "Secure".
+Permissions: `dangerous` → red "High", `normal` → gray "Low", `unknown` → gray "Unknown".
 
 ## Code Analysis
 Source: `code_vulnerabilties` (map of category → `{files, metadata}`).
@@ -17,23 +18,22 @@ Source: `code_vulnerabilties` (map of category → `{files, metadata}`).
 - Headline: count of categories where `metadata.severity` is `high` or
   `warning` → **"N Vulnerabilities"**.
 - Tags: up to two chips, one per severity present among `{high, warning}`,
-  formatted **"N High"** / **"N Warning"**, highest severity first. If neither
+  formatted **"N High"** / **"N Medium"**, highest severity first. If neither
   is present, show a single **"No Issues Found"** tag instead.
 
 ## Behavior Analysis
 Source: `permissions` (map of permission name → `{status, info, description}`).
 
-- Headline: count where `status == "dangerous"` → **"N Dangerous"**.
-- Tags: **"N Moderate"** (`status == "normal"`), **"N Unclassified"**
-  (`status == "unknown"`). "Unclassified" is used instead of "Safe" — an
-  unknown-status permission has not been verified safe, and labeling it as
-  such would be misleading.
+- Headline: count where `status == "dangerous"` → **"N High-risk permissions"**.
+- Tags: **"N Low"** (`status == "normal"`), **"N Unknown"**
+  (`status == "unknown"`). An unknown-status permission has not been verified
+  safe, so it is never labelled "Safe".
 
 ## App Information
 Source: `manifest_analysis` (list of `{rule, title, severity, description, component}`).
 
-- Headline: count where `severity == "high"` → **"N Critical"**.
-- Tags: **"N Moderate"** (`severity == "warning"`), **"N Low"**
+- Headline: count where `severity == "high"` → **"N High-risk issues"**.
+- Tags: **"N Medium"** (`severity == "warning"`), **"N Info"**
   (`severity == "info"`). Omit a tag if its count is 0.
 
 ## Threat Intelligence

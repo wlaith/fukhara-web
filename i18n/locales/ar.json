@@ -97,29 +97,28 @@
   "severity": {
     "all": "الكل",
     "high": "عالية",
-    "warning": "تحذير",
+    "medium": "متوسطة",
+    "low": "منخفضة",
     "info": "معلومة",
-    "good": "جيد",
-    "dangerous": "خطير",
-    "normal": "عادي",
+    "secure": "آمن",
     "unknown": "غير معروف"
   },
   "subVerdicts": {
     "codeAnalysis": {
       "headline": "{count} ثغرات",
       "highTag": "{count} عالية",
-      "warningTag": "{count} تحذير",
+      "mediumTag": "{count} متوسطة",
       "noIssues": "لا توجد مشكلات"
     },
     "behaviorAnalysis": {
-      "headline": "{count} خطير",
-      "moderateTag": "{count} متوسط",
-      "unclassifiedTag": "{count} غير مصنّف"
+      "headline": "{count} أذونات عالية الخطورة",
+      "lowTag": "{count} منخفضة",
+      "unknownTag": "{count} غير معروفة"
     },
     "appInformation": {
-      "headline": "{count} حرج",
-      "moderateTag": "{count} متوسط",
-      "lowTag": "{count} منخفض"
+      "headline": "{count} مشكلات عالية الخطورة",
+      "mediumTag": "{count} متوسطة",
+      "infoTag": "{count} معلومة"
     },
     "threatIntelligence": {
       "flaggedHeadline": "أُبلغ عنه {count} مرة",

@@ -24,7 +24,7 @@ describe('codeAnalysisSubVerdict', () => {
     expect(result.headline).toBe('3 Vulnerabilities')
     expect(result.tags).toEqual([
       { label: '2 High', kind: 'red' },
-      { label: '1 Warning', kind: 'gold' },
+      { label: '1 Medium', kind: 'gold' },
     ])
   })
 
@@ -36,33 +36,33 @@ describe('codeAnalysisSubVerdict', () => {
 })
 
 describe('behaviorAnalysisSubVerdict', () => {
-  it('headlines the dangerous count, tags moderate and unclassified', () => {
+  it('headlines the high-risk permission count, tags low and unknown', () => {
     const result = behaviorAnalysisSubVerdict([
       { status: 'dangerous' },
       { status: 'dangerous' },
       { status: 'normal' },
       { status: 'unknown' },
     ])
-    expect(result.headline).toBe('2 Dangerous')
+    expect(result.headline).toBe('2 High-risk permissions')
     expect(result.tags).toEqual([
-      { label: '1 Moderate', kind: 'gold' },
-      { label: '1 Unclassified', kind: 'gray' },
+      { label: '1 Low', kind: 'gray' },
+      { label: '1 Unknown', kind: 'gray' },
     ])
   })
 })
 
 describe('appInformationSubVerdict', () => {
-  it('headlines the critical (high-severity) count, tags moderate and low', () => {
+  it('headlines the high-severity count, tags medium and info', () => {
     const result = appInformationSubVerdict([
       { severity: 'high' },
       { severity: 'warning' },
       { severity: 'info' },
       { severity: 'info' },
     ])
-    expect(result.headline).toBe('1 Critical')
+    expect(result.headline).toBe('1 High-risk issues')
     expect(result.tags).toEqual([
-      { label: '1 Moderate', kind: 'gold' },
-      { label: '2 Low', kind: 'gray' },
+      { label: '1 Medium', kind: 'gold' },
+      { label: '2 Info', kind: 'gray' },
     ])
   })
 })

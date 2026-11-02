@@ -26,7 +26,7 @@ export function codeAnalysisSubVerdict(
     })
   if (warningCount > 0)
     tags.push({
-      label: t('subVerdicts.codeAnalysis.warningTag', { count: warningCount }),
+      label: t('subVerdicts.codeAnalysis.mediumTag', { count: warningCount }),
       kind: severityKind('warning'),
     })
   if (tags.length === 0) tags.push({ label: t('subVerdicts.codeAnalysis.noIssues'), kind: 'green' })
@@ -51,12 +51,12 @@ export function behaviorAnalysisSubVerdict(
   const tags: SubVerdict['tags'] = []
   if (moderate > 0)
     tags.push({
-      label: t('subVerdicts.behaviorAnalysis.moderateTag', { count: moderate }),
+      label: t('subVerdicts.behaviorAnalysis.lowTag', { count: moderate }),
       kind: permissionStatusKind('normal'),
     })
   if (unclassified > 0)
     tags.push({
-      label: t('subVerdicts.behaviorAnalysis.unclassifiedTag', { count: unclassified }),
+      label: t('subVerdicts.behaviorAnalysis.unknownTag', { count: unclassified }),
       kind: permissionStatusKind('unknown'),
     })
   return {
@@ -77,12 +77,12 @@ export function appInformationSubVerdict(findings: ManifestFinding[], t: Transla
   const tags: SubVerdict['tags'] = []
   if (moderate > 0)
     tags.push({
-      label: t('subVerdicts.appInformation.moderateTag', { count: moderate }),
+      label: t('subVerdicts.appInformation.mediumTag', { count: moderate }),
       kind: severityKind('warning'),
     })
   if (low > 0)
     tags.push({
-      label: t('subVerdicts.appInformation.lowTag', { count: low }),
+      label: t('subVerdicts.appInformation.infoTag', { count: low }),
       kind: severityKind('info'),
     })
   return {

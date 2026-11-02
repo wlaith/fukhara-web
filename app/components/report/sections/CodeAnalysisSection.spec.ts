@@ -44,8 +44,8 @@ describe('CodeAnalysisSection', () => {
     const wrapper = mount(CodeAnalysisSection, {
       global: { provide: { [REPORT_INJECTION_KEY as symbol]: report } },
     })
-    const goodTab = wrapper.findAll('.tabs__item').find((el) => el.text() === 'Good')
-    await goodTab?.trigger('click')
+    const secureTab = wrapper.findAll('.tabs__item').find((el) => el.text() === 'Secure')
+    await secureTab?.trigger('click')
     expect(wrapper.text()).toContain('CWE-999')
     expect(wrapper.text()).not.toContain('CWE-532')
   })
