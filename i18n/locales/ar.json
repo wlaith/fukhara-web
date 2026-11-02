@@ -62,9 +62,6 @@
     "cleared": "مُسح السجل.",
     "undo": "تراجع"
   },
-  "reportHeader": {
-    "eyebrow": "التطبيق المحلَّل"
-  },
   "verdictBanner": {
     "reason": "السبب",
     "recommendedResponse": "الإجراء الموصى به",
@@ -73,7 +70,9 @@
       "high": "خطورة عالية",
       "medium": "خطورة متوسطة",
       "low": "خطورة منخفضة"
-    }
+    },
+    "version": "الإصدار {version}",
+    "analyzedAt": "حُلّل في {date}"
   },
   "reportView": {
     "tabs": {

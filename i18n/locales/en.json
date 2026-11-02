@@ -62,9 +62,6 @@
     "cleared": "History cleared.",
     "undo": "Undo"
   },
-  "reportHeader": {
-    "eyebrow": "Analyzed Application"
-  },
   "verdictBanner": {
     "reason": "Reason",
     "recommendedResponse": "Recommended Response",
@@ -73,7 +70,9 @@
       "high": "High Severity",
       "medium": "Medium Severity",
       "low": "Low Severity"
-    }
+    },
+    "version": "Version {version}",
+    "analyzedAt": "Analyzed {date}"
   },
   "reportView": {
     "tabs": {

@@ -2,13 +2,35 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Tag from '../ui/Tag.vue'
+import Icon from '../ui/Icon.vue'
+import warningFilledIcon from '../../assets/icons/warning--filled.svg'
+import warningAltFilledIcon from '../../assets/icons/warning--alt--filled.svg'
+import checkmarkFilledIcon from '../../assets/icons/checkmark--filled.svg'
+import helpFilledIcon from '../../assets/icons/help--filled.svg'
 import { verdictSeverityKind } from '../../domain/severity'
 
-const props = defineProps<{ verdict?: string; severity?: string; reason?: string; response?: string }>()
+const props = defineProps<{
+  verdict?: string
+  severity?: string
+  reason?: string
+  response?: string
+  appName?: string
+  packageName?: string
+  version?: string
+  analyzedAt?: string
+}>()
+
+const ICONS = {
+  red: warningFilledIcon,
+  gold: warningAltFilledIcon,
+  green: checkmarkFilledIcon,
+  gray: helpFilledIcon,
+} as const
 
 const { t } = useI18n()
 const kind = computed(() => verdictSeverityKind(props.severity))
 const hasHeadline = computed(() => Boolean(props.verdict || props.severity))
+const icon = computed(() => ICONS[kind.value])
 const hasDetails = computed(() => Boolean(props.reason || props.response))
 const severityTagLabel = computed(() => {
   const map: Record<string, string> = {
@@ -50,13 +72,22 @@ const verdictText = computed(() => {
 
 <template>
   <section v-if="hasHeadline || hasDetails" class="w-full border-subtle">
-    <div v-if="hasHeadline" class="flex border-subtle items-center justify-between p-5" :class="[`verdict-banner__headline--${kind}`, headlineBg]">
-      <h1 v-if="verdict" class="font-heading text-display-lg" :class="verdictText">
-        {{ verdict }}
-      </h1>
-      <Tag v-if="severity" :kind="kind">{{ severityTagLabel }}</Tag>
+    <div v-if="hasHeadline" class="flex flex-col gap-3 border-subtle p-5" :class="[`verdict-banner__headline--${kind}`, headlineBg]">
+      <p v-if="appName || packageName" class="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-body text-body text-primary">
+        <bdi v-if="appName" dir="auto" class="font-semibold">{{ appName }}</bdi>
+        <code v-if="packageName" dir="ltr" class="font-mono text-caption">{{ packageName }}</code>
+        <span v-if="version" class="font-body text-caption">{{ t('verdictBanner.version', { version }) }}</span>
+        <span v-if="analyzedAt" class="font-body text-caption">{{ t('verdictBanner.analyzedAt', { date: analyzedAt }) }}</span>
+      </p>
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3 font-heading text-display-lg" :class="verdictText">
+          <Icon :src="icon" />
+          <h1 v-if="verdict">{{ verdict }}</h1>
+        </div>
+        <Tag v-if="severity" :kind="kind">{{ severityTagLabel }}</Tag>
+      </div>
     </div>
-    <div v-if="hasDetails" class="flex gap-6 p-5 border-subtle">
+    <div v-if="hasDetails" class="flex flex-col gap-6 border-subtle p-5 sm:flex-row">
       <div v-if="reason" class="flex flex-1 flex-col gap-2">
         <p class="font-body text-eyebrow font-semibold text-primary">{{ t('verdictBanner.reason') }}</p>
         <p class="font-body text-body text-primary">{{ reason }}</p>
