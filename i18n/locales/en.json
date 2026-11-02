@@ -103,6 +103,8 @@
       "apk_info": "App details and signature",
       "yara": "YARA rule scan"
     },
+    "source": "Your APK",
+    "report": "Report",
     "errors": {
       "failed": "The analysis could not be completed. Please try uploading the file again.",
       "notFound": "We could not find an analysis for this file. Please upload it again.",

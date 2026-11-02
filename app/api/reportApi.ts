@@ -60,8 +60,23 @@ export interface AnalysisStatus {
   toolsTotal: number
 }
 
+const MOCK_TOOL_INTERVAL_MS = 1200
+const MOCK_FINISH_ORDER = ['virustotal', 'malwarebazaar', 'apk_info', 'apkid', 'ssdeep', 'yara', 'androcfg', 'quark_engine', 'mobsf']
+const mockStartedAt = new Map<string, number>()
+
+function mockAnalysisStatus(id: string): AnalysisStatus {
+  const startedAt = mockStartedAt.get(id) ?? Date.now()
+  mockStartedAt.set(id, startedAt)
+  const count = Math.min(MOCK_FINISH_ORDER.length, Math.floor((Date.now() - startedAt) / MOCK_TOOL_INTERVAL_MS))
+  return {
+    status: count === MOCK_FINISH_ORDER.length ? 'completed' : 'pending',
+    toolsDone: MOCK_FINISH_ORDER.slice(0, count),
+    toolsTotal: MOCK_FINISH_ORDER.length,
+  }
+}
+
 export async function getAnalysisStatus(id: string): Promise<AnalysisStatus> {
-  if (apiConfig().useMock) return { status: 'completed', toolsDone: [], toolsTotal: 0 }
+  if (apiConfig().useMock) return mockAnalysisStatus(id)
   const res = await apiRequest(`GET /api/report/${id}/status/`, () =>
     $fukhara('/api/report/{id}/status/', { path: { id } }),
   )

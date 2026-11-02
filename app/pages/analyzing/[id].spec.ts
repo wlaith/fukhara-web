@@ -20,10 +20,10 @@ describe('analyzing page', () => {
     expect(wrapper.text()).toContain('نقوم بتحليل ملفك')
   })
 
-  it('navigates to the report when the steps finish', async () => {
-    vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] })
+  it('navigates to the report when every check finishes', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true, toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'Date'] })
     const wrapper = await mountSuspended(AnalyzingPage, { route: '/analyzing/abc123' })
-    vi.advanceTimersByTime(8000)
+    await vi.advanceTimersByTimeAsync(20000)
     await vi.waitFor(() => expect(useRouter().currentRoute.value.fullPath).toBe('/report/abc123'))
     wrapper.unmount()
   })
