@@ -27,14 +27,32 @@ describe('reportApi with useMock=false', () => {
     expect(result).toBeNull()
   })
 
-  it('POSTs the file as multipart form data', async () => {
-    fukharaMock.mockResolvedValue({ id: 'abc123', status: 'success' })
-    const result = await analyzeApk(new File(['x'], 'sample.apk'))
-    const [path, options] = fukharaMock.mock.calls[0]!
-    expect(path).toBe('/api/analyze/')
-    expect(options.method).toBe('POST')
-    expect(options.body).toBeInstanceOf(FormData)
-    expect((options.body as FormData).get('file')).toBeInstanceOf(File)
+  it('POSTs the file as multipart form data and reports upload progress', async () => {
+    const sent: { method?: string; url?: string; body?: FormData } = {}
+    class FakeXhr {
+      upload: { onprogress?: (event: { loaded: number; total: number }) => void } = {}
+      status = 200
+      response = { id: 'abc123', status: 'success' }
+      responseType = ''
+      onload?: () => void
+      open(method: string, url: string) {
+        sent.method = method
+        sent.url = url
+      }
+      send(body: FormData) {
+        sent.body = body
+        this.upload.onprogress?.({ loaded: 1, total: 2 })
+        this.onload?.()
+      }
+    }
+    vi.stubGlobal('XMLHttpRequest', FakeXhr)
+    const onProgress = vi.fn()
+    const result = await analyzeApk(new File(['x'], 'sample.apk'), { onProgress })
+    vi.unstubAllGlobals()
+    expect(sent.method).toBe('POST')
+    expect(sent.url).toBe('/api/__api_party/fukhara/proxy/api/analyze/')
+    expect(sent.body?.get('file')).toBeInstanceOf(File)
+    expect(onProgress).toHaveBeenCalledWith(1, 2)
     expect(result).toEqual({ id: 'abc123', status: 'success' })
   })
 

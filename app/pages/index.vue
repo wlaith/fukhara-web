@@ -3,7 +3,9 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FileUploader from '~/components/ui/FileUploader.vue'
 import Button from '~/components/ui/Button.vue'
-import { analyzeApk } from '~/api/reportApi'
+import ProgressBar from '~/components/ui/ProgressBar.vue'
+import { useApkUpload } from '~/composables/useApkUpload'
+import { formatFileSize } from '~/domain/format'
 import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
 import applicationMobileIcon from '~/assets/icons/application--mobile.svg'
 import cloudUploadIcon from '~/assets/icons/cloud--upload.svg'
@@ -16,7 +18,14 @@ const { t, locale } = useI18n()
 const { push } = useLocalizedNavigation()
 const uploadError = ref<string | null>(null)
 const selectedFile = ref<File | null>(null)
-const isAnalyzing = ref(false)
+const { isUploading, loaded, total, percent, upload, cancel } = useApkUpload()
+const uploadLabel = computed(() =>
+  t('homeView.uploadProgress', {
+    percent: percent.value,
+    loaded: formatFileSize(loaded.value, locale.value),
+    total: formatFileSize(total.value, locale.value),
+  }),
+)
 
 const APK_GUIDE_URL = 'https://developer.android.com/studio/run#reference'
 const josaUrl = computed(() => (locale.value === 'ar' ? 'https://josa.ngo/ar' : 'https://josa.ngo'))
@@ -38,16 +47,13 @@ function onClear() {
 }
 
 async function onAnalyze() {
-  if (!selectedFile.value || isAnalyzing.value) return
+  if (!selectedFile.value || isUploading.value) return
   uploadError.value = null
-  isAnalyzing.value = true
   try {
-    const result = await analyzeApk(selectedFile.value)
-    push({ name: 'analyzing', params: { id: result.id } })
+    const result = await upload(selectedFile.value)
+    if (result) push({ name: 'analyzing', params: { id: result.id } })
   } catch (err) {
     uploadError.value = err instanceof Error ? err.message : t('homeView.uploadFailed')
-  } finally {
-    isAnalyzing.value = false
   }
 }
 </script>
@@ -67,14 +73,12 @@ async function onAnalyze() {
         </svg>
         {{ t('homeView.privacyNote') }}
       </p>
-      <Button
-        v-if="selectedFile"
-        variant="primary"
-        class="analyze-button self-start"
-        :disabled="isAnalyzing"
-        @click="onAnalyze"
-      >
-        {{ isAnalyzing ? t('homeView.analyzing') : t('homeView.analyze') }}
+      <div v-if="isUploading" class="flex flex-col gap-4">
+        <ProgressBar :percent="percent" :label="uploadLabel" :helper-text="t('homeView.uploadHelper')" />
+        <Button class="cancel-button self-start" @click="cancel">{{ t('homeView.cancel') }}</Button>
+      </div>
+      <Button v-else-if="selectedFile" variant="primary" class="analyze-button self-start" @click="onAnalyze">
+        {{ t('homeView.analyze') }}
       </Button>
       <p v-if="uploadError" class="p-4 font-body text-body text-tag-red-border">{{ uploadError }}</p>
     </section>

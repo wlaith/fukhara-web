@@ -1,4 +1,4 @@
-import { apiRequest } from './client'
+import { ApiError, apiRequest } from './client'
 import { apiConfig } from './config'
 import { unwrap, type Envelope } from './envelope'
 import { verdictFixture } from './mocks/verdict'
@@ -27,16 +27,31 @@ export interface AnalyzeResult {
   status: string
 }
 
-export async function analyzeApk(file: File): Promise<AnalyzeResult> {
+export interface UploadOptions {
+  signal?: AbortSignal
+  onProgress?: (loaded: number, total: number) => void
+}
+
+export async function analyzeApk(file: File, options: UploadOptions = {}): Promise<AnalyzeResult> {
   if (apiConfig().useMock) {
     return { id: rawSample.fingerprints['checksums[mobsf]'].sha256, status: 'success' }
   }
   const body = new FormData()
   body.append('file', file)
-  const res = await apiRequest('POST /api/analyze/', () =>
-    $fukhara('/api/analyze/', { method: 'POST', body: body as never }),
-  )
-  return { id: res.id ?? '', status: res.status ?? '' }
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', '/api/__api_party/fukhara/proxy/api/analyze/')
+    xhr.responseType = 'json'
+    xhr.upload.onprogress = (event) => options.onProgress?.(event.loaded, event.total)
+    xhr.onload = () => {
+      if (xhr.status >= 300) return reject(new ApiError(xhr.status, `POST /api/analyze/ failed with ${xhr.status}`))
+      resolve({ id: xhr.response?.id ?? '', status: xhr.response?.status ?? '' })
+    }
+    xhr.onerror = () => reject(new Error('POST /api/analyze/ failed'))
+    xhr.onabort = () => reject(new DOMException('Upload cancelled', 'AbortError'))
+    options.signal?.addEventListener('abort', () => xhr.abort())
+    xhr.send(body)
+  })
 }
 
 export interface AnalysisStatus {
