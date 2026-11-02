@@ -19,13 +19,12 @@ const selectedFile = ref<File | null>(null)
 const isAnalyzing = ref(false)
 
 const APK_GUIDE_URL = 'https://developer.android.com/studio/run#reference'
-const API_REPO = 'https://github.com/jordanopensource/fukhara-api'
 const josaUrl = computed(() => (locale.value === 'ar' ? 'https://josa.ngo/ar' : 'https://josa.ngo'))
 
 const howToSteps = [
   { key: 'getApk', icon: applicationMobileIcon, notes: false, link: APK_GUIDE_URL },
   { key: 'upload', icon: cloudUploadIcon, notes: true, link: null },
-  { key: 'readReport', icon: reportDataIcon, notes: true, link: API_REPO },
+  { key: 'readReport', icon: reportDataIcon, notes: false, link: null },
 ] as const
 
 function onSelect(file: File) {
