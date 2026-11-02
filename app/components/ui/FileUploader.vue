@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useFileUpload } from '../../composables/useFileUpload'
+import { formatFileSize } from '../../domain/format'
+import Icon from './Icon.vue'
 import closeIcon from '../../assets/icons/close.svg'
+import checkmarkFilledIcon from '../../assets/icons/checkmark--filled.svg'
 
 defineProps<{ label?: string }>()
 const emit = defineEmits<{ select: [file: File]; clear: [] }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { selectedFile, error, selectFile, clearFile } = useFileUpload(t)
 const isDragging = ref(false)
+const fileSize = computed(() => (selectedFile.value ? formatFileSize(selectedFile.value.size, locale.value) : ''))
 
 watch(selectedFile, (file) => {
   if (file) emit('select', file)
@@ -45,7 +49,9 @@ function onDrop(event: DragEvent) {
     </label>
     <p v-if="error" class="font-body text-label text-tag-red-border">{{ error }}</p>
     <div v-if="selectedFile" class="flex h-12 items-center gap-4 bg-panel px-4 font-body text-body tracking-tight text-primary">
+      <Icon :src="checkmarkFilledIcon" />
       <span class="min-w-0 flex-1 truncate">{{ selectedFile.name }}</span>
+      <span class="shrink-0 font-body text-label tracking-label text-helper">{{ fileSize }}</span>
       <button
         type="button"
         :aria-label="t('fileUpload.remove', { name: selectedFile.name })"

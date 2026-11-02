@@ -17,3 +17,12 @@ export function formatTimestamp(value: string, locale: string, withTime = false)
     ...(withTime ? { timeStyle: 'short' } : {}),
   }).format(date)
 }
+
+export function formatFileSize(bytes: number, locale: string): string {
+  const megabytes = bytes / 1_000_000
+  return new Intl.NumberFormat(`${locale}-u-nu-latn`, {
+    style: 'unit',
+    unit: megabytes < 1 ? 'kilobyte' : 'megabyte',
+    maximumFractionDigits: 1,
+  }).format(megabytes < 1 ? bytes / 1000 : megabytes)
+}
