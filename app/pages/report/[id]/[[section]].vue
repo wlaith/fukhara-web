@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide } from 'vue'
+import { computed, provide, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
 import ReportHeader from '~/components/report/ReportHeader.vue'
@@ -13,6 +13,7 @@ import NetworkSection from '~/components/report/sections/NetworkSection.vue'
 import FingerprintsSection from '~/components/report/sections/FingerprintsSection.vue'
 import CodeAnalysisSection from '~/components/report/sections/CodeAnalysisSection.vue'
 import { useReport, REPORT_INJECTION_KEY } from '~/composables/useReport'
+import { useRecentReports } from '~/composables/useRecentReports'
 
 definePageMeta({
   name: 'report',
@@ -27,6 +28,21 @@ const report = useReport(route.params.id as string)
 provide(REPORT_INJECTION_KEY, report)
 
 const apkDetails = computed(() => report.appAnalysis.data.value?.apk_details)
+
+const { remember } = useRecentReports()
+watch(
+  () => [report.verdict.data.value, apkDetails.value] as const,
+  ([verdict, details]) => {
+    if (!verdict?.verdict) return
+    remember({
+      id: route.params.id as string,
+      appName: details?.app_name ?? details?.package ?? (route.params.id as string),
+      verdict: verdict.verdict,
+      severity: verdict.severity ?? null,
+    })
+  },
+  { immediate: true },
+)
 
 const TABS = computed(() => [
   { id: 'code-analysis', label: t('reportView.tabs.codeAnalysis') },

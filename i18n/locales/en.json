@@ -56,6 +56,12 @@
       "josa": "Jordan Open Source Association (JOSA)"
     }
   },
+  "recentReports": {
+    "title": "Your recent reports",
+    "clear": "Clear history",
+    "cleared": "History cleared.",
+    "undo": "Undo"
+  },
   "reportHeader": {
     "eyebrow": "Analyzed Application"
   },

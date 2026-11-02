@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import FileUploader from '~/components/ui/FileUploader.vue'
 import Button from '~/components/ui/Button.vue'
 import ProgressBar from '~/components/ui/ProgressBar.vue'
+import RecentReports from '~/components/home/RecentReports.vue'
 import { useApkUpload } from '~/composables/useApkUpload'
 import { formatFileSize } from '~/domain/format'
 import { useLocalizedNavigation } from '~/composables/useLocalizedNavigation'
@@ -93,6 +94,7 @@ async function onAnalyze() {
       </i18n-t>
       <img :src="josaLogoMark" alt="" class="mt-auto h-14 w-14 self-end">
     </section></div>
+    <RecentReports />
     <section class="page-shell grid grid-cols-1 border-subtle lg:grid-cols-3">
       <div v-for="step in howToSteps" :key="step.key" class="flex flex-col items-start gap-4 border-subtle p-6">
         <img :src="step.icon" alt="" width="36" height="36" class="h-9 w-9" >
