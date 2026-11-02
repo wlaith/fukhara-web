@@ -74,8 +74,7 @@
       "appInformation": "App Information",
       "threatIntelligence": "Threat Intelligence",
       "network": "Network",
-      "fingerprints": "Fingerprints",
-      "controlFlow": "Control Flow"
+      "fingerprints": "Fingerprints"
     }
   },
   "analyzingView": {
@@ -253,10 +252,6 @@
     "noChecksums": "No checksums were reported.",
     "noIdentifiers": "No flagged identifiers were reported.",
     "noFuzzyHashes": "No fuzzy hashes were reported."
-  },
-  "controlFlow": {
-    "title": "Not yet available",
-    "description": "Control-flow graph visualization is not yet defined by the backend. Check back once this section's data contract is finalized."
   },
   "aboutView": {
     "title": "About Fukhara",

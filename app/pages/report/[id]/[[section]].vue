@@ -6,7 +6,6 @@ import ReportHeader from '~/components/report/ReportHeader.vue'
 import VerdictBanner from '~/components/report/VerdictBanner.vue'
 import SubVerdictGrid from '~/components/report/SubVerdictGrid.vue'
 import VerticalTabs from '~/components/ui/VerticalTabs.vue'
-import ControlFlowSection from '~/components/report/sections/ControlFlowSection.vue'
 import BehaviorAnalysisSection from '~/components/report/sections/BehaviorAnalysisSection.vue'
 import AppInformationSection from '~/components/report/sections/AppInformationSection.vue'
 import ThreatIntelligenceSection from '~/components/report/sections/ThreatIntelligenceSection.vue'
@@ -36,13 +35,11 @@ const TABS = computed(() => [
   { id: 'threat-intelligence', label: t('reportView.tabs.threatIntelligence') },
   { id: 'network', label: t('reportView.tabs.network') },
   { id: 'fingerprints', label: t('reportView.tabs.fingerprints') },
-  { id: 'control-flow', label: t('reportView.tabs.controlFlow') },
 ])
 
 const SECTION_COMPONENTS: Record<string, unknown> = {
   'behavior-analysis': BehaviorAnalysisSection,
   'app-information': AppInformationSection,
-  'control-flow': ControlFlowSection,
   'threat-intelligence': ThreatIntelligenceSection,
   'network': NetworkSection,
   'fingerprints': FingerprintsSection,

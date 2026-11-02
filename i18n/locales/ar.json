@@ -74,8 +74,7 @@
       "appInformation": "معلومات التطبيق",
       "threatIntelligence": "استخبارات التهديدات",
       "network": "الشبكة",
-      "fingerprints": "البصمات",
-      "controlFlow": "تدفق التحكم"
+      "fingerprints": "البصمات"
     }
   },
   "analyzingView": {
@@ -253,10 +252,6 @@
     "noChecksums": "لم يُبلَّغ عن قيم تحقق.",
     "noIdentifiers": "لم يُبلَّغ عن معرّفات مُعلَّمة.",
     "noFuzzyHashes": "لم يُبلَّغ عن بصمات تقريبية."
-  },
-  "controlFlow": {
-    "title": "غير متاح بعد",
-    "description": "لم يُحدَّد بعد تصور الرسم البياني لتدفق التحكم من الخلفية (backend). تحقق مرة أخرى بعد الانتهاء من تحديد عقد بيانات هذا القسم."
   },
   "aboutView": {
     "title": "حول فخارة",
